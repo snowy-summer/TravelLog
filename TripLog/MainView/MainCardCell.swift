@@ -16,8 +16,12 @@ final class MainCardCell: UICollectionViewCell {
     private lazy var dateLabel = UILabel()
     private lazy var moreButton = UIButton()
     
+    private lazy var backView = UIView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        configureContentView()
         configureSumbnailImageView()
         configureTitlLabel()
         configureDateLabel()
@@ -32,15 +36,37 @@ final class MainCardCell: UICollectionViewCell {
 
 extension MainCardCell {
     
+    private func configureContentView() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.layer.borderWidth = 1
+        
+        let contentViewConstraints = [
+            contentView.topAnchor.constraint(equalTo: self.topAnchor,
+                                             constant: 8),
+            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
+                                                constant: -8),
+            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor,
+                                                 constant: 16),
+            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor,
+                                                  constant: -16)
+        ]
+        
+        NSLayoutConstraint.activate(contentViewConstraints)
+        contentView.layer.cornerRadius = 20
+        contentView.clipsToBounds = true
+    }
+    
     private func configureSumbnailImageView() {
         contentView.addSubview(sumbnailImageView)
         sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        sumbnailImageView.image = UIImage(resource: .testMain)
         
+        sumbnailImageView.contentMode = .scaleToFill
         let imageViewConstraints = [
             sumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            sumbnailImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8)
+            sumbnailImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height * 0.25)
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)
@@ -51,6 +77,7 @@ extension MainCardCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.font = .preferredFont(forTextStyle: .title1)
+        titleLabel.textColor = .white
         titleLabel.text = "제목"
         
         let titleLabelConstraints = [
@@ -60,7 +87,6 @@ extension MainCardCell {
         ]
         
         NSLayoutConstraint.activate(titleLabelConstraints)
-        
     }
     
     private func configureDateLabel() {
@@ -70,12 +96,13 @@ extension MainCardCell {
         
         let dateLabelConstraints = [
             dateLabel.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: 16),
+            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                              constant:  -8)
         ]
         
         NSLayoutConstraint.activate(dateLabelConstraints)
-        
     }
     
     private func configureMoreButton() {
@@ -85,10 +112,13 @@ extension MainCardCell {
         
         let moreButtonConstraints = [
             moreButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
-            moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            moreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -16),
+            moreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                               constant: -8)
         ]
         
         NSLayoutConstraint.activate(moreButtonConstraints)
     }
+    
 }

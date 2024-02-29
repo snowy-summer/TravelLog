@@ -27,7 +27,6 @@ final class MainCollectionView: UICollectionView {
 extension MainCollectionView {
     
     func configureAutoLayout(superView: UIView) {
-        
         superView.addSubview(self)
         
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -45,23 +44,10 @@ extension MainCollectionView {
     }
     
     private func createBasicCompositionalLayout() -> UICollectionViewCompositionalLayout{
+        var config = UICollectionLayoutListConfiguration(appearance: .grouped)
+        config.showsSeparators = false
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-    
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(0.3))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                       subitems: [item])
-        group.contentInsets = .init(top: 16,
-                                    leading: 16,
-                                    bottom: 0,
-                                    trailing: 16)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
+        let layout = UICollectionViewCompositionalLayout.list(using: config)
         
         return layout
     }
@@ -74,17 +60,16 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = self.dequeueReusableCell(withReuseIdentifier: MainCardCell.identifier, for: indexPath) as? MainCardCell else { return UICollectionViewCell() }
-        
-        cell.layer.cornerRadius = 20
-        cell.layer.borderWidth = 2
+        guard let cell = self.dequeueReusableCell(withReuseIdentifier: MainCardCell.identifier,
+                                                  for: indexPath) as? MainCardCell else {
+            return UICollectionViewCell()
+        }
         
         return cell
     }
