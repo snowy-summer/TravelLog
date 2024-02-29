@@ -47,6 +47,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B87F0F82B9075440036A53B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6BCC920F2B8F05AA00931D0C /* MainCardsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		6BCC92092B8F026200931D0C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -63,7 +71,7 @@
 				6BEAA2432B8E17AE0017318C /* MainViewController.swift */,
 				6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */,
 				6B87F0F62B8F458F0036A53B /* MainCardCell.swift */,
-				6BCC920F2B8F05AA00931D0C /* MainCardsViewModel.swift */,
+				6B87F0F82B9075440036A53B /* ViewModel */,
 			);
 			path = MainView;
 			sourceTree = "<group>";

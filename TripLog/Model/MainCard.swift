@@ -11,7 +11,7 @@ struct MainCard {
     
     var title: String
     var image: UIImage?
-    var isBookMarked: Bool
+    var isBookMarked = false
     var id: UUID = UUID()
     var date: Date = Date.now
     var subCard: [SubCard]

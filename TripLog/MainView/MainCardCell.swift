@@ -109,6 +109,9 @@ extension MainCardCell {
         contentView.addSubview(moreButton)
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        moreButton.addTarget(self,
+                             action: #selector(tapMoreButton),
+                             for: .touchUpInside)
         
         let moreButtonConstraints = [
             moreButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
@@ -121,4 +124,7 @@ extension MainCardCell {
         NSLayoutConstraint.activate(moreButtonConstraints)
     }
     
+    @objc private func tapMoreButton() {
+        
+    }
 }

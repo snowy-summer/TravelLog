@@ -10,7 +10,7 @@ import UIKit
 final class MainCollectionView: UICollectionView {
     
     init(frame: CGRect) {
-        super.init(frame: frame, collectionViewLayout: UICollectionViewFlowLayout())
+        super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         self.register(MainCardCell.self,
                       forCellWithReuseIdentifier: MainCardCell.identifier)
         self.collectionViewLayout = createBasicCompositionalLayout()
