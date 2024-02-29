@@ -23,8 +23,8 @@ extension MainViewModel {
         list.value.append(mainCard)
     }
     
-    func deleteCard(mainCard: MainCard) {
-        
+    func deleteCard(id: UUID) {
+        list.value = list.value.filter{ $0.id != id }
     }
     
     func bookMarkCard(mainCard: MainCard) {
