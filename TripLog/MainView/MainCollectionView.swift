@@ -14,8 +14,6 @@ final class MainCollectionView: UICollectionView {
         self.register(MainCardCell.self,
                       forCellWithReuseIdentifier: MainCardCell.identifier)
         self.collectionViewLayout = createBasicCompositionalLayout()
-        delegate = self
-        dataSource = self
     }
     
     required init?(coder: NSCoder) {
@@ -45,33 +43,12 @@ extension MainCollectionView {
     
     private func createBasicCompositionalLayout() -> UICollectionViewCompositionalLayout{
         var config = UICollectionLayoutListConfiguration(appearance: .grouped)
+        config.backgroundColor = .white
         config.showsSeparators = false
         
         let layout = UICollectionViewCompositionalLayout.list(using: config)
         
         return layout
-    }
-    
-}
-
-//MARK: - CollectionViewDelegate, UICollectionViewDataSource
-
-extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        guard let cell = self.dequeueReusableCell(withReuseIdentifier: MainCardCell.identifier,
-                                                  for: indexPath) as? MainCardCell else {
-            return UICollectionViewCell()
-        }
-        
-        return cell
     }
     
 }

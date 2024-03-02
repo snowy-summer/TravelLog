@@ -16,13 +16,16 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        mainCollectionView.delegate = self
+        mainCollectionView.dataSource = self
         mainCollectionView.configureAutoLayout(superView: view)
+        
         configureAddButton()
         bind()
     }
 
 }
-
 
 extension MainViewController {
     
@@ -51,13 +54,41 @@ extension MainViewController {
     }
     
     private func bind() {
-        mainViewModel.list.observe { mainCards in
+        mainViewModel.list.observe { [weak self] mainCards in
             //값이 변하면 일어나는일
+            guard let self = self else { return }
+            self.mainCollectionView.reloadData()
         }
     }
     
     @objc private func tapAddButton() {
+        let modalNavigationController = UINavigationController(rootViewController: EditOfVMainCardViewController(mainViewmodel: mainViewModel))
+        self.present(modalNavigationController, animated: true)
+    }
     
+}
+
+//MARK: - CollectionViewDelegate, UICollectionViewDataSource
+
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        
+//        guard let count = mainDelgate?.dd() else { return 0 }
+        let count = mainViewModel.list.value.count
+        return count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = mainCollectionView.dequeueReusableCell(withReuseIdentifier: MainCardCell.identifier,
+                                                  for: indexPath) as? MainCardCell else {
+            return UICollectionViewCell()
+        }
+        
+        return cell
     }
     
 }
