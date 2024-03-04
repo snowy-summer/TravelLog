@@ -15,8 +15,9 @@ final class MainCardCell: UICollectionViewCell {
     private lazy var sumbnailImageView = UIImageView()
     private lazy var dateLabel = UILabel()
     private lazy var moreButton = UIButton()
-    
-    private lazy var backView = UIView()
+    private var id: UUID?
+
+    weak var delegate: CellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +27,7 @@ final class MainCardCell: UICollectionViewCell {
         configureTitlLabel()
         configureDateLabel()
         configureMoreButton()
+        configureMenu()
     }
     
     required init?(coder: NSCoder) {
@@ -59,9 +61,8 @@ extension MainCardCell {
     private func configureSumbnailImageView() {
         contentView.addSubview(sumbnailImageView)
         sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
-        sumbnailImageView.image = UIImage(resource: .testMain)
-        
         sumbnailImageView.contentMode = .scaleToFill
+        
         let imageViewConstraints = [
             sumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -109,9 +110,6 @@ extension MainCardCell {
         contentView.addSubview(moreButton)
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        moreButton.addTarget(self,
-                             action: #selector(tapMoreButton),
-                             for: .touchUpInside)
         
         let moreButtonConstraints = [
             moreButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
@@ -122,6 +120,54 @@ extension MainCardCell {
         ]
         
         NSLayoutConstraint.activate(moreButtonConstraints)
+    }
+    
+    private func configureMenu() {
+        
+        
+        let edit = UIAction(title: "편집",
+                            image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
+            guard let id = self?.id else { return }
+            self?.delegate?.editCard(id: id)
+        }
+        
+        let bookMark = UIAction(title: "즐겨찾기",
+                                image: UIImage(systemName: "bookmark")) { _ in
+            
+        }
+        
+        let share = UIAction(title: "공유",
+                             image: UIImage(systemName: "square.and.arrow.up")) { _ in
+            
+        }
+        
+        let delete = UIAction(title: "삭제",
+                              image: UIImage(systemName: "trash"),
+                              attributes: .destructive) { [weak self] _ in
+            guard let id = self?.id else { return }
+            self?.delegate?.deleteCard(id: id)
+        }
+        
+        let items = [edit, bookMark, share, delete]
+        moreButton.menu = UIMenu(children: items)
+        moreButton.showsMenuAsPrimaryAction = true
+        
+    }
+    
+    func updateContent(title: String,
+                       image: UIImage?,
+                       date: Date,
+                       id: UUID?) {
+        titleLabel.text = title
+        self.id = id
+        
+        if let sumbnailImage = image {
+            sumbnailImageView.image = sumbnailImage
+        } else {
+            sumbnailImageView.image = UIImage(resource: .testMain)
+        }
+        
+        dateLabel.text = date.formatted(date: .numeric, time: .standard)
     }
     
     @objc private func tapMoreButton() {

@@ -7,6 +7,13 @@
 
 import UIKit
 
+protocol CellDelegate: AnyObject {
+    func deleteCard(id: UUID)
+    func editCard(id: UUID)
+    func shareCard(id: UUID)
+    func bookmarkCard(id: UUID)
+}
+
 final class MainViewController: UIViewController {
     
     private lazy var mainCollectionView = MainCollectionView(frame: .zero)
@@ -62,7 +69,7 @@ extension MainViewController {
     }
     
     @objc private func tapAddButton() {
-        let modalNavigationController = UINavigationController(rootViewController: EditOfVMainCardViewController(mainViewmodel: mainViewModel))
+        let modalNavigationController = UINavigationController(rootViewController: EditOfMainCardViewController(mainViewmodel: mainViewModel))
         self.present(modalNavigationController, animated: true)
     }
     
@@ -74,8 +81,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        
-//        guard let count = mainDelgate?.dd() else { return 0 }
+    
         let count = mainViewModel.list.value.count
         return count
     }
@@ -84,11 +90,41 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = mainCollectionView.dequeueReusableCell(withReuseIdentifier: MainCardCell.identifier,
-                                                  for: indexPath) as? MainCardCell else {
+                                                                for: indexPath) as? MainCardCell else {
             return UICollectionViewCell()
         }
         
+        let content = mainViewModel.list.value[indexPath.row]
+        cell.delegate = self
+        cell.updateContent(title: content.title,
+                           image: content.image,
+                           date: content.date,
+                           id: content.id)
+        
         return cell
+    }
+    
+}
+
+//MARK: - CellDelegate
+
+extension MainViewController: CellDelegate {
+    
+    func editCard(id: UUID) {
+        let modalNavigationController = UINavigationController(rootViewController: EditOfMainCardViewController(mainViewModel: mainViewModel, id: id))
+        self.present(modalNavigationController, animated: true)
+    }
+    
+    func shareCard(id: UUID) {
+        
+    }
+    
+    func bookmarkCard(id: UUID) {
+        
+    }
+    
+    func deleteCard(id: UUID) {
+        mainViewModel.deleteCard(id: id)
     }
     
 }

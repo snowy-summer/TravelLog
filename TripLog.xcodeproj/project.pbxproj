@@ -10,7 +10,7 @@
 		6B87F0F32B8F256E0036A53B /* SubCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F22B8F256E0036A53B /* SubCard.swift */; };
 		6B87F0F52B8F3C880036A53B /* MainCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */; };
 		6B87F0F72B8F458F0036A53B /* MainCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F62B8F458F0036A53B /* MainCardCell.swift */; };
-		6B87F0FA2B90A8360036A53B /* EditOfVMainCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F92B90A8360036A53B /* EditOfVMainCardViewController.swift */; };
+		6B87F0FA2B90A8360036A53B /* EditOfMainCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F92B90A8360036A53B /* EditOfMainCardViewController.swift */; };
 		6BCC920C2B8F034600931D0C /* MainCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC920B2B8F034600931D0C /* MainCard.swift */; };
 		6BCC920E2B8F04BB00931D0C /* MainContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC920D2B8F04BB00931D0C /* MainContainer.swift */; };
 		6BCC92102B8F05AA00931D0C /* MainCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC920F2B8F05AA00931D0C /* MainCardsViewModel.swift */; };
@@ -25,7 +25,7 @@
 		6B87F0F22B8F256E0036A53B /* SubCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCard.swift; sourceTree = "<group>"; };
 		6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionView.swift; sourceTree = "<group>"; };
 		6B87F0F62B8F458F0036A53B /* MainCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardCell.swift; sourceTree = "<group>"; };
-		6B87F0F92B90A8360036A53B /* EditOfVMainCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOfVMainCardViewController.swift; sourceTree = "<group>"; };
+		6B87F0F92B90A8360036A53B /* EditOfMainCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOfMainCardViewController.swift; sourceTree = "<group>"; };
 		6BCC920B2B8F034600931D0C /* MainCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCard.swift; sourceTree = "<group>"; };
 		6BCC920D2B8F04BB00931D0C /* MainContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContainer.swift; sourceTree = "<group>"; };
 		6BCC920F2B8F05AA00931D0C /* MainCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardsViewModel.swift; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 				6BEAA2432B8E17AE0017318C /* MainViewController.swift */,
 				6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */,
 				6B87F0F62B8F458F0036A53B /* MainCardCell.swift */,
-				6B87F0F92B90A8360036A53B /* EditOfVMainCardViewController.swift */,
+				6B87F0F92B90A8360036A53B /* EditOfMainCardViewController.swift */,
 				6B87F0F82B9075440036A53B /* ViewModel */,
 			);
 			path = MainView;
@@ -191,7 +191,7 @@
 				6BCC920E2B8F04BB00931D0C /* MainContainer.swift in Sources */,
 				6BEAA2442B8E17AE0017318C /* MainViewController.swift in Sources */,
 				6B87F0F32B8F256E0036A53B /* SubCard.swift in Sources */,
-				6B87F0FA2B90A8360036A53B /* EditOfVMainCardViewController.swift in Sources */,
+				6B87F0FA2B90A8360036A53B /* EditOfMainCardViewController.swift in Sources */,
 				6BEAA2402B8E17AE0017318C /* AppDelegate.swift in Sources */,
 				6BEAA2422B8E17AE0017318C /* SceneDelegate.swift in Sources */,
 				6BCC92102B8F05AA00931D0C /* MainCardsViewModel.swift in Sources */,

@@ -7,16 +7,24 @@
 
 import UIKit
 
-final class EditOfVMainCardViewController: UIViewController {
+final class EditOfMainCardViewController: UIViewController {
     
     private lazy var titleTextField = UITextField()
     private lazy var titleView = UIView()
     private lazy var imageView = UIImageView()
-    private let mainViewmodel: MainViewModel
+    private let mainViewModel: MainViewModel
+    private var selectedCardId: UUID?
     
     init(mainViewmodel: MainViewModel) {
-        self.mainViewmodel = mainViewmodel
+        self.mainViewModel = mainViewmodel
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience init(mainViewModel: MainViewModel, id: UUID) {
+        self.init(mainViewmodel: mainViewModel)
+        self.selectedCardId = id
+        let card = mainViewModel.list.value.filter { $0.id == selectedCardId }
+        titleTextField.text = card.last!.title
     }
     
     required init?(coder: NSCoder) {
@@ -34,7 +42,7 @@ final class EditOfVMainCardViewController: UIViewController {
     
 }
 
-extension EditOfVMainCardViewController {
+extension EditOfMainCardViewController {
 
     private func configureTitleView() {
         view.addSubview(titleView)
@@ -122,6 +130,12 @@ extension EditOfVMainCardViewController {
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = doneButton
     }
+
+}
+
+//MARK: - Objc func
+ 
+extension EditOfMainCardViewController {
     
     @objc private func addImage() {
         print("이미지 추가")
@@ -130,9 +144,20 @@ extension EditOfVMainCardViewController {
     @objc private func doneAction() {
       
         self.dismiss(animated: true) { [weak self] in
-            guard let title = self?.titleTextField.text else { return }
-            self?.mainViewmodel.list.value.append(MainCard(title: title,
-                                                     subCard: []))
+            guard let self = self else { return }
+            guard let title = self.titleTextField.text else { return }
+            if self.selectedCardId == nil {
+                self.mainViewModel.list.value.append(MainCard(title: title,
+                                          subCard: []))
+            } else {
+                
+                let index = self.mainViewModel.list.value.firstIndex { mainCard in
+                    mainCard.id == self.selectedCardId
+                }
+                
+                self.mainViewModel.list.value[index!].title = title
+                self.mainViewModel.list.value[index!].image = self.imageView.image
+            }
         }
     }
     

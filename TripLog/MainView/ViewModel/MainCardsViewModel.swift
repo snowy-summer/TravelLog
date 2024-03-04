@@ -5,7 +5,9 @@
 //  Created by 최승범 on 2024/02/28.
 //
 
-import UIKit
+import Foundation
+
+//import UIKit
 
 protocol MainViewModelProtocol {
     func appendCard(mainCard: MainCard)
@@ -22,7 +24,7 @@ final class MainViewModel {
 
 extension MainViewModel: MainViewModelProtocol {
     func createMainCard(title: String,
-                        sumbnailImage: UIImage?) -> MainCard {
+                        sumbnailImage: Data?) -> MainCard {
         let mainCard = MainCard(title: title,
                                 subCard: [])
         return mainCard
