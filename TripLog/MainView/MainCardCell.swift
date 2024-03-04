@@ -78,7 +78,7 @@ extension MainCardCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.font = .preferredFont(forTextStyle: .title1)
-        titleLabel.textColor = .white
+        titleLabel.textColor = .basic
         titleLabel.text = "제목"
         
         let titleLabelConstraints = [
@@ -110,6 +110,7 @@ extension MainCardCell {
         contentView.addSubview(moreButton)
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        moreButton.tintColor = .black
         
         let moreButtonConstraints = [
             moreButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
@@ -124,7 +125,6 @@ extension MainCardCell {
     
     private func configureMenu() {
         
-        
         let edit = UIAction(title: "편집",
                             image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
             guard let id = self?.id else { return }
@@ -132,7 +132,9 @@ extension MainCardCell {
         }
         
         let bookMark = UIAction(title: "즐겨찾기",
-                                image: UIImage(systemName: "bookmark")) { _ in
+                                image: UIImage(systemName: "bookmark")) { [weak self] _ in
+            guard let id = self?.id else { return }
+            self?.delegate?.bookmarkCard(id: id)
             
         }
         
@@ -157,20 +159,17 @@ extension MainCardCell {
     func updateContent(title: String,
                        image: UIImage?,
                        date: Date,
-                       id: UUID?) {
+                       id: UUID) {
         titleLabel.text = title
         self.id = id
         
         if let sumbnailImage = image {
             sumbnailImageView.image = sumbnailImage
         } else {
-            sumbnailImageView.image = UIImage(resource: .testMain)
+            sumbnailImageView.image = UIImage(resource: .skyBlue)
         }
         
         dateLabel.text = date.formatted(date: .numeric, time: .standard)
     }
     
-    @objc private func tapMoreButton() {
-        
-    }
 }

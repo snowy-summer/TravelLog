@@ -32,12 +32,12 @@ final class EditOfMainCardViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .basic
     
         configureTitleView()
         configureTitleTextField()
         configureImageView()
-        configureNavigationVar()
+        configureNavigationBar()
     }
     
 }
@@ -71,6 +71,7 @@ extension EditOfMainCardViewController {
         titleView.addSubview(titleTextField)
         titleTextField.placeholder = "제목"
         titleTextField.font = .preferredFont(forTextStyle: .title1)
+        titleTextField.textColor = .black
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
         let titleTextFieldConstraints = [
@@ -117,7 +118,7 @@ extension EditOfMainCardViewController {
         NSLayoutConstraint.activate(imageViewConstraints)
     }
     
-    private func configureNavigationVar() {
+    private func configureNavigationBar() {
         let doneButton = UIBarButtonItem(title: "완료",
                                          style: .done,
                                          target: self,
@@ -147,16 +148,20 @@ extension EditOfMainCardViewController {
             guard let self = self else { return }
             guard let title = self.titleTextField.text else { return }
             if self.selectedCardId == nil {
-                self.mainViewModel.list.value.append(MainCard(title: title,
-                                          subCard: []))
+                self.mainViewModel.appendCard(mainCard: MainCard(title: title,
+                                                                 subCard: []))
             } else {
                 
-                let index = self.mainViewModel.list.value.firstIndex { mainCard in
+                let indexOfViewModel = self.mainViewModel.list.value.firstIndex { mainCard in
                     mainCard.id == self.selectedCardId
                 }
+                guard let index = indexOfViewModel else { return }
                 
-                self.mainViewModel.list.value[index!].title = title
-                self.mainViewModel.list.value[index!].image = self.imageView.image
+                self.mainViewModel.list.value[index].title = title
+                
+                if self.mainViewModel.list.value[index].image != nil {
+                    self.mainViewModel.list.value[index].image = imageView.image
+                }
             }
         }
     }

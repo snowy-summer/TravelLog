@@ -57,6 +57,15 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		6BB59A392B959D4800E15C8E /* LIfeCycle */ = {
+			isa = PBXGroup;
+			children = (
+				6BEAA23F2B8E17AE0017318C /* AppDelegate.swift */,
+				6BEAA2412B8E17AE0017318C /* SceneDelegate.swift */,
+			);
+			path = LIfeCycle;
+			sourceTree = "<group>";
+		};
 		6BCC92092B8F026200931D0C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,8 +115,7 @@
 		6BEAA23E2B8E17AE0017318C /* TripLog */ = {
 			isa = PBXGroup;
 			children = (
-				6BEAA23F2B8E17AE0017318C /* AppDelegate.swift */,
-				6BEAA2412B8E17AE0017318C /* SceneDelegate.swift */,
+				6BB59A392B959D4800E15C8E /* LIfeCycle */,
 				6BCC920A2B8F029A00931D0C /* MainView */,
 				6BCC92092B8F026200931D0C /* Model */,
 				6BCC92132B8F0D5100931D0C /* Utils */,

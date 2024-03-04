@@ -12,8 +12,7 @@ import Foundation
 protocol MainViewModelProtocol {
     func appendCard(mainCard: MainCard)
     func deleteCard(id: UUID)
-    func bookMarkCard(mainCard: MainCard)
-    func editCard()
+    func bookmarkCard(id: UUID)
 }
 
 final class MainViewModel {
@@ -38,12 +37,12 @@ extension MainViewModel: MainViewModelProtocol {
         list.value = list.value.filter{ $0.id != id }
     }
     
-    func bookMarkCard(mainCard: MainCard) {
-        
-    }
-    
-    func editCard() {
-        
+    func bookmarkCard(id: UUID) {
+        let index = list.value.firstIndex { mainCard in
+            mainCard.id == id
+        }
+        guard let index = index else { return }
+        list.value[index].isBookMarked = !list.value[index].isBookMarked
     }
     
 }

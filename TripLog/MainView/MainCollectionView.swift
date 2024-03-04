@@ -9,6 +9,8 @@ import UIKit
 
 final class MainCollectionView: UICollectionView {
     
+    weak var collectionViewDelegate: MainCollectionViewDelegate?
+    
     init(frame: CGRect) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         self.register(MainCardCell.self,
@@ -30,7 +32,7 @@ extension MainCollectionView {
         self.translatesAutoresizingMaskIntoConstraints = false
         
         let safeArea = superView.safeAreaLayoutGuide
-        let constraints = [ 
+        let constraints = [
             self.topAnchor.constraint(equalTo: safeArea.topAnchor),
             self.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
             self.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
@@ -42,11 +44,64 @@ extension MainCollectionView {
     }
     
     private func createBasicCompositionalLayout() -> UICollectionViewCompositionalLayout{
-        var config = UICollectionLayoutListConfiguration(appearance: .grouped)
-        config.backgroundColor = .white
-        config.showsSeparators = false
+        var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .grouped)
         
-        let layout = UICollectionViewCompositionalLayout.list(using: config)
+        layoutConfiguration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            
+            let bookmarkAction = UIContextualAction(style: .normal,
+                                                    title: nil) { action, view, completion in
+                self?.collectionViewDelegate?.switchBookmarkState(index: indexPath.row)
+                
+                
+                completion(true)
+            }
+            guard let isBookmarked = self?.collectionViewDelegate?.isBookmarked(index: indexPath.row) else {
+                return  UISwipeActionsConfiguration(actions: [bookmarkAction])
+            }
+            
+            if isBookmarked  {
+                bookmarkAction.image = UIImage(resource: .customBookmarkOn)
+            } else {
+                bookmarkAction.image = UIImage(resource: .customBookmarkOff)
+            }
+            
+            bookmarkAction.backgroundColor = .basic
+            
+            let configuration = UISwipeActionsConfiguration(actions: [bookmarkAction])
+            configuration.performsFirstActionWithFullSwipe = false
+            
+            return configuration
+        }
+        
+        layoutConfiguration.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            
+            let deleteAction = UIContextualAction(style: .normal,
+                                                  title: nil) { action, view, completion in
+                self?.collectionViewDelegate?.deleteAction(index: indexPath.row)
+                completion(true)
+            }
+            
+            let editAction = UIContextualAction(style: .normal,
+                                                title: nil) { action, view, completion in
+                self?.collectionViewDelegate?.goToEditView(index: indexPath.row)
+                completion(true)
+            }
+            
+            deleteAction.image = UIImage(resource: .deleteButton)
+            deleteAction.backgroundColor = .basic
+            
+            editAction.image = UIImage(resource: .editButton)
+            editAction.backgroundColor = .basic
+            
+            let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+            configuration.performsFirstActionWithFullSwipe = false
+            
+            return configuration
+        }
+        
+        layoutConfiguration.backgroundColor = .basic
+        layoutConfiguration.showsSeparators = false
+        let layout = UICollectionViewCompositionalLayout.list(using: layoutConfiguration)
         
         return layout
     }
