@@ -15,23 +15,22 @@ protocol CellDelegate: AnyObject {
 }
 
 protocol MainCollectionViewDelegate: AnyObject {
-    func goToEditView(index: Int)
-    func deleteAction(index: Int)
-    func switchBookmarkState(index: Int)
-    func isBookmarked(index: Int) -> Bool
+    func goToEditView(id: UUID)
 }
 
 final class MainViewController: UIViewController {
     
-    private lazy var mainCollectionView = MainCollectionView(frame: .zero)
+    private lazy var mainCollectionView = MainCollectionView(frame: .zero,
+                                                             mainViewModel: mainViewModel)
     private lazy var addButton = UIButton()
-    private let mainViewModel: MainViewModelProtocol = MainViewModel()
+    private let mainViewModel: MainViewModelProtocol = MainCardsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .basic
         
         mainCollectionView.collectionViewDelegate = self
+        mainCollectionView.delegate = self
         mainCollectionView.dataSource = self
         mainCollectionView.configureAutoLayout(superView: view)
         
@@ -83,7 +82,7 @@ extension MainViewController {
 
 //MARK: - UICollectionViewDataSource
 
-extension MainViewController: UICollectionViewDataSource {
+extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -108,6 +107,10 @@ extension MainViewController: UICollectionViewDataSource {
                            id: content.id)
 
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        navigationController?.pushViewController(MainCardViewController(), animated: true)
     }
     
 }
@@ -139,22 +142,9 @@ extension MainViewController: CellDelegate {
 
 extension MainViewController: MainCollectionViewDelegate {
     
-    func goToEditView(index: Int) {
-        let id = mainViewModel.list.value[index].id
+    func goToEditView(id: UUID) {
         let modalNavigationController = UINavigationController(rootViewController: EditOfMainCardViewController(mainViewModel: mainViewModel, id: id))
         self.present(modalNavigationController, animated: true)
-    }
-    
-    func deleteAction(index: Int) {
-        mainViewModel.deleteCard(id: mainViewModel.list.value[index].id)
-    }
-    
-    func switchBookmarkState(index: Int) {
-        mainViewModel.bookmarkCard(id: mainViewModel.list.value[index].id)
-    }
-    
-    func isBookmarked(index: Int) -> Bool {
-        return mainViewModel.list.value[index].isBookMarked
     }
     
 }

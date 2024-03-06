@@ -14,7 +14,7 @@ final class MainCardCell: UICollectionViewCell {
     private lazy var titleLabel = UILabel()
     private lazy var sumbnailImageView = UIImageView()
     private lazy var dateLabel = UILabel()
-    private lazy var moreButton = UIButton()
+    private lazy var menuButton = UIButton()
     private var id: UUID?
 
     weak var delegate: CellDelegate?
@@ -26,7 +26,7 @@ final class MainCardCell: UICollectionViewCell {
         configureSumbnailImageView()
         configureTitlLabel()
         configureDateLabel()
-        configureMoreButton()
+        configureMenuButton()
         configureMenu()
     }
     
@@ -106,17 +106,17 @@ extension MainCardCell {
         NSLayoutConstraint.activate(dateLabelConstraints)
     }
     
-    private func configureMoreButton() {
-        contentView.addSubview(moreButton)
-        moreButton.translatesAutoresizingMaskIntoConstraints = false
-        moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        moreButton.tintColor = .black
+    private func configureMenuButton() {
+        contentView.addSubview(menuButton)
+        menuButton.translatesAutoresizingMaskIntoConstraints = false
+        menuButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        menuButton.tintColor = .black
         
         let moreButtonConstraints = [
-            moreButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
-            moreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+            menuButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
+            menuButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                  constant: -16),
-            moreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+            menuButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                constant: -8)
         ]
         
@@ -151,8 +151,8 @@ extension MainCardCell {
         }
         
         let items = [edit, bookMark, share, delete]
-        moreButton.menu = UIMenu(children: items)
-        moreButton.showsMenuAsPrimaryAction = true
+        menuButton.menu = UIMenu(children: items)
+        menuButton.showsMenuAsPrimaryAction = true
         
     }
     

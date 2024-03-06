@@ -10,8 +10,10 @@ import UIKit
 final class MainCollectionView: UICollectionView {
     
     weak var collectionViewDelegate: MainCollectionViewDelegate?
+    private var mainViewModel: MainViewModelProtocol
     
-    init(frame: CGRect) {
+    init(frame: CGRect, mainViewModel: MainViewModelProtocol) {
+        self.mainViewModel = mainViewModel
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         self.register(MainCardCell.self,
                       forCellWithReuseIdentifier: MainCardCell.identifier)
@@ -48,14 +50,18 @@ extension MainCollectionView {
         
         layoutConfiguration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             
+            guard let selectedId = self?.mainViewModel.list.value[indexPath.row].id else {
+                return UISwipeActionsConfiguration()
+            }
+            
             let bookmarkAction = UIContextualAction(style: .normal,
                                                     title: nil) { action, view, completion in
-                self?.collectionViewDelegate?.switchBookmarkState(index: indexPath.row)
-                
+                self?.mainViewModel.bookmarkCard(id: selectedId)
                 
                 completion(true)
             }
-            guard let isBookmarked = self?.collectionViewDelegate?.isBookmarked(index: indexPath.row) else {
+            
+            guard let isBookmarked = self?.mainViewModel.list.value[indexPath.row].isBookMarked else {
                 return  UISwipeActionsConfiguration(actions: [bookmarkAction])
             }
             
@@ -75,15 +81,19 @@ extension MainCollectionView {
         
         layoutConfiguration.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             
+            guard let selectedId = self?.mainViewModel.list.value[indexPath.row].id else {
+                return UISwipeActionsConfiguration()
+            }
+            
             let deleteAction = UIContextualAction(style: .normal,
                                                   title: nil) { action, view, completion in
-                self?.collectionViewDelegate?.deleteAction(index: indexPath.row)
+                self?.mainViewModel.deleteCard(id: selectedId)
                 completion(true)
             }
             
             let editAction = UIContextualAction(style: .normal,
                                                 title: nil) { action, view, completion in
-                self?.collectionViewDelegate?.goToEditView(index: indexPath.row)
+                self?.collectionViewDelegate?.goToEditView(id: selectedId)
                 completion(true)
             }
             
