@@ -217,7 +217,8 @@ extension EditOfMainCardViewController{
             
             let sumbnailImage = imageView.image
             
-            if self.selectedCardId == nil {
+            guard let cardId = self.selectedCardId else {
+                
                 if sumbnailImage == nil {
                     self.mainViewModel.appendCard(mainCard: MainCard(title: title,
                                                                      subCard: []))
@@ -226,19 +227,12 @@ extension EditOfMainCardViewController{
                                                                      image: sumbnailImage,
                                                                      subCard: []))
                 }
-               
-            } else {
-                
-                let indexOfViewModel = self.mainViewModel.list.value.firstIndex { mainCard in
-                    mainCard.id == self.selectedCardId
-                }
-    
-                guard let index = indexOfViewModel else { return }
-                
-                self.mainViewModel.list.value[index].title = title
-                self.mainViewModel.list.value[index].image = imageView.image
-                self.mainViewModel.list.value[index].date = Date.now
+                return
             }
+            
+            self.mainViewModel.editMainCardTitle(id: cardId, title: title)
+            self.mainViewModel.editMainCardImage(id: cardId, image: imageView.image)
+            self.mainViewModel.editMainCardDate(id: cardId, date: .now)
         }
         
     }
