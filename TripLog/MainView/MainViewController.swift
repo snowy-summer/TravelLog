@@ -24,8 +24,8 @@ protocol MainCollectionViewDelegate: AnyObject {
 final class MainViewController: UIViewController {
     
     private lazy var mainCollectionView = MainCollectionView(frame: .zero)
-    private let mainViewModel = MainViewModel()
     private lazy var addButton = UIButton()
+    private let mainViewModel: MainViewModelProtocol = MainViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +69,6 @@ extension MainViewController {
     
     private func bind() {
         mainViewModel.list.observe { [weak self] mainCards in
-            //값이 변하면 일어나는일
             guard let self = self else { return }
             self.mainCollectionView.reloadData()
         }
@@ -98,11 +97,10 @@ extension MainViewController: UICollectionViewDataSource {
         
         guard let cell = mainCollectionView.dequeueReusableCell(withReuseIdentifier: MainCardCell.identifier,
                                                                 for: indexPath) as? MainCardCell else {
-            return UICollectionViewCell()
+            return MainCardCell()
         }
         
         let content = mainViewModel.list.value[indexPath.row]
-//        print("aaaasdadsadsadsakdsajdsajdksajkdsajldjsakldjklajlkjkljkl\(content.image)")
         cell.delegate = self
         cell.updateContent(title: content.title,
                            image: content.image,

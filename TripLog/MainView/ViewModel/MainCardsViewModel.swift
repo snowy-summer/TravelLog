@@ -7,9 +7,8 @@
 
 import Foundation
 
-//import UIKit
-
 protocol MainViewModelProtocol {
+    var list: Observable<[MainCard]> { get }
     func appendCard(mainCard: MainCard)
     func deleteCard(id: UUID)
     func bookmarkCard(id: UUID)
@@ -22,13 +21,7 @@ final class MainViewModel {
 }
 
 extension MainViewModel: MainViewModelProtocol {
-    func createMainCard(title: String,
-                        sumbnailImage: Data?) -> MainCard {
-        let mainCard = MainCard(title: title,
-                                subCard: [])
-        return mainCard
-    }
-    
+  
     func appendCard(mainCard: MainCard){
         list.value.append(mainCard)
     }

@@ -14,16 +14,17 @@ final class EditOfMainCardViewController: UIViewController {
     private lazy var titleView = UIView()
     private lazy var imageView = UIImageView()
     private lazy var addButton = UIButton()
-    private let mainViewModel: MainViewModel
+    private let mainViewModel: MainViewModelProtocol
     private var selectedCardId: UUID?
+    private var mainQueue = DispatchQueue.main
     
-    init(mainViewmodel: MainViewModel) {
+    init(mainViewmodel: MainViewModelProtocol) {
         self.mainViewModel = mainViewmodel
         super.init(nibName: nil, bundle: nil)
         
     }
     
-    convenience init(mainViewModel: MainViewModel, id: UUID) {
+    convenience init(mainViewModel: MainViewModelProtocol, id: UUID) {
         self.init(mainViewmodel: mainViewModel)
         self.selectedCardId = id
         let card = mainViewModel.list.value.filter { $0.id == selectedCardId }
@@ -179,8 +180,8 @@ extension EditOfMainCardViewController: PHPickerViewControllerDelegate {
         
         if let itemProvider = itemProvider,
            itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                DispatchQueue.main.async { [weak self] in
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                self?.mainQueue.async {
                     self?.imageView.image = image as? UIImage
                 }
             }
@@ -236,6 +237,7 @@ extension EditOfMainCardViewController{
                 
                 self.mainViewModel.list.value[index].title = title
                 self.mainViewModel.list.value[index].image = imageView.image
+                self.mainViewModel.list.value[index].date = Date.now
             }
         }
         
