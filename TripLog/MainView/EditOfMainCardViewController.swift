@@ -6,18 +6,21 @@
 //
 
 import UIKit
+import PhotosUI
 
 final class EditOfMainCardViewController: UIViewController {
     
     private lazy var titleTextField = UITextField()
     private lazy var titleView = UIView()
     private lazy var imageView = UIImageView()
+    private lazy var addButton = UIButton()
     private let mainViewModel: MainViewModel
     private var selectedCardId: UUID?
     
     init(mainViewmodel: MainViewModel) {
         self.mainViewModel = mainViewmodel
         super.init(nibName: nil, bundle: nil)
+        
     }
     
     convenience init(mainViewModel: MainViewModel, id: UUID) {
@@ -25,6 +28,14 @@ final class EditOfMainCardViewController: UIViewController {
         self.selectedCardId = id
         let card = mainViewModel.list.value.filter { $0.id == selectedCardId }
         titleTextField.text = card.last!.title
+        
+        if let sumbnailImage = card.last?.image {
+            imageView.image = sumbnailImage
+            addButton.isHidden = true
+        } else {
+            addButton.isHidden = false
+        }
+        
     }
     
     required init?(coder: NSCoder) {
@@ -38,6 +49,7 @@ final class EditOfMainCardViewController: UIViewController {
         configureTitleTextField()
         configureImageView()
         configureNavigationBar()
+        configureAddButton()
     }
     
 }
@@ -72,6 +84,8 @@ extension EditOfMainCardViewController {
         titleTextField.placeholder = "제목"
         titleTextField.font = .preferredFont(forTextStyle: .title1)
         titleTextField.textColor = .black
+        titleTextField.autocorrectionType = .no
+        titleTextField.spellCheckingType = .no
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
         let titleTextFieldConstraints = [
@@ -94,7 +108,6 @@ extension EditOfMainCardViewController {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        imageView.image = UIImage(resource: .addImagePlaceHolder)
         imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
@@ -131,15 +144,68 @@ extension EditOfMainCardViewController {
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = doneButton
     }
+    
+    private func configureAddButton() {
+        imageView.addSubview(addButton)
+        
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.setImage(UIImage(resource: .plusButton), for: .normal)
+        addButton.contentVerticalAlignment = .fill
+        addButton.contentHorizontalAlignment = .fill
+        addButton.addTarget(self,
+                            action: #selector(addImage),
+                            for: .touchUpInside)
+        
+        let addButtonConstraints = [
+            addButton.widthAnchor.constraint(equalTo: view.widthAnchor,
+                                             multiplier: 0.2),
+            addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
+            addButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            addButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
+        ]
+        
+        NSLayoutConstraint.activate(addButtonConstraints)
+    }
 
 }
 
-//MARK: - Objc func
- 
-extension EditOfMainCardViewController {
+//MARK: - PHPickerViewControllerDelegate
+
+extension EditOfMainCardViewController: PHPickerViewControllerDelegate {
     
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                DispatchQueue.main.async { [weak self] in
+                    self?.imageView.image = image as? UIImage
+                }
+            }
+        }
+        
+        if imageView.image == nil  && results.isEmpty {
+            addButton.isHidden = false
+        } else {
+            addButton.isHidden = true
+        }
+    }
+    
+}
+
+//MARK: - objc Method
+ 
+extension EditOfMainCardViewController{
+
     @objc private func addImage() {
-        print("이미지 추가")
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        self.present(picker, animated: true)
     }
     
     @objc private func doneAction() {
@@ -147,26 +213,36 @@ extension EditOfMainCardViewController {
         self.dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             guard let title = self.titleTextField.text else { return }
+            
+            let sumbnailImage = imageView.image
+            
             if self.selectedCardId == nil {
-                self.mainViewModel.appendCard(mainCard: MainCard(title: title,
-                                                                 subCard: []))
+                if sumbnailImage == nil {
+                    self.mainViewModel.appendCard(mainCard: MainCard(title: title,
+                                                                     subCard: []))
+                } else {
+                    self.mainViewModel.appendCard(mainCard: MainCard(title: title,
+                                                                     image: sumbnailImage,
+                                                                     subCard: []))
+                }
+               
             } else {
                 
                 let indexOfViewModel = self.mainViewModel.list.value.firstIndex { mainCard in
                     mainCard.id == self.selectedCardId
                 }
+    
                 guard let index = indexOfViewModel else { return }
                 
                 self.mainViewModel.list.value[index].title = title
-                
-                if self.mainViewModel.list.value[index].image != nil {
-                    self.mainViewModel.list.value[index].image = imageView.image
-                }
+                self.mainViewModel.list.value[index].image = imageView.image
             }
         }
+        
     }
     
     @objc private func cancelAction() {
         self.dismiss(animated: true)
     }
+    
 }

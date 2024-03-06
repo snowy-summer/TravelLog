@@ -102,6 +102,7 @@ extension MainViewController: UICollectionViewDataSource {
         }
         
         let content = mainViewModel.list.value[indexPath.row]
+//        print("aaaasdadsadsadsakdsajdsajdksajkdsajldjsakldjklajlkjkljkl\(content.image)")
         cell.delegate = self
         cell.updateContent(title: content.title,
                            image: content.image,
