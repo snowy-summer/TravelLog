@@ -16,12 +16,12 @@ final class MainCardCell: UICollectionViewCell {
     private lazy var dateLabel = UILabel()
     private lazy var menuButton = UIButton()
     private var id: UUID?
-
+    
     weak var delegate: CellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         configureContentView()
         configureSumbnailImageView()
         configureTitlLabel()
@@ -150,7 +150,12 @@ extension MainCardCell {
             self?.delegate?.deleteCard(id: id)
         }
         
-        let items = [edit, bookMark, share, delete]
+        let items = [
+            edit,
+            bookMark,
+            share,
+            delete
+        ]
         menuButton.menu = UIMenu(children: items)
         menuButton.showsMenuAsPrimaryAction = true
         
@@ -169,7 +174,9 @@ extension MainCardCell {
             sumbnailImageView.image = UIImage(resource: .skyBlue)
         }
         
-        dateLabel.text = date.formatted(date: .numeric, time: .standard)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY / MM / dd"
+        dateLabel.text = formatter.string(from: date)
     }
     
 }
