@@ -9,6 +9,7 @@ import UIKit
 
 final class CircularLayout: UICollectionViewLayout {
     
+    var attributesList = [CircularLayoutAttributes]()
     let itemSize: CGSize
     
     var radius: CGFloat {
@@ -21,7 +22,27 @@ final class CircularLayout: UICollectionViewLayout {
         return atan(itemSize.width / radius)
     }
     
-    var attributesList = [CircularLayoutAttributes]()
+    var angleAtExtreme: CGFloat {
+        guard let collectionView = collectionView else { return 0.0}
+        
+        if collectionView.numberOfItems(inSection: 0) > 0 {
+            return -CGFloat(collectionView.numberOfItems(inSection: 0) - 1) * anglePerItem
+        }
+        
+        return 0.0
+    }
+    
+    var angle: CGFloat {
+        guard let collectionView = collectionView else { return 0.0 }
+        let extraContentWidth = collectionViewContentSize.width - CGRectGetWidth(collectionView.bounds)
+        let angle = angleAtExtreme * collectionView.contentOffset.x / extraContentWidth
+        
+        return angle
+    }
+    
+    override class var layoutAttributesClass: AnyClass {
+        return CircularLayoutAttributes.self
+    }
     
     init(itemSize: CGSize, radius: CGFloat) {
         self.itemSize = itemSize
@@ -32,35 +53,42 @@ final class CircularLayout: UICollectionViewLayout {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override class var layoutAttributesClass: AnyClass {
-        return CircularLayoutAttributes.self
-    }
+
+}
+
+extension CircularLayout {
     
     override func prepare() {
         super.prepare()
         
         guard let collectionView = collectionView else { return }
-        let centerX = collectionView.contentOffset.x + (CGRectGetWidth(collectionView.bounds) / 2.0)
         
-        attributesList = (0..<collectionView.numberOfItems(inSection: 0)).map { (i) ->
+        let collectionViewWidth = CGRectGetWidth(collectionView.bounds)
+        let centerX = collectionView.contentOffset.x + (collectionViewWidth / 2.0)
+        let itemCount = collectionView.numberOfItems(inSection: 0)
+        var anchorPointY = ((itemSize.height / 2.0) + radius) / itemSize.height
+        
+        attributesList = (0..<itemCount).map { (i) ->
             CircularLayoutAttributes in
             
             let attributes = CircularLayoutAttributes(forCellWith: IndexPath(item: i, section: 0))
-        
+            
             attributes.size = self.itemSize
-            attributes.center = CGPoint(x: centerX, y: CGRectGetMidY(collectionView.bounds))
- 
+            attributes.center = CGPoint(x: centerX,
+                                        y: CGRectGetMidY(collectionView.bounds))
+            
+            attributes.angle = self.angle + (self.anglePerItem * CGFloat(i))
+            attributes.anchorPoint = CGPoint(x: 0.5, y: anchorPointY)
+        
             return attributes
         }
     }
-    
     
     override var collectionViewContentSize: CGSize {
         guard let collectionView = collectionView else { return CGSize()}
         let width = CGFloat(collectionView.numberOfItems(inSection: 0)) * itemSize.width
         let height = CGRectGetHeight(collectionView.bounds)
-        
+
         return CGSize(width: CGFloat(width), height: height)
     }
     
@@ -69,9 +97,14 @@ final class CircularLayout: UICollectionViewLayout {
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        
         return attributesList[indexPath.row]
     }
-   
+    
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
+    }
 }
+
 
 

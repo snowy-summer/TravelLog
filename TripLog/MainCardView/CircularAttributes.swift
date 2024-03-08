@@ -10,14 +10,13 @@ import UIKit
 final class CircularLayoutAttributes: UICollectionViewLayoutAttributes {
     
     var anchorPoint: CGPoint = CGPoint(x: 0.5, y: 0.5)
-    
     var angle: CGFloat = 0 {
         didSet {
             zIndex = Int(angle * 100000)
             transform = CGAffineTransformMakeRotation(angle)
         }
     }
-    
+
     convenience init(anchorPoint: CGPoint, forCellWith: IndexPath) {
         self.init(forCellWith: forCellWith)
         self.anchorPoint = anchorPoint
