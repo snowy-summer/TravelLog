@@ -10,7 +10,8 @@ import UIKit
 final class MainCardViewController: UIViewController {
     
     private let viewModel = SubCardsViewModel()
-    private lazy var collectionView = MainCardCollectionView(viewModel: viewModel, size: view.bounds.size)
+    private lazy var collectionView = MainCardCollectionView(viewModel: viewModel,
+                                                             size: view.bounds.size)
     private lazy var addButton = UIButton()
 
     override func viewDidLoad() {
@@ -49,7 +50,6 @@ extension MainCardViewController {
         
         let changeLayout = UIAction(title: "갤러리로 보기",
                                     image: UIImage(systemName: "square.grid.2x2.fill")) { action in
-            
         }
         
         let select = UIAction(title: "선택",
@@ -90,7 +90,7 @@ extension MainCardViewController {
     
     @objc private func tapAddButton() {
         
-        viewModel.list.value.append(SubCard(title: "", stars: 0, money: 0, images: [], script: ""))
+        self.present(SubCardEditView(), animated: true)
 
     }
 }

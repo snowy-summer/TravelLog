@@ -19,8 +19,8 @@ final class MainCardCollectionView: UICollectionView {
     init(viewModel: SubCardsViewModel, size: CGSize) {
         self.viewModel = viewModel
         super.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        self.collectionViewLayout = CircularLayout(itemSize: CGSize(width: size.width * 0.6,
-                                                                    height: size.height * 0.4),
+        self.collectionViewLayout = CircularLayout(itemSize: CGSize(width: size.width * 0.8,
+                                                                    height: size.height * 0.6),
                                                    radius: size.height)
         configureDataSource()
     }
@@ -56,8 +56,9 @@ extension MainCardCollectionView {
             let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
             let subCardDictionary: [UUID: SubCard] = Dictionary(uniqueKeysWithValues: tupleArray)
             
-            cell.backgroundColor = .cyan
+            cell.backgroundColor = #colorLiteral(red: 0.5843137503, green: 0.8235294223, blue: 0.4196078479, alpha: 1)
             cell.layer.borderWidth = 1
+            cell.layer.cornerRadius = 20
             guard let subCard = subCardDictionary[itemIdentifier] else { return }
            
         }

@@ -82,9 +82,12 @@ extension MainCardCell {
         titleLabel.text = "제목"
         
         let titleLabelConstraints = [
-            titleLabel.bottomAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor, constant: -16),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: 0.5)
+            titleLabel.bottomAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
+                                               constant: -16),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 16),
+            titleLabel.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor,
+                                              multiplier: 0.5)
         ]
         
         NSLayoutConstraint.activate(titleLabelConstraints)

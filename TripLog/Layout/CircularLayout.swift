@@ -66,18 +66,18 @@ extension CircularLayout {
         let collectionViewWidth = CGRectGetWidth(collectionView.bounds)
         let centerX = collectionView.contentOffset.x + (collectionViewWidth / 2.0)
         let itemCount = collectionView.numberOfItems(inSection: 0)
-        var anchorPointY = ((itemSize.height / 2.0) + radius) / itemSize.height
+        let anchorPointY = ((itemSize.height / 2.0) + radius) / itemSize.height
         
         attributesList = (0..<itemCount).map { (i) ->
             CircularLayoutAttributes in
             
             let attributes = CircularLayoutAttributes(forCellWith: IndexPath(item: i, section: 0))
             
-            attributes.size = self.itemSize
+            attributes.size = itemSize
             attributes.center = CGPoint(x: centerX,
                                         y: CGRectGetMidY(collectionView.bounds))
             
-            attributes.angle = self.angle + (self.anglePerItem * CGFloat(i))
+            attributes.angle = angle + (anglePerItem * CGFloat(i))
             attributes.anchorPoint = CGPoint(x: 0.5, y: anchorPointY)
         
             return attributes
