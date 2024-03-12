@@ -1,5 +1,5 @@
 //
-//  MainCardCollectionView.swift
+//  SubsCardsCollectionView.swift
 //  TripLog
 //
 //  Created by 최승범 on 2024/03/07.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MainCardCollectionView: UICollectionView {
+final class SubCardsCollectionView: UICollectionView {
     
     private enum Section {
         case main
@@ -31,7 +31,7 @@ final class MainCardCollectionView: UICollectionView {
 
 }
 
-extension MainCardCollectionView {
+extension SubCardsCollectionView {
     
     func configureAutoLayout(superView: UIView) {
         superView.addSubview(self)

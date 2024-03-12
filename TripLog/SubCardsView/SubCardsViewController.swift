@@ -1,5 +1,5 @@
 //
-//  MainCardViewController.swift
+//  SubCardsViewController.swift
 //  TripLog
 //
 //  Created by 최승범 on 2024/03/06.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class MainCardViewController: UIViewController {
+final class SubCardsViewController: UIViewController {
     
     private let viewModel = SubCardsViewModel()
-    private lazy var collectionView = MainCardCollectionView(viewModel: viewModel,
+    private lazy var collectionView = SubCardsCollectionView(viewModel: viewModel,
                                                              size: view.bounds.size)
     private lazy var addButton = UIButton()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .basic
@@ -21,19 +21,18 @@ final class MainCardViewController: UIViewController {
         collectionView.configureAutoLayout(superView: view)
         configureNavigationBar()
         bind()
-        
-      configureAddButton()
+        configureAddButton()
         
     }
     
 }
 
-extension MainCardViewController {
+extension SubCardsViewController {
     
     private func bind() {
         viewModel.list.observe { [weak self] subCards in
             self?.collectionView.saveSnapshot(id: subCards.map { $0.id } )
-    
+            
         }
     }
     
@@ -55,8 +54,8 @@ extension MainCardViewController {
         let select = UIAction(title: "선택",
                               image: UIImage(systemName: "checkmark.circle")  ) { action in
         }
-
-        let items = [ 
+        
+        let items = [
             changeLayout,
             select
         ]
@@ -90,7 +89,8 @@ extension MainCardViewController {
     
     @objc private func tapAddButton() {
         
-        self.present(SubCardEditView(), animated: true)
-
+        navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
+                                                 animated: true)
+        
     }
 }

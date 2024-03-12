@@ -158,7 +158,7 @@ extension EditOfMainCardViewController {
                             for: .touchUpInside)
         
         let addButtonConstraints = [
-            addButton.widthAnchor.constraint(equalTo: view.widthAnchor,
+            addButton.widthAnchor.constraint(equalTo: imageView.widthAnchor,
                                              multiplier: 0.2),
             addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
             addButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
