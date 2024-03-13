@@ -32,7 +32,6 @@ extension SubCardsViewController {
     private func bind() {
         viewModel.list.observe { [weak self] subCards in
             self?.collectionView.saveSnapshot(id: subCards.map { $0.id } )
-            
         }
     }
     

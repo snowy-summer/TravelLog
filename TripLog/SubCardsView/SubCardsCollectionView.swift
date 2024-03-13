@@ -56,10 +56,13 @@ extension SubCardsCollectionView {
             let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
             let subCardDictionary: [UUID: SubCard] = Dictionary(uniqueKeysWithValues: tupleArray)
             
-            cell.backgroundColor = #colorLiteral(red: 0.5843137503, green: 0.8235294223, blue: 0.4196078479, alpha: 1)
-            cell.layer.borderWidth = 1
-            cell.layer.cornerRadius = 20
+           
             guard let subCard = subCardDictionary[itemIdentifier] else { return }
+            
+            cell.updateContent(title: subCard.title,
+                               images: subCard.images,
+                               starState: subCard.starsState,
+                               script: subCard.script)
            
         }
         

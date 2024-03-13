@@ -52,6 +52,59 @@ final class SubCardEditViewController: UIViewController {
 
 extension SubCardEditViewController {
     
+    @objc private func doneAction() {
+        
+        let subCard = SubCard(title: titleView.text,
+                              starsState: starsView.starState,
+                              money: 0,
+                              images: [imageView.image],
+                              script: scriptTextView.text)
+        
+        viewModel.list.value.append(subCard)
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func addImage() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        self.present(picker, animated: true)
+    }
+    
+}
+
+//MARK: - PHPickerViewControllerDelegate
+
+extension SubCardEditViewController: PHPickerViewControllerDelegate {
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                self?.mainQueue.async {
+                    self?.imageView.image = image as? UIImage
+                }
+            }
+        }
+        
+        if imageView.image == nil  && results.isEmpty {
+            addButton.isHidden = false
+        } else {
+            addButton.isHidden = true
+        }
+    }
+    
+}
+
+//MARK: - Configuration
+
+extension SubCardEditViewController {
+    
     private func configureNavigationBar() {
         let doneButton = UIBarButtonItem(title: "완료",
                                          style: .plain,
@@ -169,7 +222,6 @@ extension SubCardEditViewController {
         contentView.addSubview(starsView)
         
         starsView.translatesAutoresizingMaskIntoConstraints = false
-        
         starsView.layer.cornerRadius = 8
         starsView.layer.borderWidth = 1
         
@@ -254,50 +306,6 @@ extension SubCardEditViewController {
         ]
         
         NSLayoutConstraint.activate(viewConstraints)
-    }
-    
-}
-
-extension SubCardEditViewController {
-    
-    @objc private func doneAction() {
-        
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc private func addImage() {
-        var configuration = PHPickerConfiguration()
-        configuration.filter = .images
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        self.present(picker, animated: true)
-    }
-    
-}
-
-//MARK: - PHPickerViewControllerDelegate
-
-extension SubCardEditViewController: PHPickerViewControllerDelegate {
-    
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        let itemProvider = results.first?.itemProvider
-        
-        if let itemProvider = itemProvider,
-           itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                self?.mainQueue.async {
-                    self?.imageView.image = image as? UIImage
-                }
-            }
-        }
-        
-        if imageView.image == nil  && results.isEmpty {
-            addButton.isHidden = false
-        } else {
-            addButton.isHidden = true
-        }
     }
     
 }

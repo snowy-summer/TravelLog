@@ -14,15 +14,21 @@ final class SubCardCell: UICollectionViewCell {
     private lazy var titleLabel = UILabel()
     private lazy var titleView = UIView()
     private lazy var sumbnailImageView = UIImageView()
-    private lazy var stars = UIImageView()
-    private lazy var script = UITextView()
+    private lazy var starRateView = StarRateView()
+    private lazy var scriptTextView = UITextView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureSumbnailImageView()
+        self.backgroundColor = #colorLiteral(red: 0.6251164079, green: 0.8091775775, blue: 1, alpha: 1)
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 20
+        
         configureTitleView()
         configureTitleLabel()
+        configureSumbnailImageView()
+        configureStarsRateView()
+        configureScript()
     }
     
     required init?(coder: NSCoder) {
@@ -39,40 +45,46 @@ final class SubCardCell: UICollectionViewCell {
     
 }
 
+//MARK: - Method
+
 extension SubCardCell {
     
-    private func configureSumbnailImageView() {
-        contentView.addSubview(sumbnailImageView)
-        sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
-        sumbnailImageView.image = UIImage(resource: .addImagePlaceHolder)
+    func updateContent(title: String,
+                       images: [UIImage?],
+                       starState: [Bool],
+                       script: String?) {
         
-        let imageViewConstraints = [
-            sumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                   constant: 16),
-            sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                       constant: 16),
-            sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                   constant: -16),
-            sumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor,
-                                                      multiplier: 0.4)
-        ]
+        titleLabel.text = title
+        scriptTextView.text = script
+        starRateView.starState = starState
+        starRateView.updateButton()
         
-        NSLayoutConstraint.activate(imageViewConstraints)
+        if let sumbnailImage = images[0] {
+            sumbnailImageView.image = sumbnailImage
+        } else {
+            sumbnailImageView.backgroundColor = .gray
+        }
     }
+}
+
+
+//MARK: - Configuration
+
+extension SubCardCell {
     
     private func configureTitleView() {
         contentView.addSubview(titleView)
         titleView.translatesAutoresizingMaskIntoConstraints = false
         
         let titleViewConstraints = [
-            titleView.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
+            titleView.topAnchor.constraint(equalTo: contentView.topAnchor,
                                            constant: 16),
             titleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
             titleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                 constant: -16),
-            titleView.heightAnchor.constraint(lessThanOrEqualTo: sumbnailImageView.heightAnchor,
-                                               multiplier: 0.3)
+            titleView.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor,
+                                               multiplier: 0.25)
         ]
         
         NSLayoutConstraint.activate(titleViewConstraints)
@@ -86,24 +98,6 @@ extension SubCardCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .preferredFont(forTextStyle: .title1)
         titleLabel.textAlignment = .center
-        titleLabel.text = "美味"
-        
-        let imageViewConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: titleView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(imageViewConstraints)
-    } 
-    
-    private func configureScript() {
-        contentView.addSubview(script)
-        script.translatesAutoresizingMaskIntoConstraints = false
-        script.font = .preferredFont(forTextStyle: .title1)
-        script.textAlignment = .center
-        script.text = "美味"
         
         let imageViewConstraints = [
             titleLabel.topAnchor.constraint(equalTo: titleView.topAnchor),
@@ -115,6 +109,72 @@ extension SubCardCell {
         NSLayoutConstraint.activate(imageViewConstraints)
     }
     
+    private func configureSumbnailImageView() {
+        contentView.addSubview(sumbnailImageView)
+        
+        sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        sumbnailImageView.layer.cornerRadius = 8
+        sumbnailImageView.clipsToBounds = true
+        
+        let imageViewConstraints = [
+            sumbnailImageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
+                                                   constant: 8),
+            sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                       constant: 16),
+            sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                   constant: -16),
+            sumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor,
+                                                      multiplier: 0.4)
+        ]
+        
+        NSLayoutConstraint.activate(imageViewConstraints)
+    }
     
+    private func configureStarsRateView() {
+        contentView.addSubview(starRateView)
+        
+        starRateView.translatesAutoresizingMaskIntoConstraints = false
+        
+        starRateView.layer.cornerRadius = 8
+        starRateView.layer.borderWidth = 1
+        starRateView.isUserInteractionEnabled = false
+        
+       let viewConstraint = [
+        starRateView.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
+                                          constant: 8),
+        starRateView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                              constant: 16),
+        starRateView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                               constant: -16),
+        starRateView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.075)
+       ]
+        
+        NSLayoutConstraint.activate(viewConstraint)
+    }
     
+    private func configureScript() {
+        contentView.addSubview(scriptTextView)
+        
+        scriptTextView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scriptTextView.layer.cornerRadius = 8
+        
+        scriptTextView.font = .preferredFont(forTextStyle: .title1)
+        scriptTextView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        scriptTextView.isUserInteractionEnabled = false
+        
+        let imageViewConstraints = [
+            scriptTextView.topAnchor.constraint(equalTo: starRateView.bottomAnchor,
+                                                constant: 8),
+            scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                    constant: 16),
+            scriptTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                     constant: -16),
+            scriptTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                   constant: -16)
+        ]
+        
+        NSLayoutConstraint.activate(imageViewConstraints)
+    }
 }

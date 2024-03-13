@@ -13,6 +13,11 @@ final class PriceView: UIView {
     private lazy var priceTextField = UITextField()
     private lazy var priceImage = UIImageView()
     
+    var price: String {
+        guard let price = priceTextField.text else { return "0" }
+        return price
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

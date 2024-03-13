@@ -11,6 +11,11 @@ final class TitleView: UIView {
     
     private lazy var titleTextField = UITextField()
     
+    var text: String {
+        guard let title = titleTextField.text else { return "" }
+        return title
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -23,17 +28,20 @@ final class TitleView: UIView {
     
 }
 
+//MARK: - Configuration
+
 extension TitleView {
     
     private func configureTitleTextField() {
-        
         self.addSubview(titleTextField)
+        
+        titleTextField.translatesAutoresizingMaskIntoConstraints = false
+        
         titleTextField.placeholder = "제목"
         titleTextField.font = .preferredFont(forTextStyle: .title1)
         titleTextField.textColor = .black
         titleTextField.autocorrectionType = .no
         titleTextField.spellCheckingType = .no
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
         let titleTextFieldConstraints = [
             titleTextField.topAnchor.constraint(equalTo: self.topAnchor,
@@ -50,21 +58,4 @@ extension TitleView {
         
     }
     
-//    private func configureTitle() {
-//        titleView.addSubview(titleTextField)
-//        titleTextField.translatesAutoresizingMaskIntoConstraints = false
-//        titleTextField.font = .preferredFont(forTextStyle: .title1)
-//        titleTextField.textAlignment = .center
-//        titleTextField.placeholder = "제목"
-//        
-//        let titleConstraints = [
-//            titleTextField.topAnchor.constraint(equalTo: titleView.topAnchor),
-//            titleTextField.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
-//            titleTextField.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
-//            titleTextField.bottomAnchor.constraint(equalTo: titleView.bottomAnchor)
-//        ]
-//        
-//        NSLayoutConstraint.activate(titleConstraints)
-//        
-//    }
 }

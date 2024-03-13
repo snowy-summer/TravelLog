@@ -10,10 +10,10 @@ import UIKit
 struct SubCard: Identifiable {
     var id = UUID()
     var title: String
-    var stars: Int
+    var starsState: [Bool]
     var money: Int
-    var images: [UIImage]
-    var script: String
+    var images: [UIImage?]
+    var script: String?
 }
 
 extension SubCard: Hashable {

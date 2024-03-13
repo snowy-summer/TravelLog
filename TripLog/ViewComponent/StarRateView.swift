@@ -9,14 +9,14 @@ import UIKit
 
 final class StarRateView: UIView {
     
-    private lazy var starScore = UILabel()
     private lazy var starStackView = UIStackView()
     private lazy var stars = [UIButton]()
-    private lazy var starState = [Bool](repeating: false, count: 5)
+    var starState = [Bool](repeating: false, count: 5)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureStarScoreLabel()
+        
+        self.backgroundColor = .white
         configureStarStackView()
         configureStarImage()
     }
@@ -27,29 +27,9 @@ final class StarRateView: UIView {
     
 }
 
+//MARK: - configuration
+
 extension StarRateView {
-    
-    private func configureStarScoreLabel() {
-        self.addSubview(starScore)
-        
-        starScore.translatesAutoresizingMaskIntoConstraints = false
-        
-        starScore.text = "0 / 5"
-        
-        let scoreLabelConstraints = [
-            starScore.topAnchor.constraint(equalTo: self.topAnchor,
-                                           constant: 4),
-            starScore.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                              constant: -4),
-            starScore.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                               constant: 8),
-            starScore.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                             multiplier: 0.1)
-        ]
-        
-        NSLayoutConstraint.activate(scoreLabelConstraints)
-    
-    }
     
     private func configureStarStackView() {
         self.addSubview(starStackView)
@@ -57,67 +37,93 @@ extension StarRateView {
         starStackView.translatesAutoresizingMaskIntoConstraints = false
         
         starStackView.axis = .horizontal
-        starStackView.distribution = .equalSpacing
+        starStackView.distribution = .fillEqually
+        starStackView.spacing = 4
         
         let stackConstraints = [
+            starStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 32),
+            starStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant:  -32),
             starStackView.topAnchor.constraint(equalTo: self.topAnchor,
-                                       constant: 4),
+                                               constant: 4),
             starStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                          constant: -4),
-            starStackView.leadingAnchor.constraint(equalTo: starScore.trailingAnchor),
-            starStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+                                                  constant: -4)
         ]
         
         NSLayoutConstraint.activate(stackConstraints)
-    
+        
     }
     
     private func configureStarImage() {
         let starEmptyImage = UIImage(systemName: "star")
+        let starFillImage = UIImage(systemName: "star.fill")
         
         for i in 0..<5 {
             let button = UIButton()
-            button.setImage(starEmptyImage, for: .normal)
+            
+            button.tintColor = #colorLiteral(red: 0.9825740457, green: 0.8500512838, blue: 0.1501097083, alpha: 1)
             button.tag = i
+            button.contentVerticalAlignment = .fill
+            button.contentHorizontalAlignment = .fill
             stars.append(button)
             starStackView.addArrangedSubview(button)
+            
+            button.heightAnchor.constraint(equalTo: starStackView.heightAnchor,
+                                           multiplier: 1.0).isActive = true
+
             button.addTarget(self,
-                             action: #selector(tapStar(sender: )),
+                             action: #selector(tapStar),
                              for: .touchUpInside)
-            button.widthAnchor.constraint(equalTo: button.heightAnchor,
-                                          multiplier: 1.0).isActive = true
+            
+            if starState[i] {
+                button.setImage(starFillImage, for: .normal)
+            } else {
+                button.setImage(starEmptyImage, for: .normal)
+            }
+            
+            
+            
+           
         }
     }
 }
 
+//MARK: - method
 
 extension StarRateView {
     
-    @objc private func tapStar(sender: UIButton) {
+    @objc private func tapStar(_ sender: UIButton) {
         let starEmptyImage = UIImage(systemName: "star")
         let starFillImage = UIImage(systemName: "star.fill")
         let end = sender.tag
+        let filledCount = starState.filter { $0 == true }.count
         
         if starState[end] == false {
-            starState[end] = !starState[end]
-            for i in (end + 1)..<5 {
-                starState[i] = !starState[end]
-            }
-            
-            for i in 0...end {
-                starState[i] = starState[end]
-            }
-        } else {
-            for i in (end + 1)..<5 {
-                starState[i] = !starState[end]
-            }
-            
-            for i in 0...end {
-                starState[i] = starState[end]
-            }
+            starState[end] = true
+
+        } else if starState[end] && filledCount == end + 1{
             starState[end] = !starState[end]
         }
         
+        for i in (end + 1)..<5 {
+            starState[i] = false
+        }
+        
+        for i in 0..<end {
+            starState[i] = true
+        }
+        
+        for i in 0...4 {
+            if starState[i] {
+                stars[i].setImage(starFillImage, for: .normal)
+            } else {
+                stars[i].setImage(starEmptyImage, for: .normal)
+            }
+        }
+    }
+    
+    func updateButton() {
+        let starEmptyImage = UIImage(systemName: "star")
+        let starFillImage = UIImage(systemName: "star.fill")
         for i in 0...4 {
             if starState[i] {
                 stars[i].setImage(starFillImage, for: .normal)
