@@ -12,13 +12,15 @@ final class SubCardEditViewController: UIViewController {
     
     private let viewModel: SubCardsViewModel
     private let mainQueue = DispatchQueue.main
+    private var selctedCardId: UUID?
+    private lazy var images = [UIImage]()
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     private lazy var titleView = TitleView()
     private lazy var imageView = UIImageView()
     private lazy var addButton = UIButton()
-    private lazy var starsView = StarRateView()
+    private lazy var starRateView = StarRateView()
     private lazy var priceView = PriceView()
     private lazy var locationView = LocationView()
     private lazy var scriptTextView = UITextView()
@@ -26,6 +28,13 @@ final class SubCardEditViewController: UIViewController {
     init(viewModel: SubCardsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience init(viewModel: SubCardsViewModel, selectedCardId: UUID) {
+        self.init(viewModel: viewModel)
+        self.selctedCardId = selectedCardId
+        
+        loadSubCard(selectedCardId: selectedCardId)
     }
     
     required init?(coder: NSCoder) {
@@ -52,22 +61,60 @@ final class SubCardEditViewController: UIViewController {
 
 extension SubCardEditViewController {
     
+    func loadSubCard(selectedCardId: UUID) {
+        let index = viewModel.list.value.firstIndex { subCard in
+            subCard.id == selectedCardId
+        }
+        guard let index = index else { return }
+        
+        let card = viewModel.list.value[index]
+        
+        titleView.updateText(card.title)
+        
+        if let cardImages = card.images,
+            !cardImages.isEmpty {
+            imageView.image = cardImages[0]
+            addButton.isHidden = true
+        } else {
+            addButton.isHidden = false
+        }
+        
+        starRateView.starState = card.starsState
+        starRateView.updateButton()
+        priceView.updatePrice(price: card.money)
+        scriptTextView.text = card.script
+        if let selctedCardImages = card.images {
+            images = selctedCardImages
+        }
+    }
+    
     @objc private func doneAction() {
         
-        let subCard = SubCard(title: titleView.text,
-                              starsState: starsView.starState,
-                              money: 0,
-                              images: [imageView.image],
-                              script: scriptTextView.text)
+        if let cardId = selctedCardId {
+            
+            viewModel.updateContent(selectedCardId: cardId,
+                                    title: titleView.text,
+                                    images: images,
+                                    starsState: starRateView.starState,
+                                    price: priceView.price,
+                                    script: scriptTextView.text)
+            
+        } else {
+            
+            viewModel.appendSubCard(title: titleView.text,
+                                    images: images,
+                                    starsState: starRateView.starState,
+                                    price: priceView.price,
+                                    script: scriptTextView.text)
+        }
         
-        viewModel.list.value.append(subCard)
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func addImage() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
-        
+        configuration.selectionLimit = .max
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         self.present(picker, animated: true)
@@ -81,13 +128,24 @@ extension SubCardEditViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        let itemProvider = results.first?.itemProvider
         
-        if let itemProvider = itemProvider,
-           itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                self?.mainQueue.async {
-                    self?.imageView.image = image as? UIImage
+        if results.count != 0 {
+            images = []
+        }
+        
+        for index in 0..<results.count {
+            let itemProvider = results[index].itemProvider
+            if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                    guard let image = image as? UIImage else { return }
+                    
+                    if index == 0 {
+                        self?.mainQueue.async {
+                            self?.imageView.image = image
+                        }
+                    }
+                    
+                    self?.images.append(image)
                 }
             }
         }
@@ -112,7 +170,7 @@ extension SubCardEditViewController {
                                          action: #selector(doneAction))
         navigationItem.rightBarButtonItem = doneButton
     }
-     
+    
     private func configureScrollView() {
         view.addSubview(scrollView)
         
@@ -165,7 +223,7 @@ extension SubCardEditViewController {
         
         NSLayoutConstraint.activate(viewConstraints)
     }
-
+    
     private func configureImageView() {
         contentView.addSubview(imageView)
         
@@ -219,21 +277,21 @@ extension SubCardEditViewController {
     }
     
     private func configureStarsView() {
-        contentView.addSubview(starsView)
+        contentView.addSubview(starRateView)
         
-        starsView.translatesAutoresizingMaskIntoConstraints = false
-        starsView.layer.cornerRadius = 8
-        starsView.layer.borderWidth = 1
+        starRateView.translatesAutoresizingMaskIntoConstraints = false
+        starRateView.layer.cornerRadius = 8
+        starRateView.layer.borderWidth = 1
         
         let viewConstraints = [
-            starsView.topAnchor.constraint(equalTo: imageView.bottomAnchor,
-                                           constant: 16),
-            starsView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                               constant: 16),
-            starsView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                constant: -16),
-            starsView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor,
-                                              multiplier: 0.08)
+            starRateView.topAnchor.constraint(equalTo: imageView.bottomAnchor,
+                                              constant: 16),
+            starRateView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                  constant: 16),
+            starRateView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                   constant: -16),
+            starRateView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor,
+                                                 multiplier: 0.05)
         ]
         
         NSLayoutConstraint.activate(viewConstraints)
@@ -249,7 +307,7 @@ extension SubCardEditViewController {
         priceView.layer.borderWidth = 1
         
         let viewConstraints = [
-            priceView.topAnchor.constraint(equalTo: starsView.bottomAnchor,
+            priceView.topAnchor.constraint(equalTo: starRateView.bottomAnchor,
                                            constant: 16),
             priceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
@@ -272,13 +330,13 @@ extension SubCardEditViewController {
         
         let viewConstraints = [
             locationView.topAnchor.constraint(equalTo: priceView.bottomAnchor,
-                                         constant: 16),
+                                              constant: 16),
             locationView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                             constant: 16),
+                                                  constant: 16),
             locationView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                              constant: -16),
+                                                   constant: -16),
             locationView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor,
-                                            multiplier: 0.05)
+                                                 multiplier: 0.05)
         ]
         
         NSLayoutConstraint.activate(viewConstraints)
@@ -296,11 +354,11 @@ extension SubCardEditViewController {
         
         let viewConstraints = [
             scriptTextView.topAnchor.constraint(equalTo: locationView.bottomAnchor,
-                                            constant: 16),
-            scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                 constant: 16),
+            scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                    constant: 16),
             scriptTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                 constant: -16),
+                                                     constant: -16),
             scriptTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             scriptTextView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, multiplier: 0.5)
         ]

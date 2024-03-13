@@ -17,8 +17,10 @@ final class StarRateView: UIView {
         super.init(frame: frame)
         
         self.backgroundColor = .white
-        configureStarStackView()
+        self.addSubview(starStackView)
+        
         configureStarImage()
+        configureStarStackView()
     }
     
     required init?(coder: NSCoder) {
@@ -32,7 +34,6 @@ final class StarRateView: UIView {
 extension StarRateView {
     
     private func configureStarStackView() {
-        self.addSubview(starStackView)
         
         starStackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -41,12 +42,11 @@ extension StarRateView {
         starStackView.spacing = 4
         
         let stackConstraints = [
-            starStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 32),
-            starStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant:  -32),
             starStackView.topAnchor.constraint(equalTo: self.topAnchor,
                                                constant: 4),
             starStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                                  constant: -4)
+                                                  constant: -4),
+            starStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ]
         
         NSLayoutConstraint.activate(stackConstraints)
@@ -59,6 +59,7 @@ extension StarRateView {
         
         for i in 0..<5 {
             let button = UIButton()
+            button.translatesAutoresizingMaskIntoConstraints = false
             
             button.tintColor = #colorLiteral(red: 0.9825740457, green: 0.8500512838, blue: 0.1501097083, alpha: 1)
             button.tag = i
@@ -67,8 +68,11 @@ extension StarRateView {
             stars.append(button)
             starStackView.addArrangedSubview(button)
             
-            button.heightAnchor.constraint(equalTo: starStackView.heightAnchor,
-                                           multiplier: 1.0).isActive = true
+            button.heightAnchor.constraint(equalTo: self.heightAnchor,
+                                           multiplier: 1.0,
+                                           constant: -8).isActive = true
+            button.widthAnchor.constraint(equalTo: button.heightAnchor,
+                                          multiplier: 1.0).isActive = true
 
             button.addTarget(self,
                              action: #selector(tapStar),
@@ -79,10 +83,6 @@ extension StarRateView {
             } else {
                 button.setImage(starEmptyImage, for: .normal)
             }
-            
-            
-            
-           
         }
     }
 }

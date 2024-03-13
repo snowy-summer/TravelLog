@@ -11,8 +11,8 @@ final class TitleView: UIView {
     
     private lazy var titleTextField = UITextField()
     
-    var text: String {
-        guard let title = titleTextField.text else { return "" }
+    var text: String? {
+        guard let title = titleTextField.text else { return nil }
         return title
     }
     
@@ -32,7 +32,8 @@ final class TitleView: UIView {
 
 extension TitleView {
     
-    func updateText(_ text: String) {
+    func updateText(_ text: String?) {
+        titleTextField.placeholder = nil
         titleTextField.text = text
     }
     

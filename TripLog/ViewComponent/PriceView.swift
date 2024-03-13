@@ -13,8 +13,8 @@ final class PriceView: UIView {
     private lazy var priceTextField = UITextField()
     private lazy var priceImage = UIImageView()
     
-    var price: String {
-        guard let price = priceTextField.text else { return "0" }
+    var price: Int {
+        guard let price = Int(priceTextField.text!) else { return 0 }
         return price
     }
     
@@ -31,6 +31,17 @@ final class PriceView: UIView {
     }
     
 }
+
+//MARK: - Method
+
+extension PriceView {
+    
+    func updatePrice(price: Int) {
+        priceTextField.text = String(price)
+    }
+}
+
+//MARK: - Configuration
 
 extension PriceView {
     

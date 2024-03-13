@@ -47,8 +47,8 @@ final class SubCardCell: UICollectionViewCell {
 
 extension SubCardCell {
     
-    func updateContent(title: String,
-                       images: [UIImage?],
+    func updateContent(title: String?,
+                       images: [UIImage]?,
                        starState: [Bool],
                        script: String?) {
         
@@ -57,8 +57,9 @@ extension SubCardCell {
         starRateView.starState = starState
         starRateView.updateButton()
         
-        if let sumbnailImage = images[0] {
-            sumbnailImageView.image = sumbnailImage
+        if let images = images, 
+            !images.isEmpty {
+            sumbnailImageView.image = images[0]
         } else {
             sumbnailImageView.backgroundColor = .gray
         }

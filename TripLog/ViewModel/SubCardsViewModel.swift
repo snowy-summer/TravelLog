@@ -4,7 +4,7 @@
 //
 //  Created by 최승범 on 2024/03/06.
 //
-import Foundation
+import UIKit
 
 final class SubCardsViewModel {
     
@@ -14,4 +14,57 @@ final class SubCardsViewModel {
 
 extension SubCardsViewModel {
     
+    func appendSubCard(title: String?,
+                       images: [UIImage]?,
+                       starsState: [Bool],
+                       price: Int,
+                       script: String) {
+        
+        list.value.append(SubCard(title: title,
+                                  starsState: starsState,
+                                  money: price,
+                                  images: images,
+                                  script: script))
+    }
+    
+    func updateContent(selectedCardId: UUID,
+                       title: String?,
+                       images: [UIImage]?,
+                       starsState: [Bool],
+                       price: Int,
+                       script: String) {
+        
+        let index = list.value.firstIndex { subCard in
+            subCard.id == selectedCardId
+        }
+        guard let index = index else { return }
+        
+        list.value[index] = SubCard(title: title,
+                                    starsState: starsState,
+                                    money: price,
+                                    images: images,
+                                    script: script)
+        
+    }
+    
+    func appendImage(selectedCardId: UUID,
+                     image: UIImage) {
+        
+        let index = list.value.firstIndex { subCard in
+            subCard.id == selectedCardId
+        }
+        guard let index = index else { return }
+        
+        list.value[index].images?.append(image)
+    }
+    
+    func clearImages(selectedCardId: UUID) {
+        
+        let index = list.value.firstIndex { subCard in
+            subCard.id == selectedCardId
+        }
+        guard let index = index else { return }
+        
+        list.value[index].images = []
+    }
 }

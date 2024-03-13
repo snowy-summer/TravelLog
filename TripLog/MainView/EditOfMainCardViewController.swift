@@ -10,8 +10,7 @@ import PhotosUI
 
 final class EditOfMainCardViewController: UIViewController {
     
-    private lazy var titleTextField = UITextField()
-    private lazy var titleView = UIView()
+    private lazy var titleView = TitleView()
     private lazy var imageView = UIImageView()
     private lazy var addButton = UIButton()
     private let mainViewModel: MainViewModelProtocol
@@ -27,10 +26,16 @@ final class EditOfMainCardViewController: UIViewController {
     convenience init(mainViewModel: MainViewModelProtocol, id: UUID) {
         self.init(mainViewmodel: mainViewModel)
         self.selectedCardId = id
-        let card = mainViewModel.list.value.filter { $0.id == selectedCardId }
-        titleTextField.text = card.last!.title
         
-        if let sumbnailImage = card.last?.image {
+        let index = mainViewModel.list.value.firstIndex { mainCard in
+            mainCard.id == id
+        }
+        guard let index = index else { return }
+        let card = mainViewModel.list.value[index]
+        
+        titleView.updateText(card.title)
+        
+        if let sumbnailImage = card.image {
             imageView.image = sumbnailImage
             addButton.isHidden = true
         } else {
@@ -47,7 +52,6 @@ final class EditOfMainCardViewController: UIViewController {
         view.backgroundColor = .basic
     
         configureTitleView()
-        configureTitleTextField()
         configureImageView()
         configureNavigationBar()
         configureAddButton()
@@ -76,31 +80,6 @@ extension EditOfMainCardViewController {
         titleView.layer.cornerRadius = 20
         
         NSLayoutConstraint.activate(titleViewConstraints)
-        
-    }
-    
-    private func configureTitleTextField() {
-        
-        titleView.addSubview(titleTextField)
-        titleTextField.placeholder = "제목"
-        titleTextField.font = .preferredFont(forTextStyle: .title1)
-        titleTextField.textColor = .black
-        titleTextField.autocorrectionType = .no
-        titleTextField.spellCheckingType = .no
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        
-        let titleTextFieldConstraints = [
-            titleTextField.topAnchor.constraint(equalTo: titleView.topAnchor,
-                                                constant: 4),
-            titleTextField.bottomAnchor.constraint(equalTo: titleView.bottomAnchor,
-                                                constant: -4),
-            titleTextField.leadingAnchor.constraint(equalTo: titleView.leadingAnchor,
-                                                constant: 8),
-            titleTextField.trailingAnchor.constraint(equalTo: titleView.trailingAnchor,
-                                                     constant: -8),
-        ]
-        
-        NSLayoutConstraint.activate(titleTextFieldConstraints)
         
     }
     
@@ -213,7 +192,7 @@ extension EditOfMainCardViewController{
       
         self.dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-            guard let title = self.titleTextField.text else { return }
+            guard let title = self.titleView.text else { return }
             
             let sumbnailImage = imageView.image
             

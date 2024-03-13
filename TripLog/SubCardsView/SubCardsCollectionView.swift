@@ -9,10 +9,6 @@ import UIKit
 
 final class SubCardsCollectionView: UICollectionView {
     
-    private enum Section {
-        case main
-    }
-    
     private let viewModel: SubCardsViewModel
     private var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
     
@@ -84,4 +80,8 @@ extension SubCardsCollectionView {
         diffableDataSource?.apply(snaphot, animatingDifferences: false)
     }
     
+}
+
+enum Section {
+    case main
 }

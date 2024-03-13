@@ -9,10 +9,10 @@ import UIKit
 
 struct SubCard: Identifiable {
     var id = UUID()
-    var title: String
+    var title: String?
     var starsState: [Bool]
     var money: Int
-    var images: [UIImage?]
+    var images: [UIImage]?
     var script: String?
 }
 

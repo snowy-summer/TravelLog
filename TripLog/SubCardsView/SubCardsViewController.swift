@@ -33,6 +33,7 @@ final class SubCardsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .basic
         
+        collectionView.delegate = self
         collectionView.configureAutoLayout(superView: view)
         configureNavigationBar()
         bind()
@@ -109,5 +110,18 @@ extension SubCardsViewController {
         navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
                                                  animated: true)
         
+    }
+}
+
+extension SubCardsViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
+        
+        guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
+                                                                           selectedCardId: id),
+                                                 animated: true)
     }
 }
