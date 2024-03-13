@@ -11,8 +11,7 @@ final class SubCardCell: UICollectionViewCell {
     
     static let identifier = "SubCardCell"
     
-    private lazy var titleLabel = UILabel()
-    private lazy var titleView = UIView()
+    private lazy var titleView = TitleView()
     private lazy var sumbnailImageView = UIImageView()
     private lazy var starRateView = StarRateView()
     private lazy var scriptTextView = UITextView()
@@ -25,7 +24,6 @@ final class SubCardCell: UICollectionViewCell {
         self.layer.cornerRadius = 20
         
         configureTitleView()
-        configureTitleLabel()
         configureSumbnailImageView()
         configureStarsRateView()
         configureScript()
@@ -54,7 +52,7 @@ extension SubCardCell {
                        starState: [Bool],
                        script: String?) {
         
-        titleLabel.text = title
+        titleView.updateText(title)
         scriptTextView.text = script
         starRateView.starState = starState
         starRateView.updateButton()
@@ -75,6 +73,7 @@ extension SubCardCell {
     private func configureTitleView() {
         contentView.addSubview(titleView)
         titleView.translatesAutoresizingMaskIntoConstraints = false
+        titleView.isUserInteractionEnabled = false
         
         let titleViewConstraints = [
             titleView.topAnchor.constraint(equalTo: contentView.topAnchor,
@@ -91,22 +90,6 @@ extension SubCardCell {
         
         titleView.layer.cornerRadius = 8
         titleView.layer.borderWidth = 1
-    }
-    
-    private func configureTitleLabel() {
-        contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .preferredFont(forTextStyle: .title1)
-        titleLabel.textAlignment = .center
-        
-        let imageViewConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: titleView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(imageViewConstraints)
     }
     
     private func configureSumbnailImageView() {

@@ -14,6 +14,6 @@ struct MainCard {
     var isBookMarked = false
     var id: UUID = UUID()
     var date: Date = Date.now
-    var subCard: [SubCard]
+    var subCards: [SubCard]
     
 }

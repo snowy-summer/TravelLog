@@ -7,17 +7,6 @@
 
 import UIKit
 
-protocol CellDelegate: AnyObject {
-    func deleteCard(id: UUID)
-    func editCard(id: UUID)
-    func shareCard(id: UUID)
-    func bookmarkCard(id: UUID)
-}
-
-protocol MainCollectionViewDelegate: AnyObject {
-    func goToEditView(id: UUID)
-}
-
 final class MainViewController: UIViewController {
     
     private lazy var mainCollectionView = MainCollectionView(frame: .zero,
@@ -110,7 +99,13 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        navigationController?.pushViewController(SubCardsViewController(), animated: true)
+        let id = mainViewModel.list.value[indexPath.row].id
+        let subCards = mainViewModel.list.value[indexPath.row].subCards
+        
+        navigationController?.pushViewController(SubCardsViewController(mainCardId: id,
+                                                                        delegate: self,
+                                                                        subcards: subCards),
+                                                 animated: true)
     }
     
 }
@@ -147,4 +142,10 @@ extension MainViewController: MainCollectionViewDelegate {
         self.present(modalNavigationController, animated: true)
     }
     
+}
+
+extension MainViewController: MainCardDelegate {
+    func changeSubCards(mainCardId: UUID, card: [SubCard]) {
+        mainViewModel.changeSubCards(id: mainCardId, cards: card)
+    }
 }

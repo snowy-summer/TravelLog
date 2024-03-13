@@ -220,9 +220,9 @@ extension EditOfMainCardViewController{
             guard let cardId = self.selectedCardId else {
                 
                 if sumbnailImage == nil {
-                    self.mainViewModel.appendCard(title: title, image: nil)
+                    self.mainViewModel.appendMainCard(title: title, image: nil)
                 } else {
-                    self.mainViewModel.appendCard(title: title, image: sumbnailImage)
+                    self.mainViewModel.appendMainCard(title: title, image: sumbnailImage)
                 }
                 return
             }

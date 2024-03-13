@@ -28,6 +28,16 @@ final class TitleView: UIView {
     
 }
 
+//MARK: - Method
+
+extension TitleView {
+    
+    func updateText(_ text: String) {
+        titleTextField.text = text
+    }
+    
+}
+
 //MARK: - Configuration
 
 extension TitleView {

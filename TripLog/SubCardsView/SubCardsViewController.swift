@@ -9,10 +9,25 @@ import UIKit
 
 final class SubCardsViewController: UIViewController {
     
+    private let mainCardId: UUID
     private let viewModel = SubCardsViewModel()
+    weak var delegate: MainCardDelegate?
+    
     private lazy var collectionView = SubCardsCollectionView(viewModel: viewModel,
                                                              size: view.bounds.size)
     private lazy var addButton = UIButton()
+    
+    
+    init(mainCardId: UUID, delegate: MainCardDelegate? = nil, subcards: [SubCard]) {
+        self.mainCardId = mainCardId
+        self.delegate = delegate
+        self.viewModel.list.value = subcards
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,14 +39,15 @@ final class SubCardsViewController: UIViewController {
         configureAddButton()
         
     }
-    
 }
 
 extension SubCardsViewController {
     
     private func bind() {
         viewModel.list.observe { [weak self] subCards in
-            self?.collectionView.saveSnapshot(id: subCards.map { $0.id } )
+            guard let self = self else { return }
+            self.collectionView.saveSnapshot(id: subCards.map { $0.id } )
+            self.delegate?.changeSubCards(mainCardId: mainCardId, card: subCards)
         }
     }
     
@@ -64,7 +80,9 @@ extension SubCardsViewController {
     
     private func configureAddButton() {
         view.addSubview(addButton)
+        
         addButton.translatesAutoresizingMaskIntoConstraints = false
+        
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
         addButton.contentVerticalAlignment = .fill
         addButton.contentHorizontalAlignment = .fill

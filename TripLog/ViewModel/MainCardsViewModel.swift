@@ -7,16 +7,7 @@
 
 import UIKit
 
-protocol MainViewModelProtocol {
-    var list: Observable<[MainCard]> { get }
-    
-    func appendCard(title: String, image: UIImage?)
-    func deleteCard(id: UUID)
-    func bookmarkCard(id: UUID)
-    func editMainCardTitle(id: UUID, title: String)
-    func editMainCardImage(id: UUID, image: UIImage?)
-    func editMainCardDate(id: UUID, date: Date)
-}
+
 
 final class MainCardsViewModel {
     
@@ -26,8 +17,16 @@ final class MainCardsViewModel {
 
 extension MainCardsViewModel: MainViewModelProtocol {
   
-    func appendCard(title: String, image: UIImage?) {
-        list.value.append(MainCard(title: title,image: image, subCard: []))
+    func appendMainCard(title: String, image: UIImage?) {
+        list.value.append(MainCard(title: title,image: image, subCards: []))
+    }
+    
+    func changeSubCards(id: UUID, cards: [SubCard]) {
+        let index = list.value.firstIndex { mainCard in
+            mainCard.id == id
+        }
+        guard let index = index else { return }
+        list.value[index].subCards = cards
     }
     
     func deleteCard(id: UUID) {
