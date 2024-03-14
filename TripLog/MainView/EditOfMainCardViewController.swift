@@ -27,20 +27,7 @@ final class EditOfMainCardViewController: UIViewController {
         self.init(mainViewmodel: mainViewModel)
         self.selectedCardId = id
         
-        let index = mainViewModel.list.value.firstIndex { mainCard in
-            mainCard.id == id
-        }
-        guard let index = index else { return }
-        let card = mainViewModel.list.value[index]
-        
-        titleView.updateText(card.title)
-        
-        if let sumbnailImage = card.image {
-            imageView.image = sumbnailImage
-            addButton.isHidden = true
-        } else {
-            addButton.isHidden = false
-        }
+        loadMainCard(selectedCardID: id)
         
     }
     
@@ -58,6 +45,29 @@ final class EditOfMainCardViewController: UIViewController {
     }
     
 }
+
+extension EditOfMainCardViewController {
+    
+    private func loadMainCard(selectedCardID: UUID) {
+        let index = mainViewModel.list.value.firstIndex { mainCard in
+            mainCard.id == selectedCardID
+        }
+        guard let index = index else { return }
+        let card = mainViewModel.list.value[index]
+        
+        titleView.updateText(card.title)
+        
+        if let sumbnailImage = card.image {
+            imageView.image = sumbnailImage
+            addButton.isHidden = true
+        } else {
+            addButton.isHidden = false
+        }
+    }
+    
+}
+
+//MARK: - Configuration
 
 extension EditOfMainCardViewController {
 
@@ -203,6 +213,7 @@ extension EditOfMainCardViewController{
                 } else {
                     self.mainViewModel.appendMainCard(title: title, image: sumbnailImage)
                 }
+                
                 return
             }
             

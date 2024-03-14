@@ -59,7 +59,7 @@ extension PriceView {
                                                constant: -4),
             priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
                                                 constant: 8),
-            priceLabel.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor,
+            priceLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
                                               multiplier: 0.1)
         ]
         

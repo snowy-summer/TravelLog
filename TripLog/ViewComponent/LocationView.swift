@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 final class LocationView: UIView {
     
@@ -43,7 +44,7 @@ extension LocationView {
                                                constant: -4),
             locationLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
                                                 constant: 8),
-            locationLabel.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor,
+            locationLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
                                               multiplier: 0.1)
         ]
         
@@ -89,5 +90,4 @@ extension LocationView {
         
         NSLayoutConstraint.activate(textFieldConstraints)
     }
-    
 }

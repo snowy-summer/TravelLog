@@ -61,7 +61,7 @@ extension SubCardCell {
             !images.isEmpty {
             sumbnailImageView.image = images[0]
         } else {
-            sumbnailImageView.backgroundColor = .gray
+            sumbnailImageView.backgroundColor = .viewBackground
         }
     }
 }
@@ -75,6 +75,7 @@ extension SubCardCell {
         contentView.addSubview(titleView)
         titleView.translatesAutoresizingMaskIntoConstraints = false
         titleView.isUserInteractionEnabled = false
+        titleView.backgroundColor = .viewBackground
         
         let titleViewConstraints = [
             titleView.topAnchor.constraint(equalTo: contentView.topAnchor,
@@ -90,7 +91,6 @@ extension SubCardCell {
         NSLayoutConstraint.activate(titleViewConstraints)
         
         titleView.layer.cornerRadius = 8
-        titleView.layer.borderWidth = 1
     }
     
     private func configureSumbnailImageView() {
@@ -121,7 +121,7 @@ extension SubCardCell {
         starRateView.translatesAutoresizingMaskIntoConstraints = false
         
         starRateView.layer.cornerRadius = 8
-        starRateView.layer.borderWidth = 1
+        starRateView.backgroundColor = .viewBackground
         starRateView.isUserInteractionEnabled = false
         
        let viewConstraint = [
@@ -145,7 +145,7 @@ extension SubCardCell {
         scriptTextView.layer.cornerRadius = 8
         
         scriptTextView.font = .preferredFont(forTextStyle: .title1)
-        scriptTextView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        scriptTextView.backgroundColor = .viewBackground
         scriptTextView.isUserInteractionEnabled = false
         
         let imageViewConstraints = [

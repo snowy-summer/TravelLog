@@ -6,20 +6,17 @@
 //
 
 import UIKit
-import PhotosUI
 
 final class SubCardEditViewController: UIViewController {
     
     private let viewModel: SubCardsViewModel
     private let mainQueue = DispatchQueue.main
     private var selctedCardId: UUID?
-    private lazy var images = [UIImage]()
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     private lazy var titleView = TitleView()
-    private lazy var imageView = UIImageView()
-    private lazy var addButton = UIButton()
+    private lazy var imageView = SelectedImageView()
     private lazy var starRateView = StarRateView()
     private lazy var priceView = PriceView()
     private lazy var locationView = LocationView()
@@ -48,10 +45,8 @@ final class SubCardEditViewController: UIViewController {
         
         configureScrollView()
         configureContentView()
-        
         configureTitleView()
         configureImageView()
-        configureAddButton()
         configureStarsView()
         configurePriceView()
         configureLocationView()
@@ -59,9 +54,11 @@ final class SubCardEditViewController: UIViewController {
     }
 }
 
+//MARK: - Method
+
 extension SubCardEditViewController {
     
-    func loadSubCard(selectedCardId: UUID) {
+    private func loadSubCard(selectedCardId: UUID) {
         let index = viewModel.list.value.firstIndex { subCard in
             subCard.id == selectedCardId
         }
@@ -73,20 +70,31 @@ extension SubCardEditViewController {
         
         if let cardImages = card.images,
             !cardImages.isEmpty {
-            imageView.image = cardImages[0]
-            addButton.isHidden = true
+            imageView.images = cardImages
+            imageView.updateNumberOfPages(num: cardImages.count)
+            imageView.updateImage(image: cardImages[0])
+            imageView.isButtonHidden(value: true)
         } else {
-            addButton.isHidden = false
+            imageView.isButtonHidden(value: false)
         }
         
         starRateView.starState = card.starsState
         starRateView.updateButton()
         priceView.updatePrice(price: card.money)
         scriptTextView.text = card.script
-        if let selctedCardImages = card.images {
-            images = selctedCardImages
-        }
+       
     }
+    
+    private func addGesture(action: Selector, where view: UIView) {
+        let gesture = UITapGestureRecognizer(target: self,
+                                             action: action)
+        view.addGestureRecognizer(gesture)
+    }
+}
+
+//MARK: - objc
+
+extension SubCardEditViewController {
     
     @objc private func doneAction() {
         
@@ -94,7 +102,7 @@ extension SubCardEditViewController {
             
             viewModel.updateContent(selectedCardId: cardId,
                                     title: titleView.text,
-                                    images: images,
+                                    images: imageView.images,
                                     starsState: starRateView.starState,
                                     price: priceView.price,
                                     script: scriptTextView.text)
@@ -102,7 +110,7 @@ extension SubCardEditViewController {
         } else {
             
             viewModel.appendSubCard(title: titleView.text,
-                                    images: images,
+                                    images: imageView.images,
                                     starsState: starRateView.starState,
                                     price: priceView.price,
                                     script: scriptTextView.text)
@@ -111,53 +119,15 @@ extension SubCardEditViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc private func addImage() {
-        var configuration = PHPickerConfiguration()
-        configuration.filter = .images
-        configuration.selectionLimit = .max
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        self.present(picker, animated: true)
+    
+    @objc private func touchLocationView() {
+     
     }
+    
     
 }
 
-//MARK: - PHPickerViewControllerDelegate
 
-extension SubCardEditViewController: PHPickerViewControllerDelegate {
-    
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        
-        if results.count != 0 {
-            images = []
-        }
-        
-        for index in 0..<results.count {
-            let itemProvider = results[index].itemProvider
-            if itemProvider.canLoadObject(ofClass: UIImage.self) {
-                itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                    guard let image = image as? UIImage else { return }
-                    
-                    if index == 0 {
-                        self?.mainQueue.async {
-                            self?.imageView.image = image
-                        }
-                    }
-                    
-                    self?.images.append(image)
-                }
-            }
-        }
-        
-        if imageView.image == nil  && results.isEmpty {
-            addButton.isHidden = false
-        } else {
-            addButton.isHidden = true
-        }
-    }
-    
-}
 
 //MARK: - Configuration
 
@@ -209,6 +179,7 @@ extension SubCardEditViewController {
         
         titleView.layer.cornerRadius = 8
         titleView.layer.borderWidth = 1
+        titleView.backgroundColor = .viewBackground
         
         let viewConstraints = [
             titleView.topAnchor.constraint(equalTo: contentView.topAnchor,
@@ -231,11 +202,9 @@ extension SubCardEditViewController {
         
         imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 8
+        imageView.backgroundColor = .viewBackground
+        imageView.delegate = self
         imageView.clipsToBounds = true
-        imageView.isUserInteractionEnabled = true
-        
-        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
-                                                              action: #selector(addImage)))
         
         let imageViewConstraints = [
             imageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
@@ -253,35 +222,13 @@ extension SubCardEditViewController {
         NSLayoutConstraint.activate(imageViewConstraints)
     }
     
-    private func configureAddButton() {
-        imageView.addSubview(addButton)
-        
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        addButton.setImage(UIImage(resource: .plusButton), for: .normal)
-        addButton.contentVerticalAlignment = .fill
-        addButton.contentHorizontalAlignment = .fill
-        addButton.addTarget(self,
-                            action: #selector(addImage),
-                            for: .touchUpInside)
-        
-        let addButtonConstraints = [
-            addButton.widthAnchor.constraint(equalTo: imageView.widthAnchor,
-                                             multiplier: 0.2),
-            addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
-            addButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-            addButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(addButtonConstraints)
-    }
-    
     private func configureStarsView() {
         contentView.addSubview(starRateView)
         
         starRateView.translatesAutoresizingMaskIntoConstraints = false
         starRateView.layer.cornerRadius = 8
         starRateView.layer.borderWidth = 1
+        starRateView.backgroundColor = .viewBackground
         
         let viewConstraints = [
             starRateView.topAnchor.constraint(equalTo: imageView.bottomAnchor,
@@ -303,6 +250,7 @@ extension SubCardEditViewController {
         
         priceView.translatesAutoresizingMaskIntoConstraints = false
         
+        priceView.backgroundColor = .viewBackground
         priceView.layer.cornerRadius = 8
         priceView.layer.borderWidth = 1
         
@@ -327,6 +275,7 @@ extension SubCardEditViewController {
         
         locationView.layer.cornerRadius = 8
         locationView.layer.borderWidth = 1
+        locationView.backgroundColor = .viewBackground
         
         let viewConstraints = [
             locationView.topAnchor.constraint(equalTo: priceView.bottomAnchor,
@@ -351,6 +300,7 @@ extension SubCardEditViewController {
         scriptTextView.isScrollEnabled = false
         scriptTextView.layer.cornerRadius = 8
         scriptTextView.layer.borderWidth = 1
+        scriptTextView.backgroundColor = .viewBackground
         
         let viewConstraints = [
             scriptTextView.topAnchor.constraint(equalTo: locationView.bottomAnchor,
@@ -364,6 +314,14 @@ extension SubCardEditViewController {
         ]
         
         NSLayoutConstraint.activate(viewConstraints)
+    }
+    
+}
+
+extension SubCardEditViewController: SelectedImageViewDelegate {
+    
+    func presentViewController(where viewController: UIViewController) {
+        self.present(viewController, animated: true)
     }
     
 }
