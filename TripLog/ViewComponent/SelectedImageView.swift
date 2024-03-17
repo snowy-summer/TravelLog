@@ -16,7 +16,7 @@ final class SelectedImageView: UIView {
     private var mainQueue = DispatchQueue.main
     var images = [UIImage]()
     
-    weak var delegate: SelectedImageViewDelegate?
+    weak var delegate: PresentViewDelegate?
  
     override init(frame: CGRect) {
         super.init(frame: frame)
