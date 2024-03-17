@@ -15,9 +15,8 @@ final class SearchLocationViewController: UIViewController {
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchRegion = MKCoordinateRegion(MKMapRect.world)
     private var completerResults: [MKLocalSearchCompletion]?
-    private let pointOfInterestFilter = MKPointOfInterestFilter(including: [.restaurant, .nightlife])
-    
-    private var places: MKMapItem? {
+
+    private var place: MKMapItem? {
         didSet {
             collectionView.reloadData()
         }
@@ -25,7 +24,7 @@ final class SearchLocationViewController: UIViewController {
     
     private var localSearch: MKLocalSearch? {
         willSet {
-            places = nil
+            place = nil
             localSearch?.cancel()
         }
     }
@@ -145,26 +144,43 @@ extension SearchLocationViewController {
 //MARK: - CollectionViewDelegate
 
 extension SearchLocationViewController: UICollectionViewDelegate,UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        
         return completerResults?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationListCell.identifier,
                                                             for: indexPath) as? LocationListCell else { return LocationListCell() }
+        
         if let suggestion = completerResults?[indexPath.row] {
             cell.title.attributedText = highlightedText(text: suggestion.title,
                                                         ranges: suggestion.titleHighlightRanges,
                                                         size: 20)
             cell.subTitle.text = suggestion.subtitle
+            
+            let symbolIcon = place?.pointOfInterestCategory?.symbolName ?? MKPointOfInterestCategory.defaultPointsOfInterestSymbolName
+            cell.icon.image = UIImage(systemName: symbolIcon)
+            
         }
         
         return cell
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let completerResults = completerResults else { return }
+        
+        let result = completerResults[indexPath.row]
+        
+        search(for: result)
+        
+    }
     
+
 }
 
 extension SearchLocationViewController: UISearchBarDelegate {
@@ -176,18 +192,63 @@ extension SearchLocationViewController: UISearchBarDelegate {
 
         searchCompleter?.queryFragment = searchText
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        search(for: searchBar.text)
+    }
 }
 
 extension SearchLocationViewController: MKLocalSearchCompleterDelegate {
  
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         completerResults = completer.results
+        
         collectionView.reloadData()
     }
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         if let error = error as NSError? {
-            print(error)
+            print("위치 가져오기 에러 발생: \(error.localizedDescription)")
+        }
+    }
+    
+}
+
+//MARK: - Search
+
+extension SearchLocationViewController {
+    
+    //completion 기반 검색 실행
+    private func search(for suggestedCompletion: MKLocalSearchCompletion) {
+        let searchRequest = MKLocalSearch.Request(completion: suggestedCompletion)
+        search(using: searchRequest)
+    }
+    
+    //문자 기반 검색 실행
+    private func search(for queryString: String?) {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
+        searchRequest.naturalLanguageQuery = queryString
+        search(using: searchRequest)
+    }
+    
+    //들어온 request를 기반으로 검색을 실행한다.
+    private func search(using searchRequest: MKLocalSearch.Request) {
+        searchRequest.resultTypes = .pointOfInterest
+        
+        localSearch = MKLocalSearch(request: searchRequest)
+        localSearch?.start { [weak self] response, error in
+    
+            guard let self = self,
+                  let mapItem = response?.mapItems[0] else { return }
+            
+            self.place = mapItem
+            
+            if let updatedRegion = response?.boundingRegion {
+                self.searchRegion = updatedRegion
+            }
+            
         }
     }
 }

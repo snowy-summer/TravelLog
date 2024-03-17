@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B07DD032BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B07DD022BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift */; };
 		6B36F1C12B988F3C005A396E /* SubCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B36F1C02B988F3C005A396E /* SubCardsViewController.swift */; };
 		6B861AB52B98973600D1D7F7 /* SubCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B861AB42B98973600D1D7F7 /* SubCardsViewModel.swift */; };
 		6B861AB72B996D9F00D1D7F7 /* SubCardsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B861AB62B996D9F00D1D7F7 /* SubCardsCollectionView.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6B07DD022BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPointOfInterestCategory+Extenstion.swift"; sourceTree = "<group>"; };
 		6B36F1C02B988F3C005A396E /* SubCardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardsViewController.swift; sourceTree = "<group>"; };
 		6B861AB42B98973600D1D7F7 /* SubCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardsViewModel.swift; sourceTree = "<group>"; };
 		6B861AB62B996D9F00D1D7F7 /* SubCardsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardsCollectionView.swift; sourceTree = "<group>"; };
@@ -87,6 +89,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B07DD012BA6BC5200EEB271 /* Extenstion */ = {
+			isa = PBXGroup;
+			children = (
+				6B07DD022BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift */,
+			);
+			path = Extenstion;
+			sourceTree = "<group>";
+		};
 		6B36F1BF2B988EFD005A396E /* SubCardsView */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +250,7 @@
 				6B87F0F82B9075440036A53B /* ViewModel */,
 				6BCC92092B8F026200931D0C /* Model */,
 				6BCC92132B8F0D5100931D0C /* Utils */,
+				6B07DD012BA6BC5200EEB271 /* Extenstion */,
 				6BEAA2482B8E17AF0017318C /* Assets.xcassets */,
 				6BEAA24D2B8E17AF0017318C /* Info.plist */,
 			);
@@ -334,6 +345,7 @@
 				6BEAA2402B8E17AE0017318C /* AppDelegate.swift in Sources */,
 				6BBB9F8C2BA2B92F0013A82B /* SelectedImageView.swift in Sources */,
 				6BEAA2422B8E17AE0017318C /* SceneDelegate.swift in Sources */,
+				6B07DD032BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift in Sources */,
 				6BCC92102B8F05AA00931D0C /* MainCardsViewModel.swift in Sources */,
 				6B861AB52B98973600D1D7F7 /* SubCardsViewModel.swift in Sources */,
 				6B87F0F72B8F458F0036A53B /* MainCardCell.swift in Sources */,

@@ -32,7 +32,7 @@ final class LocationListCell: UICollectionViewCell {
         contentView.addSubview(icon)
         
         icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.image = UIImage(systemName: "star")
+
         let iconConstraints = [
             icon.topAnchor.constraint(equalTo: self.topAnchor),
             icon.bottomAnchor.constraint(equalTo: self.bottomAnchor),

@@ -6,17 +6,10 @@
 //
 
 import MapKit
-//import UIKit
 
 final class LocationViewController: UIViewController {
     
     private let mapView = MKMapView()
-    private let searchBar = UISearchBar()
-    
-    //검색창
-    //검색 리스트
-    //자동완성
-    //사진에서 위치 데이터 가지고 오기
     
     override func viewDidLoad() {
         view.backgroundColor = .basic
@@ -54,26 +47,6 @@ extension LocationViewController {
         NSLayoutConstraint.activate(mapViewConstraints)
     }
     
-    private func configureSearchBar() {
-        view.addSubview(searchBar)
-        
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.searchBarStyle = .minimal
-        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.9697164893, green: 0.9697164893, blue: 0.9697164893, alpha: 1)
-        
-        let safeArea = view.safeAreaLayoutGuide
-        let searchBarConstraints = [
-            searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor,
-                                           constant: 16),
-            searchBar.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
-                                               constant: 16),
-            searchBar.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                                constant: -16),
-            
-        ]
-        
-        NSLayoutConstraint.activate(searchBarConstraints)
-    }
 }
 
 extension LocationViewController {
