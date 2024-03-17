@@ -84,12 +84,7 @@ extension SubCardEditViewController {
         scriptTextView.text = card.script
        
     }
-    
-    private func addGesture(action: Selector, where view: UIView) {
-        let gesture = UITapGestureRecognizer(target: self,
-                                             action: action)
-        view.addGestureRecognizer(gesture)
-    }
+
 }
 
 //MARK: - objc
@@ -120,10 +115,12 @@ extension SubCardEditViewController {
     }
     
     
-    @objc private func touchLocationView() {
-     
-    }
+    @objc private func presentSearchLocationView() {
     
+        let locationViewController = LocationViewController()
+        locationViewController.isModalInPresentation = false
+        self.present(locationViewController, animated: true)
+    }
     
 }
 
@@ -276,6 +273,8 @@ extension SubCardEditViewController {
         locationView.layer.cornerRadius = 8
         locationView.layer.borderWidth = 1
         locationView.backgroundColor = .viewBackground
+        locationView.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                 action: #selector(presentSearchLocationView)))
         
         let viewConstraints = [
             locationView.topAnchor.constraint(equalTo: priceView.bottomAnchor,
@@ -317,6 +316,8 @@ extension SubCardEditViewController {
     }
     
 }
+
+//MARK: - SelectedImageViewDelegate
 
 extension SubCardEditViewController: SelectedImageViewDelegate {
     

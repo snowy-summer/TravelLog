@@ -71,7 +71,7 @@ extension PriceView {
         
         priceImage.translatesAutoresizingMaskIntoConstraints = false
         
-        priceImage.image = UIImage(systemName: "wonsign.circle.fill")
+        priceImage.image = UIImage(systemName: "wonsign.circle")
         
         let imageConstraints = [
             priceImage.topAnchor.constraint(equalTo: self.topAnchor,

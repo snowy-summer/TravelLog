@@ -175,9 +175,9 @@ extension SelectedImageView: PHPickerViewControllerDelegate {
             let itemProvider = results[index].itemProvider
             if itemProvider.canLoadObject(ofClass: UIImage.self) {
                 itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                    
                     guard let image = image as? UIImage else { return }
                     guard let self = self else { return }
-                    
                     
                     self.images[index] = image
                     self.mainQueue.async {

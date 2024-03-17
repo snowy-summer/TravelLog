@@ -16,7 +16,6 @@ final class StarRateView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .white
         self.addSubview(starStackView)
         
         configureStarImage()
@@ -60,8 +59,6 @@ extension StarRateView {
         for i in 0..<5 {
             let button = UIButton()
             button.translatesAutoresizingMaskIntoConstraints = false
-            
-            button.tintColor = #colorLiteral(red: 0.9825740457, green: 0.8500512838, blue: 0.1501097083, alpha: 1)
             button.tag = i
             button.contentVerticalAlignment = .fill
             button.contentHorizontalAlignment = .fill

@@ -11,7 +11,7 @@ import MapKit
 final class LocationView: UIView {
     
     private lazy var locationLabel = UILabel()
-    private lazy var locationTextField = UITextField()
+    private lazy var locationText = UILabel()
     private lazy var locationImage = UIImageView()
     
     override init(frame: CGRect) {
@@ -19,7 +19,7 @@ final class LocationView: UIView {
         
         configureLocationLabel()
         configureLocationImage()
-        configureLocationTextField()
+        configureLocationText()
     }
     
     required init?(coder: NSCoder) {
@@ -54,7 +54,7 @@ extension LocationView {
     private func configureLocationImage() {
         self.addSubview(locationImage)
         locationImage.translatesAutoresizingMaskIntoConstraints = false
-        locationImage.image = UIImage(systemName: "location.fill")
+        locationImage.image = UIImage(systemName: "location")
         
         let imageConstraints = [
             locationImage.topAnchor.constraint(equalTo: self.topAnchor,
@@ -70,21 +70,21 @@ extension LocationView {
         NSLayoutConstraint.activate(imageConstraints)
     }
     
-    private func configureLocationTextField() {
-        self.addSubview(locationTextField)
+    private func configureLocationText() {
+        self.addSubview(locationText)
         
-        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationText.translatesAutoresizingMaskIntoConstraints = false
         
-        locationTextField.textAlignment = .left
+        locationText.textAlignment = .center
         
         let textFieldConstraints = [
-            locationTextField.topAnchor.constraint(equalTo: self.topAnchor,
+            locationText.topAnchor.constraint(equalTo: self.topAnchor,
                                                 constant: 4),
-            locationTextField.bottomAnchor.constraint(equalTo: self.bottomAnchor,
+            locationText.bottomAnchor.constraint(equalTo: self.bottomAnchor,
                                                    constant: -4),
-            locationTextField.leadingAnchor.constraint(equalTo: locationLabel.trailingAnchor,
+            locationText.leadingAnchor.constraint(equalTo: locationLabel.trailingAnchor,
                                                     constant: 8),
-            locationTextField.trailingAnchor.constraint(equalTo: locationImage.leadingAnchor,
+            locationText.trailingAnchor.constraint(equalTo: locationImage.leadingAnchor,
                                                      constant: -8)
         ]
         
