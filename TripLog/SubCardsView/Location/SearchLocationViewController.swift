@@ -93,6 +93,7 @@ extension SearchLocationViewController {
         searchCompleter = MKLocalSearchCompleter()
         searchCompleter?.delegate = self
         searchCompleter?.resultTypes = .pointOfInterest
+        searchCompleter?.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
         searchCompleter?.region = searchRegion
     }
     
@@ -141,6 +142,9 @@ extension SearchLocationViewController: UICollectionViewDelegate {
         
         let result = completerResults[indexPath.row]
         search(for: result)
+        self.dismiss(animated: true)
+        print(result.title)
+        
     }
     
 }
@@ -196,6 +200,7 @@ extension SearchLocationViewController {
         searchRequest.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
         searchRequest.naturalLanguageQuery = queryString
         search(using: searchRequest)
+//        locationViewModel.appendLocationModel(completion: results[i], mapitem: self.places?[i]
     }
     
     //들어온 request를 기반으로 검색을 실행한다.
@@ -207,12 +212,12 @@ extension SearchLocationViewController {
     
             guard let self = self,
                   let mapItems = response?.mapItems else { return }
-            
             self.places = mapItems
             
             guard let results = completerResults else { return }
             for i in 0..<results.count {
-                locationViewModel.appendLocationModel(completion: results[i], mapitem: self.places?[i])
+                
+                locationViewModel.appendLocationModel(completion: results[i], mapitem: self.places?[0])
                 
             }
 

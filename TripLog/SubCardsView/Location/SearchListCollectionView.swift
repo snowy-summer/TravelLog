@@ -10,7 +10,7 @@ import UIKit
 final class SearchListCollectionView: UICollectionView {
     
     private var locationViewModel: SearchLocationViewModel
-    private var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
+     var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
     
     init(viewModel: SearchLocationViewModel) {
         self.locationViewModel = viewModel

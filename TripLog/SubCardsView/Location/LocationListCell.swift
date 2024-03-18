@@ -19,6 +19,7 @@ final class LocationListCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         configureIcon()
         configureTitle()
         configureSubTitle()
@@ -35,6 +36,8 @@ final class LocationListCell: UICollectionViewCell {
         icon.image = nil
     }
     
+    
+    
     private func configureIcon() {
         contentView.addSubview(icon)
         
@@ -42,13 +45,12 @@ final class LocationListCell: UICollectionViewCell {
 
         let iconConstraints = [
             icon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            icon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+//            icon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             icon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                           constant: 8),
+            icon.heightAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height * 0.05),
             icon.widthAnchor.constraint(equalTo: icon.heightAnchor,
                                         multiplier: 1.0),
-            icon.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor,
-                                        multiplier: 0.1)
         ]
         
         NSLayoutConstraint.activate(iconConstraints)
@@ -64,7 +66,7 @@ final class LocationListCell: UICollectionViewCell {
                                        constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor,
                                            constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ]
         
         NSLayoutConstraint.activate(titleConstraints)
