@@ -7,13 +7,13 @@
 
 import UIKit
 
-struct MainCard {
+struct MainCardModel {
     
     var title: String
     var image: UIImage?
     var isBookMarked = false
     var id: UUID = UUID()
     var date: Date = Date.now
-    var subCards: [SubCard]
+    var subCards: [SubCardModel]
     
 }

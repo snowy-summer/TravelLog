@@ -147,7 +147,7 @@ extension MainViewController: MainCollectionViewDelegate {
 //MARK: - MainCardDelegate
 extension MainViewController: MainCardDelegate {
     
-    func changeSubCards(mainCardId: UUID, card: [SubCard]) {
+    func changeSubCards(mainCardId: UUID, card: [SubCardModel]) {
         mainViewModel.changeSubCards(id: mainCardId, cards: card)
     }
     

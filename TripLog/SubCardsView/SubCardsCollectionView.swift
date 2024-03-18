@@ -50,7 +50,7 @@ extension SubCardsCollectionView {
         let cellRegistration = UICollectionView.CellRegistration<SubCardCell, UUID>  { [weak self] cell, indexPath, itemIdentifier in
             guard let self = self else { return }
             let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
-            let subCardDictionary: [UUID: SubCard] = Dictionary(uniqueKeysWithValues: tupleArray)
+            let subCardDictionary: [UUID: SubCardModel] = Dictionary(uniqueKeysWithValues: tupleArray)
             
            
             guard let subCard = subCardDictionary[itemIdentifier] else { return }
@@ -74,10 +74,10 @@ extension SubCardsCollectionView {
     }
     
     func saveSnapshot(id: [UUID]) {
-        var snaphot = NSDiffableDataSourceSnapshot<Section, UUID>()
-        snaphot.appendSections([.main])
-        snaphot.appendItems(id,toSection: .main)
-        diffableDataSource?.apply(snaphot, animatingDifferences: false)
+        var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(id,toSection: .main)
+        diffableDataSource?.apply(snapshot, animatingDifferences: false)
     }
     
 }

@@ -9,22 +9,23 @@ import MapKit
 
 final class SearchLocationViewController: UIViewController {
 
+    private let locationViewModel = SearchLocationViewModel()
     private let searchBar = UISearchBar()
-    private let collectionView = UICollectionView(frame: .zero,
-                                                  collectionViewLayout: UICollectionViewLayout())
+
+    private lazy var collectionView = SearchListCollectionView(viewModel: locationViewModel)
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchRegion = MKCoordinateRegion(MKMapRect.world)
     private var completerResults: [MKLocalSearchCompletion]?
 
-    private var place: MKMapItem? {
+    private var places: [MKMapItem?]? {
         didSet {
-            collectionView.reloadData()
+            
         }
     }
     
     private var localSearch: MKLocalSearch? {
         willSet {
-            place = nil
+            places = nil
             localSearch?.cancel()
         }
     }
@@ -34,8 +35,8 @@ final class SearchLocationViewController: UIViewController {
         
         configureSearchBar()
         configureCollectionView()
-        cellRegister()
         configureSearchCompleter()
+        bind()
        
     }
     
@@ -76,49 +77,38 @@ extension SearchLocationViewController {
         view.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.collectionViewLayout = createBasicLayout()
       
-        let safeArea = view.safeAreaLayoutGuide
         let collectionViewConstraints = [
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(collectionViewConstraints)
     }
     
-    private func createBasicLayout() -> UICollectionViewCompositionalLayout {
-        var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .plain)
-        
-        layoutConfiguration.backgroundColor = .basic
-        
-        let layout = UICollectionViewCompositionalLayout.list(using: layoutConfiguration)
-        
-        return layout
-    }
-    
-    private func cellRegister() {
-        collectionView.register(LocationListCell.self,
-                                forCellWithReuseIdentifier: LocationListCell.identifier)
-    }
-    
     private func configureSearchCompleter() {
         searchCompleter = MKLocalSearchCompleter()
         searchCompleter?.delegate = self
-        searchCompleter?.resultTypes = .query
+        searchCompleter?.resultTypes = .pointOfInterest
         searchCompleter?.region = searchRegion
-  
     }
     
 }
 
 extension SearchLocationViewController {
     
-    private func highlightedText(text: String, ranges: [NSValue], size: CGFloat) -> NSMutableAttributedString {
+    private func bind() {
+        locationViewModel.list.observe { [weak self] locationModels in
+            self?.collectionView.saveSnapshot(id: locationModels.map{ $0.id })
+        }
+    }
+    
+    private func highlightedText(text: String,
+                                 ranges: [NSValue],
+                                 size: CGFloat) -> NSMutableAttributedString {
         
         let attributedText = NSMutableAttributedString(string: text)
         let normalFont = UIFont.systemFont(ofSize: size)
@@ -143,54 +133,28 @@ extension SearchLocationViewController {
 
 //MARK: - CollectionViewDelegate
 
-extension SearchLocationViewController: UICollectionViewDelegate,UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        
-        return completerResults?.count ?? 0
-    }
+extension SearchLocationViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationListCell.identifier,
-                                                            for: indexPath) as? LocationListCell else { return LocationListCell() }
-        
-        if let suggestion = completerResults?[indexPath.row] {
-            cell.title.attributedText = highlightedText(text: suggestion.title,
-                                                        ranges: suggestion.titleHighlightRanges,
-                                                        size: 20)
-            cell.subTitle.text = suggestion.subtitle
-            
-            let symbolIcon = place?.pointOfInterestCategory?.symbolName ?? MKPointOfInterestCategory.defaultPointsOfInterestSymbolName
-            cell.icon.image = UIImage(systemName: symbolIcon)
-            
-        }
-        
-        return cell
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+                        didSelectItemAt indexPath: IndexPath) {
         guard let completerResults = completerResults else { return }
         
         let result = completerResults[indexPath.row]
-        
         search(for: result)
-        
     }
     
-
 }
 
 extension SearchLocationViewController: UISearchBarDelegate {
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar,
+                   textDidChange searchText: String) {
         if searchText == "" {
             completerResults = nil
         }
 
         searchCompleter?.queryFragment = searchText
+        search(for: searchText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -202,12 +166,13 @@ extension SearchLocationViewController: UISearchBarDelegate {
 extension SearchLocationViewController: MKLocalSearchCompleterDelegate {
  
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        locationViewModel.list.value.removeAll()
         completerResults = completer.results
-        
-        collectionView.reloadData()
+      
     }
     
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+    func completer(_ completer: MKLocalSearchCompleter,
+                   didFailWithError error: Error) {
         if let error = error as NSError? {
             print("위치 가져오기 에러 발생: \(error.localizedDescription)")
         }
@@ -241,14 +206,16 @@ extension SearchLocationViewController {
         localSearch?.start { [weak self] response, error in
     
             guard let self = self,
-                  let mapItem = response?.mapItems[0] else { return }
+                  let mapItems = response?.mapItems else { return }
             
-            self.place = mapItem
+            self.places = mapItems
             
-            if let updatedRegion = response?.boundingRegion {
-                self.searchRegion = updatedRegion
+            guard let results = completerResults else { return }
+            for i in 0..<results.count {
+                locationViewModel.appendLocationModel(completion: results[i], mapitem: self.places?[i])
+                
             }
-            
+
         }
     }
 }

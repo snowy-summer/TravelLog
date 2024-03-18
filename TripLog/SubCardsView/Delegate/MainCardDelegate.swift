@@ -9,6 +9,6 @@ import Foundation
 
 protocol MainCardDelegate: AnyObject {
     
-    func changeSubCards(mainCardId: UUID, card: [SubCard])
+    func changeSubCards(mainCardId: UUID, card: [SubCardModel])
     
 }

@@ -11,4 +11,6 @@ protocol PresentViewDelegate: AnyObject {
     
     func presentViewController(where viewController: UIViewController)
     
+    func pushViewController(where viewController: UIViewController)
+    
 }

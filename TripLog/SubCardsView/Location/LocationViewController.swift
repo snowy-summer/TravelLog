@@ -10,6 +10,7 @@ import MapKit
 final class LocationViewController: UIViewController {
     
     private let mapView = MKMapView()
+    private let searchViewController = SearchLocationViewController()
     
     override func viewDidLoad() {
         view.backgroundColor = .basic
@@ -17,6 +18,7 @@ final class LocationViewController: UIViewController {
         self.sheetPresentationController?.prefersGrabberVisible = true
         
         configureMapView()
+        configureNavigationBar()
         
     }
     
@@ -47,12 +49,25 @@ extension LocationViewController {
         NSLayoutConstraint.activate(mapViewConstraints)
     }
     
+    private func configureNavigationBar() {
+        let backButton = UIBarButtonItem(title: "뒤로가기",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backAction))
+        
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    @objc private func backAction() {
+        searchViewController.dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
+    }
 }
 
 extension LocationViewController {
     
     func presentModal() {
-        let searchViewController = SearchLocationViewController()
+        
         searchViewController.isModalInPresentation = true
         
         let lowDetentIdentifier = UISheetPresentationController.Detent.Identifier("low")

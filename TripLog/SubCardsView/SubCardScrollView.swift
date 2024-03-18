@@ -39,7 +39,7 @@ final class SubCardScrollView: UIScrollView {
 
 extension SubCardScrollView {
     
-    func updateContent(card: SubCard) {
+    func updateContent(card: SubCardModel) {
         titleView.updateText(card.title)
         starRateView.starState = card.starsState
         starRateView.updateButton()
@@ -58,7 +58,8 @@ extension SubCardScrollView {
     }
     
     @objc private func presentSearchLocationView() {
-        subCardScrollViewDelegate?.presentViewController(where: LocationViewController())
+//        subCardScrollViewDelegate?.presentViewController(where: LocationViewController())
+        subCardScrollViewDelegate?.pushViewController(where: LocationViewController())
     }
 }
 

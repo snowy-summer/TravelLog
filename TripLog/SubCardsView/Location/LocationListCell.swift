@@ -12,8 +12,8 @@ final class LocationListCell: UICollectionViewCell {
     
     static let identifier = "LocationListCell"
     
-    var title = UILabel()
-    var subTitle = UILabel()
+    var titleLabel = UILabel()
+    var subTitleLabel = UILabel()
     var icon = UIImageView()
     
 
@@ -28,51 +28,72 @@ final class LocationListCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+        subTitleLabel.text = nil
+        icon.image = nil
+    }
+    
     private func configureIcon() {
         contentView.addSubview(icon)
         
         icon.translatesAutoresizingMaskIntoConstraints = false
 
         let iconConstraints = [
-            icon.topAnchor.constraint(equalTo: self.topAnchor),
-            icon.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            icon.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            icon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            icon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            icon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                          constant: 8),
             icon.widthAnchor.constraint(equalTo: icon.heightAnchor,
-                                        multiplier: 1.0)
+                                        multiplier: 1.0),
+            icon.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor,
+                                        multiplier: 0.1)
         ]
         
         NSLayoutConstraint.activate(iconConstraints)
     }
     
     private func configureTitle() {
-        contentView.addSubview(title)
+        contentView.addSubview(titleLabel)
         
-        title.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let titleConstraints = [
-            title.topAnchor.constraint(equalTo: self.topAnchor),
-            title.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            title.leadingAnchor.constraint(equalTo: icon.trailingAnchor,
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                       constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor,
                                            constant: 16),
-            title.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(titleConstraints)
     }
     
     private func configureSubTitle() {
-        contentView.addSubview(subTitle)
+        contentView.addSubview(subTitleLabel)
         
-        subTitle.translatesAutoresizingMaskIntoConstraints = false
+        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subTitleLabel.font = .systemFont(ofSize: 12)
+        subTitleLabel.textColor = .lightGray
         
         let titleConstraints = [
-            subTitle.topAnchor.constraint(equalTo: title.bottomAnchor),
-            subTitle.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            subTitle.leadingAnchor.constraint(equalTo: title.leadingAnchor),
-            subTitle.trailingAnchor.constraint(equalTo: title.trailingAnchor),
+            subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                          constant: 8),
+            subTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                             constant: -8),
+            subTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            subTitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+           
         ]
         
         NSLayoutConstraint.activate(titleConstraints)
     }
     
+    func updateContent(title: String?, subtitle: String?, iconImage: UIImage?) {
+        
+        titleLabel.text = title
+        subTitleLabel.text = subtitle
+        icon.image = iconImage
+    }
 }

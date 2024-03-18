@@ -8,7 +8,7 @@ import UIKit
 
 final class SubCardsViewModel {
     
-    var list: Observable<[SubCard]> = Observable([])
+    var list: Observable<[SubCardModel]> = Observable([])
 
 }
 
@@ -20,7 +20,7 @@ extension SubCardsViewModel {
                        price: Int,
                        script: String) {
         
-        list.value.append(SubCard(title: title,
+        list.value.append(SubCardModel(title: title,
                                   starsState: starsState,
                                   money: price,
                                   images: images,
@@ -39,7 +39,7 @@ extension SubCardsViewModel {
         }
         guard let index = index else { return }
         
-        list.value[index] = SubCard(title: title,
+        list.value[index] = SubCardModel(title: title,
                                     starsState: starsState,
                                     money: price,
                                     images: images,

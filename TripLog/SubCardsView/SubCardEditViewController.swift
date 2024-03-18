@@ -121,6 +121,11 @@ extension SubCardEditViewController {
 
 extension SubCardEditViewController: PresentViewDelegate {
     
+    func pushViewController(where viewController: UIViewController) {
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    
     func presentViewController(where viewController: UIViewController) {
         self.present(viewController, animated: true)
     }

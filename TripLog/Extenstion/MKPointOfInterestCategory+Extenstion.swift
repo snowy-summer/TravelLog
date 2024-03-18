@@ -15,16 +15,48 @@ extension MKPointOfInterestCategory {
                                                                       .cafe,
                                                                       .restaurant,
                                                                       .winery,
-                                                                      .hotel ]
+                                                                      .hotel,
+                                                                      .airport,
+                                                                      .publicTransport,
+                                                                      .museum,
+                                                                      .park,
+                                                                      .beach,
+                                                                      .foodMarket]
     
-    static let defaultPointsOfInterestSymbolName = "mappin.and.ellipse"
     
-    var symbolName: String {
+    
+    var symbolName: UIImage? {
         switch self {
+            
         case .airport:
-            return "ariplane"
+            return .airport
+        case .publicTransport:
+            return .publicTransport
+            
+        case .bakery:
+            return .bakery
+        case .brewery, .winery:
+            return .brewery
+        case .cafe:
+            return .cafe
+        case .restaurant:
+            return .restaurant
+            
+        case .museum:
+            return .museum
+        case .park:
+            return .park
+        case .beach:
+            return .beach
+            
+        case .hotel:
+            return .hotel
+        case .foodMarket:
+            return .foodMarket
+            
         default:
-            return MKPointOfInterestCategory.defaultPointsOfInterestSymbolName
+            return UIImage(systemName: "mappin.and.ellipse")?.withTintColor(.red,
+                                                                            renderingMode: .alwaysOriginal)
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  SubCard.swift
+//  SubCardModel.swift
 //  TripLog
 //
 //  Created by 최승범 on 2024/02/28.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct SubCard: Identifiable {
+struct SubCardModel: Identifiable {
     var id = UUID()
     var title: String?
     var starsState: [Bool]
@@ -16,9 +16,9 @@ struct SubCard: Identifiable {
     var script: String?
 }
 
-extension SubCard: Hashable {
+extension SubCardModel: Hashable {
     
-    static func == (lhs: SubCard, rhs: SubCard) -> Bool {
+    static func == (lhs: SubCardModel, rhs: SubCardModel) -> Bool {
         lhs.id.hashValue == rhs.id.hashValue
     }
     

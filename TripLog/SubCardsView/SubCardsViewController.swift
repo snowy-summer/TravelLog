@@ -18,7 +18,7 @@ final class SubCardsViewController: UIViewController {
     private lazy var addButton = UIButton()
     
     
-    init(mainCardId: UUID, delegate: MainCardDelegate? = nil, subcards: [SubCard]) {
+    init(mainCardId: UUID, delegate: MainCardDelegate? = nil, subcards: [SubCardModel]) {
         self.mainCardId = mainCardId
         self.delegate = delegate
         self.viewModel.list.value = subcards
@@ -115,7 +115,8 @@ extension SubCardsViewController {
 
 extension SubCardsViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
         
         guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
