@@ -10,41 +10,31 @@ import MapKit
 final class SearchLocationViewController: UIViewController {
 
     private let locationViewModel = SearchLocationViewModel()
+    private var mapSearchService: MapSearchSevice?
     private let searchBar = UISearchBar()
 
-    private lazy var collectionView = SearchListCollectionView(viewModel: locationViewModel)
-    private var searchCompleter: MKLocalSearchCompleter?
-    private var searchRegion = MKCoordinateRegion(MKMapRect.world)
-    private var completerResults: [MKLocalSearchCompletion]?
-
-    private var places: [MKMapItem?]? {
-        didSet {
-            
-        }
+    private lazy var collectionView = SearchListCollectionView(locationViewModel: locationViewModel)
+    private lazy var informationView = SelectedLocationInformationView(locationViewModel: locationViewModel)
+    
+    init(mapSearchService: MapSearchSevice? = nil) {
+        self.mapSearchService = mapSearchService
+        super.init(nibName: nil, bundle: nil)
     }
     
-    private var localSearch: MKLocalSearch? {
-        willSet {
-            places = nil
-            localSearch?.cancel()
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         view.backgroundColor = .basic
         
+        mapSearchService = MapSearchSevice(viewModel: locationViewModel)
+        bind()
         configureSearchBar()
         configureCollectionView()
-        configureSearchCompleter()
-        bind()
+        configureInformationView()
        
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        searchCompleter = nil
-    }
-    
 }
 
 //MARK: - Configuration
@@ -55,7 +45,7 @@ extension SearchLocationViewController {
         view.addSubview(searchBar)
         
         searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.delegate = self
+        searchBar.delegate = mapSearchService
         searchBar.searchBarStyle = .minimal
         searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.9697164893, green: 0.9697164893, blue: 0.9697164893, alpha: 1)
         
@@ -89,14 +79,22 @@ extension SearchLocationViewController {
         NSLayoutConstraint.activate(collectionViewConstraints)
     }
     
-    private func configureSearchCompleter() {
-        searchCompleter = MKLocalSearchCompleter()
-        searchCompleter?.delegate = self
-        searchCompleter?.resultTypes = .pointOfInterest
-        searchCompleter?.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
-        searchCompleter?.region = searchRegion
+    private func configureInformationView() {
+        view.addSubview(informationView)
+        
+        informationView.translatesAutoresizingMaskIntoConstraints = false
+      
+        let informationViewConstraints = [
+            informationView.topAnchor.constraint(equalTo: view.topAnchor),
+            informationView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            informationView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            informationView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ]
+        
+        NSLayoutConstraint.activate(informationViewConstraints)
+        
+        informationView.isHidden = true
     }
-    
 }
 
 extension SearchLocationViewController {
@@ -104,31 +102,18 @@ extension SearchLocationViewController {
     private func bind() {
         locationViewModel.list.observe { [weak self] locationModels in
             self?.collectionView.saveSnapshot(id: locationModels.map{ $0.id })
+
         }
     }
     
-    private func highlightedText(text: String,
-                                 ranges: [NSValue],
-                                 size: CGFloat) -> NSMutableAttributedString {
-        
-        let attributedText = NSMutableAttributedString(string: text)
-        let normalFont = UIFont.systemFont(ofSize: size)
-        
-        attributedText.addAttribute(.font,
-                                    value: normalFont,
-                                    range: NSRange(location: 0,
-                                                   length: text.count))
-        
-        for range in ranges {
-            let boldFont = UIFont.boldSystemFont(ofSize: size)
-            
-            let nsRange = range.rangeValue
-            attributedText.addAttribute(.font,
-                                        value: boldFont,
-                                        range: nsRange)
-        }
-        
-        return attributedText
+    func isCollectionViewHidden(value: Bool) {
+        collectionView.isHidden = value
+        searchBar.isHidden = value
+        informationView.isHidden = !value
+    }
+    
+    func configureInformationViewDelegate(delegate: InformationViewDelegate) {
+        informationView.delegate = delegate
     }
 }
 
@@ -138,89 +123,17 @@ extension SearchLocationViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        guard let completerResults = completerResults else { return }
+
+        mapSearchService?.didSelectSearch(index: indexPath.row)
         
-        let result = completerResults[indexPath.row]
-        search(for: result)
-        self.dismiss(animated: true)
-        print(result.title)
-        
-    }
+        //가장 밑으로 내리고 그곳에 확인 버튼 누를 경우 저장하는 방식
+        isCollectionViewHidden(value: true)
+        guard let dataSource = collectionView.dataSource as?
+                UICollectionViewDiffableDataSource<Section, UUID>,
+              let id = dataSource.itemIdentifier(for: indexPath) else { return }
     
-}
+        informationView.updateContent(id: id)
 
-extension SearchLocationViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar,
-                   textDidChange searchText: String) {
-        if searchText == "" {
-            completerResults = nil
-        }
-
-        searchCompleter?.queryFragment = searchText
-        search(for: searchText)
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        search(for: searchBar.text)
-    }
-}
-
-extension SearchLocationViewController: MKLocalSearchCompleterDelegate {
- 
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        locationViewModel.list.value.removeAll()
-        completerResults = completer.results
-      
-    }
-    
-    func completer(_ completer: MKLocalSearchCompleter,
-                   didFailWithError error: Error) {
-        if let error = error as NSError? {
-            print("위치 가져오기 에러 발생: \(error.localizedDescription)")
-        }
-    }
-    
-}
-
-//MARK: - Search
-
-extension SearchLocationViewController {
-    
-    //completion 기반 검색 실행
-    private func search(for suggestedCompletion: MKLocalSearchCompletion) {
-        let searchRequest = MKLocalSearch.Request(completion: suggestedCompletion)
-        search(using: searchRequest)
-    }
-    
-    //문자 기반 검색 실행
-    private func search(for queryString: String?) {
-        let searchRequest = MKLocalSearch.Request()
-        searchRequest.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
-        searchRequest.naturalLanguageQuery = queryString
-        search(using: searchRequest)
-//        locationViewModel.appendLocationModel(completion: results[i], mapitem: self.places?[i]
-    }
-    
-    //들어온 request를 기반으로 검색을 실행한다.
-    private func search(using searchRequest: MKLocalSearch.Request) {
-        searchRequest.resultTypes = .pointOfInterest
-        
-        localSearch = MKLocalSearch(request: searchRequest)
-        localSearch?.start { [weak self] response, error in
-    
-            guard let self = self,
-                  let mapItems = response?.mapItems else { return }
-            self.places = mapItems
-            
-            guard let results = completerResults else { return }
-            for i in 0..<results.count {
-                
-                locationViewModel.appendLocationModel(completion: results[i], mapitem: self.places?[0])
-                
-            }
-
-        }
-    }
 }

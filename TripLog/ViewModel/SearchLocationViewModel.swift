@@ -17,8 +17,23 @@ final class SearchLocationViewModel {
         list.value.append(locationModel)
     }
     
-    func appendLocationModel(mapitem: MKMapItem) {
+    func selectedLocation(id: UUID) -> LocationModel {
+        let index = list.value.firstIndex { locationModel in
+            locationModel.id == id
+        }
+        guard let index = index else { return LocationModel() }
         
+        return list.value[index]
+        
+    }
+    
+    func openInMap(id: UUID) {
+        let index = list.value.firstIndex { locationModel in
+            locationModel.id == id
+        }
+        
+        guard let index = index else { return }
+        list.value[index].mapItem?.openInMaps()
     }
     
     

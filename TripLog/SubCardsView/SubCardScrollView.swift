@@ -17,6 +17,7 @@ final class SubCardScrollView: UIScrollView {
     private(set) lazy var locationView = LocationView()
     private(set) lazy var scriptTextView = UITextView()
     
+    let mapViewController = MapViewController()
     weak var subCardScrollViewDelegate: PresentViewDelegate?
     
     override init(frame: CGRect) {
@@ -44,6 +45,7 @@ extension SubCardScrollView {
         starRateView.starState = card.starsState
         starRateView.updateButton()
         priceView.updatePrice(price: card.money)
+        locationView.updateLocationModel(location: card.location)
         scriptTextView.text = card.script
         
         if let cardImages = card.images,
@@ -58,8 +60,7 @@ extension SubCardScrollView {
     }
     
     @objc private func presentSearchLocationView() {
-//        subCardScrollViewDelegate?.presentViewController(where: LocationViewController())
-        subCardScrollViewDelegate?.pushViewController(where: LocationViewController())
+        subCardScrollViewDelegate?.pushViewController(where: mapViewController)
     }
 }
 

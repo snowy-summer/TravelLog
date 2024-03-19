@@ -12,10 +12,9 @@ final class LocationListCell: UICollectionViewCell {
     
     static let identifier = "LocationListCell"
     
-    var titleLabel = UILabel()
-    var subTitleLabel = UILabel()
-    var icon = UIImageView()
-    
+    private var titleLabel = UILabel()
+    private var subTitleLabel = UILabel()
+    private var icon = UIImageView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,8 +35,6 @@ final class LocationListCell: UICollectionViewCell {
         icon.image = nil
     }
     
-    
-    
     private func configureIcon() {
         contentView.addSubview(icon)
         
@@ -45,7 +42,6 @@ final class LocationListCell: UICollectionViewCell {
 
         let iconConstraints = [
             icon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-//            icon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             icon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                           constant: 8),
             icon.heightAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height * 0.05),
@@ -92,10 +88,36 @@ final class LocationListCell: UICollectionViewCell {
         NSLayoutConstraint.activate(titleConstraints)
     }
     
-    func updateContent(title: String?, subtitle: String?, iconImage: UIImage?) {
+    func updateContent(title: String?,
+                       subtitle: String?,
+                       iconImage: UIImage?) {
         
         titleLabel.text = title
         subTitleLabel.text = subtitle
         icon.image = iconImage
+    }
+    
+    func highlightedText(text: String,
+                         ranges: [NSValue],
+                         size: CGFloat) {
+        
+        let attributedText = NSMutableAttributedString(string: text)
+        let normalFont = UIFont.systemFont(ofSize: size)
+        
+        attributedText.addAttribute(.font,
+                                    value: normalFont,
+                                    range: NSRange(location: 0,
+                                                   length: text.count))
+        
+        for range in ranges {
+            let boldFont = UIFont.boldSystemFont(ofSize: size)
+            
+            let nsRange = range.rangeValue
+            attributedText.addAttribute(.font,
+                                        value: boldFont,
+                                        range: nsRange)
+        }
+        
+        titleLabel.attributedText = attributedText
     }
 }

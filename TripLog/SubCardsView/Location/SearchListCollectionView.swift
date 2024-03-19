@@ -10,10 +10,10 @@ import UIKit
 final class SearchListCollectionView: UICollectionView {
     
     private var locationViewModel: SearchLocationViewModel
-     var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
+    private var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
     
-    init(viewModel: SearchLocationViewModel) {
-        self.locationViewModel = viewModel
+    init(locationViewModel: SearchLocationViewModel) {
+        self.locationViewModel = locationViewModel
         super.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         self.collectionViewLayout = createBasicLayout()
         configureDataSource()
@@ -72,13 +72,13 @@ extension SearchListCollectionView {
             
             
             
-            cell.updateContent(title: location.searchCompletion?.title,
-                               subtitle: location.searchCompletion?.subtitle,
+            cell.updateContent(title: completion.title,
+                               subtitle: completion.subtitle,
                                iconImage: symbolIcon)
-            cell.titleLabel.attributedText = highlightedText(text: completion.title,
-                                                             ranges: completion.titleHighlightRanges,
-                                                             size: 16)
-           
+            
+            cell.highlightedText(text: completion.title,
+                                 ranges: completion.titleHighlightRanges,
+                                 size: 16)
         }
         
         diffableDataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: self,
@@ -99,27 +99,4 @@ extension SearchListCollectionView {
         diffableDataSource?.apply(snaphot, animatingDifferences: false)
     }
     
-    private func highlightedText(text: String,
-                                 ranges: [NSValue],
-                                 size: CGFloat) -> NSMutableAttributedString {
-        
-        let attributedText = NSMutableAttributedString(string: text)
-        let normalFont = UIFont.systemFont(ofSize: size)
-        
-        attributedText.addAttribute(.font,
-                                    value: normalFont,
-                                    range: NSRange(location: 0,
-                                                   length: text.count))
-        
-        for range in ranges {
-            let boldFont = UIFont.boldSystemFont(ofSize: size)
-            
-            let nsRange = range.rangeValue
-            attributedText.addAttribute(.font,
-                                        value: boldFont,
-                                        range: nsRange)
-        }
-        
-        return attributedText
-    }
 }

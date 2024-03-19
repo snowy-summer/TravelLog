@@ -77,6 +77,7 @@ extension SubCardEditViewController {
                                     images: scrollView.imageView.images,
                                     starsState: scrollView.starRateView.starState,
                                     price: scrollView.priceView.price,
+                                    location: scrollView.locationView.locationModel,
                                     script: scrollView.scriptTextView.text)
         }
         
@@ -104,6 +105,7 @@ extension SubCardEditViewController {
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.configureDelegate(delegate: self)
+        scrollView.mapViewController.delegate = self
 
         let scrollViewConstraints = [
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -128,6 +130,21 @@ extension SubCardEditViewController: PresentViewDelegate {
     
     func presentViewController(where viewController: UIViewController) {
         self.present(viewController, animated: true)
+    }
+    
+}
+
+extension SubCardEditViewController: MapViewControllerDelegate {
+    
+    func updateLocation(location: LocationModel) {
+        guard let id = selctedCardId else {
+            
+            scrollView.locationView.updateLocationModel(location: location)
+            return
+        }
+        
+        viewModel.updateLocation(selectedCardId: id, location: location)
+        loadSubCard(selectedCardId: id)
     }
     
 }

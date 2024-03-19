@@ -14,6 +14,7 @@ struct SubCardModel: Identifiable {
     var money: Int
     var images: [UIImage]?
     var script: String?
+    var location: LocationModel?
 }
 
 extension SubCardModel: Hashable {

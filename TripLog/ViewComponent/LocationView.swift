@@ -13,6 +13,7 @@ final class LocationView: UIView {
     private lazy var locationLabel = UILabel()
     private lazy var locationText = UILabel()
     private lazy var locationImage = UIImageView()
+    private(set) var locationModel: LocationModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -75,7 +76,7 @@ extension LocationView {
         
         locationText.translatesAutoresizingMaskIntoConstraints = false
         
-        locationText.textAlignment = .center
+        locationText.textAlignment = .left
         
         let textFieldConstraints = [
             locationText.topAnchor.constraint(equalTo: self.topAnchor,
@@ -90,4 +91,10 @@ extension LocationView {
         
         NSLayoutConstraint.activate(textFieldConstraints)
     }
+    
+    func updateLocationModel(location: LocationModel?) {
+        locationModel = location
+        locationText.text = location?.searchCompletion?.title
+    }
+    
 }
