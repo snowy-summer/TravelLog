@@ -10,7 +10,6 @@ import UIKit
 final class SubCardEditViewController: UIViewController {
     
     private let viewModel: SubCardsViewModel
-    private let mainQueue = DispatchQueue.main
     private var selctedCardId: UUID?
     
     private lazy var scrollView = SubCardScrollView()

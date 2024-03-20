@@ -73,8 +73,11 @@ extension SubCardCell {
     
     private func configureTitleView() {
         contentView.addSubview(titleView)
+        
         titleView.translatesAutoresizingMaskIntoConstraints = false
+        
         titleView.isUserInteractionEnabled = false
+        titleView.layer.cornerRadius = 8
         titleView.backgroundColor = .viewBackground
         
         let titleViewConstraints = [
@@ -90,7 +93,6 @@ extension SubCardCell {
         
         NSLayoutConstraint.activate(titleViewConstraints)
         
-        titleView.layer.cornerRadius = 8
     }
     
     private func configureSumbnailImageView() {

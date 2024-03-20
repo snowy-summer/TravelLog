@@ -9,6 +9,9 @@ import UIKit
 
 final class SubCardScrollView: UIScrollView {
 
+    let mapViewController = MapViewController()
+    weak var subCardScrollViewDelegate: PresentViewDelegate?
+    
     private(set) lazy var contentView = UIView()
     private(set) lazy var titleView = TitleView()
     private(set) lazy var imageView = SelectedImageView()
@@ -16,9 +19,6 @@ final class SubCardScrollView: UIScrollView {
     private(set) lazy var priceView = PriceView()
     private(set) lazy var locationView = LocationView()
     private(set) lazy var scriptTextView = UITextView()
-    
-    let mapViewController = MapViewController()
-    weak var subCardScrollViewDelegate: PresentViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -142,6 +142,7 @@ extension SubCardScrollView {
         contentView.addSubview(starRateView)
         
         starRateView.translatesAutoresizingMaskIntoConstraints = false
+        
         starRateView.layer.cornerRadius = 8
         starRateView.layer.borderWidth = 1
         starRateView.backgroundColor = .viewBackground

@@ -51,7 +51,6 @@ extension SubCardsCollectionView {
             guard let self = self else { return }
             let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
             let subCardDictionary: [UUID: SubCardModel] = Dictionary(uniqueKeysWithValues: tupleArray)
-            
            
             guard let subCard = subCardDictionary[itemIdentifier] else { return }
             

@@ -8,6 +8,7 @@
 import UIKit
 
 protocol MainViewModelProtocol {
+    
     var list: Observable<[MainCardModel]> { get }
     
     func appendMainCard(title: String, image: UIImage?)
@@ -17,4 +18,5 @@ protocol MainViewModelProtocol {
     func editMainCardTitle(id: UUID, title: String)
     func editMainCardImage(id: UUID, image: UIImage?)
     func editMainCardDate(id: UUID, date: Date)
+    
 }

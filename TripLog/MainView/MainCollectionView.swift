@@ -9,8 +9,8 @@ import UIKit
 
 final class MainCollectionView: UICollectionView {
     
-    weak var collectionViewDelegate: MainCollectionViewDelegate?
     private var mainViewModel: MainViewModelProtocol
+    weak var collectionViewDelegate: MainCollectionViewDelegate?
     
     init(frame: CGRect, mainViewModel: MainViewModelProtocol) {
         self.mainViewModel = mainViewModel

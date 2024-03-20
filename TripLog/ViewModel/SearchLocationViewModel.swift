@@ -11,9 +11,12 @@ final class SearchLocationViewModel {
     
     var list: Observable<[LocationModel]> = Observable([])
     
+}
+
+extension SearchLocationViewModel {
     
-    func appendLocationModel(completion: MKLocalSearchCompletion, mapitem: MKMapItem?) {
-        let locationModel = LocationModel(searchCompletion: completion, mapItem: mapitem)
+    func appendLocationModel(mapitem: MKMapItem?) {
+        let locationModel = LocationModel(mapItem: mapitem)
         list.value.append(locationModel)
     }
     
@@ -36,7 +39,4 @@ final class SearchLocationViewModel {
         list.value[index].mapItem?.openInMaps()
     }
     
-    
-    
-
 }

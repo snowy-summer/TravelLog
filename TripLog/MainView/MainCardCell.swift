@@ -11,13 +11,13 @@ final class MainCardCell: UICollectionViewCell {
     
     static let identifier = "MainCardCell"
     
+    private var id: UUID?
+    weak var delegate: CellDelegate?
+    
     private lazy var titleLabel = UILabel()
     private lazy var sumbnailImageView = UIImageView()
     private lazy var dateLabel = UILabel()
     private lazy var menuButton = UIButton()
-    private var id: UUID?
-    
-    weak var delegate: CellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,7 +40,10 @@ extension MainCardCell {
     
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        
         contentView.layer.borderWidth = 1
+        contentView.layer.cornerRadius = 20
+        contentView.clipsToBounds = true
         
         let contentViewConstraints = [
             contentView.topAnchor.constraint(equalTo: self.topAnchor,
@@ -54,13 +57,14 @@ extension MainCardCell {
         ]
         
         NSLayoutConstraint.activate(contentViewConstraints)
-        contentView.layer.cornerRadius = 20
-        contentView.clipsToBounds = true
+        
     }
     
     private func configureSumbnailImageView() {
         contentView.addSubview(sumbnailImageView)
+        
         sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        
         sumbnailImageView.contentMode = .scaleToFill
         
         let imageViewConstraints = [
@@ -68,6 +72,7 @@ extension MainCardCell {
             sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             sumbnailImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height * 0.25)
+            
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)
@@ -75,11 +80,11 @@ extension MainCardCell {
     
     private func configureTitlLabel() {
         contentView.addSubview(titleLabel)
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.font = .preferredFont(forTextStyle: .title1)
         titleLabel.textColor = .basic
-        titleLabel.text = "제목"
         
         let titleLabelConstraints = [
             titleLabel.bottomAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
@@ -95,8 +100,8 @@ extension MainCardCell {
     
     private func configureDateLabel() {
         contentView.addSubview(dateLabel)
+        
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.text = "2023.02.28"
         
         let dateLabelConstraints = [
             dateLabel.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
@@ -111,7 +116,9 @@ extension MainCardCell {
     
     private func configureMenuButton() {
         contentView.addSubview(menuButton)
+        
         menuButton.translatesAutoresizingMaskIntoConstraints = false
+        
         menuButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         menuButton.tintColor = .black
         

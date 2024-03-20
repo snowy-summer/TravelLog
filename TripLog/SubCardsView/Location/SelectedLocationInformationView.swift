@@ -42,7 +42,6 @@ final class SelectedLocationInformationView: UIView {
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .preferredFont(forTextStyle: .title1)
-        titleLabel.text = "용산역"
         
         let titleConstraints = [
             titleLabel.topAnchor.constraint(equalTo: self.topAnchor,
@@ -61,7 +60,6 @@ final class SelectedLocationInformationView: UIView {
         
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.font = .preferredFont(forTextStyle: .body)
-        categoryLabel.text = "대중교통"
         
         let categoryLabelConstraints = [
             categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
@@ -211,12 +209,11 @@ final class SelectedLocationInformationView: UIView {
     
     
     func updateContent(id: UUID) {
-       
-        selectedId = id
-        
         let locationModel = locationViewModel.selectedLocation(id: id)
-        titleLabel.text = locationModel.searchCompletion?.title
-        categoryLabel.text = locationModel.searchCompletion?.subtitle
+        
+        selectedId = id
+        titleLabel.text = locationModel.mapItem?.name
+        categoryLabel.text = locationModel.mapItem?.pointOfInterestCategory?.categoryName
         
     }
     

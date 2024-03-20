@@ -94,7 +94,12 @@ extension LocationView {
     
     func updateLocationModel(location: LocationModel?) {
         locationModel = location
-        locationText.text = location?.searchCompletion?.title
+
+        guard let mapitem = locationModel?.mapItem,
+              let name = mapitem.name,
+              let address = mapitem.placemark.title else { return }
+        
+        locationText.text = name
     }
     
 }

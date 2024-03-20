@@ -10,12 +10,13 @@ import PhotosUI
 
 final class EditOfMainCardViewController: UIViewController {
     
-    private lazy var titleView = TitleView()
-    private lazy var imageView = UIImageView()
-    private lazy var addButton = UIButton()
     private let mainViewModel: MainViewModelProtocol
     private var selectedCardId: UUID?
     private var mainQueue = DispatchQueue.main
+    
+    private lazy var titleView = TitleView()
+    private lazy var imageView = UIImageView()
+    private lazy var addButton = UIButton()
     
     init(mainViewmodel: MainViewModelProtocol) {
         self.mainViewModel = mainViewmodel
@@ -43,7 +44,6 @@ final class EditOfMainCardViewController: UIViewController {
         configureNavigationBar()
         configureAddButton()
     }
-    
 }
 
 extension EditOfMainCardViewController {
@@ -73,8 +73,11 @@ extension EditOfMainCardViewController {
 
     private func configureTitleView() {
         view.addSubview(titleView)
+        
         titleView.translatesAutoresizingMaskIntoConstraints = false
+        
         titleView.layer.borderWidth = 1
+        titleView.layer.cornerRadius = 20
         
         let safeArea = view.safeAreaLayoutGuide
         let titleViewConstraints = [
@@ -87,7 +90,7 @@ extension EditOfMainCardViewController {
             titleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1)
         ]
         
-        titleView.layer.cornerRadius = 20
+        
         
         NSLayoutConstraint.activate(titleViewConstraints)
         
@@ -139,6 +142,7 @@ extension EditOfMainCardViewController {
         imageView.addSubview(addButton)
         
         addButton.translatesAutoresizingMaskIntoConstraints = false
+        
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
         addButton.contentVerticalAlignment = .fill
         addButton.contentHorizontalAlignment = .fill

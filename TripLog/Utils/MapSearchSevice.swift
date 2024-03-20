@@ -9,21 +9,20 @@ import MapKit
 
 final class MapSearchSevice: NSObject {
     
+    private var locationViewModel: SearchLocationViewModel?
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchRegion = MKCoordinateRegion(MKMapRect.world)
     private var completerResults: [MKLocalSearchCompletion]?
-    private let locationViewModel: SearchLocationViewModel?
+    private var localSearch: MKLocalSearch?
     
-    private var places: [MKMapItem?]? {
+    private var places = [MKMapItem]() {
         didSet {
+            locationViewModel?.list.value.removeAll()
             
-        }
-    }
-    
-    private var localSearch: MKLocalSearch? {
-        willSet {
-            places = nil
-            localSearch?.cancel()
+            for place in places {
+                locationViewModel?.appendLocationModel(mapitem: place)
+            }
+            
         }
     }
     
@@ -38,8 +37,8 @@ final class MapSearchSevice: NSObject {
         searchCompleter = MKLocalSearchCompleter()
         searchCompleter?.delegate = self
         searchCompleter?.resultTypes = .pointOfInterest
-        searchCompleter?.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
         searchCompleter?.region = searchRegion
+        searchCompleter?.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
     }
 }
 
@@ -50,9 +49,9 @@ extension MapSearchSevice: UISearchBarDelegate {
         if searchText == "" {
             completerResults = nil
         }
-
+    
         searchCompleter?.queryFragment = searchText
-        search(for: searchText)
+
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -64,63 +63,66 @@ extension MapSearchSevice: UISearchBarDelegate {
 extension MapSearchSevice: MKLocalSearchCompleterDelegate {
  
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        locationViewModel?.list.value.removeAll()
-        completerResults = completer.results
       
+        completerResults = completer.results
+        
+        guard let completerResults = completerResults else { return }
+        
+        if !completerResults.isEmpty {
+            places.removeAll()
+            
+            for completion in completerResults {
+                search(for: completion)
+            }
+        }
     }
-    
+
     func completer(_ completer: MKLocalSearchCompleter,
                    didFailWithError error: Error) {
         if let error = error as NSError? {
-            print("위치 가져오기 에러 발생: \(error.localizedDescription)")
+//            print("위치 가져오기 에러 발생: \(error.localizedDescription)")
         }
     }
     
 }
 
+
 //MARK: - Search
 
 extension MapSearchSevice {
     
-    func didSelectSearch(index: Int) {
-        guard let completerResults = completerResults else { return }
-        
-        let result = completerResults[index]
-        search(for: result)
-    }
-    
-    //completion 기반 검색 실행
-    func search(for suggestedCompletion: MKLocalSearchCompletion) {
+    private func search(for suggestedCompletion: MKLocalSearchCompletion) {
         let searchRequest = MKLocalSearch.Request(completion: suggestedCompletion)
+        
+        searchRequest.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
+        searchRequest.naturalLanguageQuery = suggestedCompletion.title
+        
         search(using: searchRequest)
     }
     
     //문자 기반 검색 실행
-    func search(for queryString: String?) {
+   private func search(for queryString: String?) {
         let searchRequest = MKLocalSearch.Request()
+       
         searchRequest.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
         searchRequest.naturalLanguageQuery = queryString
+       
         search(using: searchRequest)
     }
     
     //들어온 request를 기반으로 검색을 실행한다.
     private func search(using searchRequest: MKLocalSearch.Request) {
         searchRequest.resultTypes = .pointOfInterest
-        
+    
         localSearch = MKLocalSearch(request: searchRequest)
         localSearch?.start { [weak self] response, error in
     
             guard let self = self,
                   let mapItems = response?.mapItems else { return }
-            self.places = mapItems
             
-            guard let results = completerResults else { return }
-            for i in 0..<results.count {
-                
-                locationViewModel?.appendLocationModel(completion: results[i], mapitem: self.places?[0])
-                
+            if !mapItems.isEmpty { 
+                self.places.append(mapItems.first!)
             }
-
         }
     }
 }

@@ -123,10 +123,7 @@ extension SearchLocationViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-
-        mapSearchService?.didSelectSearch(index: indexPath.row)
         
-        //가장 밑으로 내리고 그곳에 확인 버튼 누를 경우 저장하는 방식
         isCollectionViewHidden(value: true)
         guard let dataSource = collectionView.dataSource as?
                 UICollectionViewDiffableDataSource<Section, UUID>,

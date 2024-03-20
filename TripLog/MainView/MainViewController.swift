@@ -9,10 +9,11 @@ import UIKit
 
 final class MainViewController: UIViewController {
     
+    private let mainViewModel: MainViewModelProtocol = MainCardsViewModel()
+    
     private lazy var mainCollectionView = MainCollectionView(frame: .zero,
                                                              mainViewModel: mainViewModel)
     private lazy var addButton = UIButton()
-    private let mainViewModel: MainViewModelProtocol = MainCardsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +34,9 @@ extension MainViewController {
     
     private func configureAddButton() {
         view.addSubview(addButton)
+        
         addButton.translatesAutoresizingMaskIntoConstraints = false
+        
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
         addButton.contentVerticalAlignment = .fill
         addButton.contentHorizontalAlignment = .fill
@@ -69,7 +72,7 @@ extension MainViewController {
     
 }
 
-//MARK: - UICollectionViewDataSource
+//MARK: - UICollectionViewDataSource,UICollectionViewDelegate
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     

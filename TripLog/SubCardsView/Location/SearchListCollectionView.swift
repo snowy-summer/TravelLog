@@ -16,9 +16,9 @@ final class SearchListCollectionView: UICollectionView {
         self.locationViewModel = locationViewModel
         super.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         self.collectionViewLayout = createBasicLayout()
+        
         configureDataSource()
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -62,23 +62,17 @@ extension SearchListCollectionView {
             let tupleArray = self.locationViewModel.list.value.map {($0.id, $0)}
             let subCardDictionary: [UUID: LocationModel] = Dictionary(uniqueKeysWithValues: tupleArray)
             
-           
             guard let location = subCardDictionary[itemIdentifier],
-                  let completion = location.searchCompletion else { return }
+                  let mapitem = location.mapItem else { return }
             
             let symbolIcon = location.mapItem?.pointOfInterestCategory?.symbolName
                 ?? UIImage(systemName: "mappin.and.ellipse")?.withTintColor(.red,
                                                                             renderingMode: .alwaysOriginal)
             
-            
-            
-            cell.updateContent(title: completion.title,
-                               subtitle: completion.subtitle,
+            cell.updateContent(title: mapitem.name,
+                               subtitle: mapitem.placemark.title,
                                iconImage: symbolIcon)
-            
-            cell.highlightedText(text: completion.title,
-                                 ranges: completion.titleHighlightRanges,
-                                 size: 16)
+
         }
         
         diffableDataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: self,

@@ -23,8 +23,6 @@ extension MKPointOfInterestCategory {
                                                                       .beach,
                                                                       .foodMarket]
     
-    
-    
     var symbolName: UIImage? {
         switch self {
             
@@ -57,6 +55,40 @@ extension MKPointOfInterestCategory {
         default:
             return UIImage(systemName: "mappin.and.ellipse")?.withTintColor(.red,
                                                                             renderingMode: .alwaysOriginal)
+        }
+    }
+    
+    var categoryName: String? {
+        switch self {
+            
+        case .airport:
+            return "공항"
+        case .publicTransport:
+            return "지하철"
+            
+        case .bakery:
+            return "빵집"
+        case .brewery, .winery:
+            return "술집"
+        case .cafe:
+            return "카페"
+        case .restaurant:
+            return "식당"
+            
+        case .museum:
+            return "박물관"
+        case .park:
+            return "공원"
+        case .beach:
+            return "해변"
+            
+        case .hotel:
+            return "숙소"
+        case .foodMarket:
+            return "마켓"
+            
+        default:
+            return ""
         }
     }
 }

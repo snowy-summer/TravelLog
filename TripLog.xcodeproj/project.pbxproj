@@ -125,13 +125,13 @@
 			path = SubCardsView;
 			sourceTree = "<group>";
 		};
-		6B861ABE2B9B1BE500D1D7F7 /* Layout */ = {
+		6B861ABE2B9B1BE500D1D7F7 /* CollectionViewLayout */ = {
 			isa = PBXGroup;
 			children = (
 				6B861AB82B99845A00D1D7F7 /* CircularLayout.swift */,
 				6B861ABA2B99B29E00D1D7F7 /* CircularAttributes.swift */,
 			);
-			path = Layout;
+			path = CollectionViewLayout;
 			sourceTree = "<group>";
 		};
 		6B87F0F82B9075440036A53B /* ViewModel */ = {
@@ -188,7 +188,6 @@
 				6BB8D16B2BA4022900F96229 /* SearchLocationViewController.swift */,
 				6B1E787D2BA81BC800008CAF /* SearchListCollectionView.swift */,
 				6B1E787F2BA8672B00008CAF /* SelectedLocationInformationView.swift */,
-				6B1E78832BA9796F00008CAF /* MapSearchSevice.swift */,
 				6BB8D16E2BA43EFF00F96229 /* LocationListCell.swift */,
 			);
 			path = Location;
@@ -219,6 +218,7 @@
 		6BCC92132B8F0D5100931D0C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6B1E78832BA9796F00008CAF /* MapSearchSevice.swift */,
 				6BCC92142B8F0D7700931D0C /* Observable.swift */,
 			);
 			path = Utils;
@@ -232,6 +232,7 @@
 				6BE523BF2BA0356300A551DB /* TitleView.swift */,
 				6BBB9F8B2BA2B92F0013A82B /* SelectedImageView.swift */,
 				6BE523BD2BA0343200A551DB /* LocationView.swift */,
+				6B861ABE2B9B1BE500D1D7F7 /* CollectionViewLayout */,
 			);
 			path = ViewComponent;
 			sourceTree = "<group>";
@@ -259,7 +260,6 @@
 				6BCC920A2B8F029A00931D0C /* MainView */,
 				6B36F1BF2B988EFD005A396E /* SubCardsView */,
 				6BE523B82BA02A8600A551DB /* ViewComponent */,
-				6B861ABE2B9B1BE500D1D7F7 /* Layout */,
 				6B87F0F82B9075440036A53B /* ViewModel */,
 				6BCC92092B8F026200931D0C /* Model */,
 				6BCC92132B8F0D5100931D0C /* Utils */,

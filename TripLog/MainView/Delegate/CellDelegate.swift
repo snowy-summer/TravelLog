@@ -8,8 +8,10 @@
 import Foundation
 
 protocol CellDelegate: AnyObject {
+    
     func deleteCard(id: UUID)
     func editCard(id: UUID)
     func shareCard(id: UUID)
     func bookmarkCard(id: UUID)
+    
 }
