@@ -9,6 +9,11 @@ import UIKit
 
 final class SelectedLocationInformationView: UIView {
     
+    private var locationViewModel: SearchLocationViewModel
+    private var selectedId: UUID?
+    
+    weak var delegate: InformationViewDelegate?
+    
     private let titleLabel = UILabel()
     private let categoryLabel = UILabel()
     private let saveButton = UIButton()
@@ -16,10 +21,6 @@ final class SelectedLocationInformationView: UIView {
     private let searchButton = UIButton()
     private let noNameButton = UIButton()
     
-    private var locationViewModel: SearchLocationViewModel
-    private var selectedId: UUID?
-    
-    weak var delegate: InformationViewDelegate?
     
     init (locationViewModel: SearchLocationViewModel ) {
         self.locationViewModel = locationViewModel
@@ -31,11 +32,22 @@ final class SelectedLocationInformationView: UIView {
         configureOpenInMapButton()
         configureSearchButton()
         configureNoNameButton()
+        print("SelectedLocationInformationView 생성")
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        print("SelectedLocationInformationView 끝~~~~~~~~~~~~~~~~~~~~~")
+    }
+    
+}
+
+//MARK: - Configuration
+
+extension SelectedLocationInformationView {
     
     private func configureTitle() {
         self.addSubview(titleLabel)
@@ -49,7 +61,7 @@ final class SelectedLocationInformationView: UIView {
             titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
                                                 constant: 16),
             titleLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.5)
+                                              multiplier: 0.8)
         ]
         
         NSLayoutConstraint.activate(titleConstraints)
@@ -65,8 +77,7 @@ final class SelectedLocationInformationView: UIView {
             categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                             constant: 8),
             categoryLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            categoryLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.5)
+            categoryLabel.widthAnchor.constraint(equalTo: self.widthAnchor)
         ]
         
         NSLayoutConstraint.activate(categoryLabelConstraints)
@@ -220,7 +231,7 @@ final class SelectedLocationInformationView: UIView {
     @objc private func saveAction() {
         guard let id = selectedId else { return }
         
-        delegate?.backToViewController(location: locationViewModel.selectedLocation(id: id))
+        delegate?.saveLocation(location: locationViewModel.selectedLocation(id: id))
     }
     
     @objc private func openInMapAction() {

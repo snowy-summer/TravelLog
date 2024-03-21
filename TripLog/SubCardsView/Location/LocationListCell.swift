@@ -44,7 +44,9 @@ final class LocationListCell: UICollectionViewCell {
             icon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             icon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                           constant: 8),
-            icon.heightAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height * 0.05),
+            icon.heightAnchor.constraint(lessThanOrEqualToConstant: 40),
+            icon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                         constant: -8),
             icon.widthAnchor.constraint(equalTo: icon.heightAnchor,
                                         multiplier: 1.0),
         ]
@@ -63,6 +65,8 @@ final class LocationListCell: UICollectionViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor,
                                            constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleLabel.heightAnchor.constraint(equalTo: icon.heightAnchor,
+                                               multiplier: 0.4)
         ]
         
         NSLayoutConstraint.activate(titleConstraints)
@@ -81,7 +85,8 @@ final class LocationListCell: UICollectionViewCell {
             subTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                              constant: -8),
             subTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            subTitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+            subTitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            subTitleLabel.heightAnchor.constraint(lessThanOrEqualTo: titleLabel.heightAnchor)
            
         ]
         

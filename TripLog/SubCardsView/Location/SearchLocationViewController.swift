@@ -12,13 +12,19 @@ final class SearchLocationViewController: UIViewController {
     private let locationViewModel = SearchLocationViewModel()
     private var mapSearchService: MapSearchSevice?
     private let searchBar = UISearchBar()
-
-    private lazy var collectionView = SearchListCollectionView(locationViewModel: locationViewModel)
-    private lazy var informationView = SelectedLocationInformationView(locationViewModel: locationViewModel)
     
-    init(mapSearchService: MapSearchSevice? = nil) {
-        self.mapSearchService = mapSearchService
+    weak var delegate: SearchLocationViewDelegate?
+
+    private var collectionView: SearchListCollectionView
+    private var informationView: SelectedLocationInformationView
+    
+    init() {
+        self.mapSearchService = MapSearchSevice(viewModel: locationViewModel)
+        self.collectionView = SearchListCollectionView(locationViewModel: locationViewModel)
+        self.informationView = SelectedLocationInformationView(locationViewModel: locationViewModel)
         super.init(nibName: nil, bundle: nil)
+        
+        print("modal 생성")
     }
     
     required init?(coder: NSCoder) {
@@ -28,12 +34,15 @@ final class SearchLocationViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .basic
         
-        mapSearchService = MapSearchSevice(viewModel: locationViewModel)
         bind()
         configureSearchBar()
         configureCollectionView()
         configureInformationView()
        
+    }
+    
+    deinit {
+        print("modal 해제")
     }
 }
 
@@ -129,7 +138,12 @@ extension SearchLocationViewController: UICollectionViewDelegate {
                 UICollectionViewDiffableDataSource<Section, UUID>,
               let id = dataSource.itemIdentifier(for: indexPath) else { return }
     
+        guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
+
+        delegate?.updateMapView(where: coordinate)
         informationView.updateContent(id: id)
+        
+        self.sheetPresentationController?.selectedDetentIdentifier = CustomDetent.low.idetifier
 
     }
     

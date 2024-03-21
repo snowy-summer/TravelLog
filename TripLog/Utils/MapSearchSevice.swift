@@ -31,6 +31,12 @@ final class MapSearchSevice: NSObject {
         super.init()
         
         configureSearchCompleter()
+        
+        print("MapSearchService 생성")
+    }
+    
+    deinit {
+        print("MapSearchService 해제")
     }
     
     private func configureSearchCompleter() {
@@ -38,20 +44,25 @@ final class MapSearchSevice: NSObject {
         searchCompleter?.delegate = self
         searchCompleter?.resultTypes = .pointOfInterest
         searchCompleter?.region = searchRegion
-        searchCompleter?.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
+    }
+    
+    func de() {
+        searchCompleter = nil
     }
 }
 
 extension MapSearchSevice: UISearchBarDelegate {
-    
+
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String) {
         if searchText == "" {
             completerResults = nil
         }
     
-        searchCompleter?.queryFragment = searchText
-
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchCompleter?.queryFragment = searchBar.text!
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -80,7 +91,7 @@ extension MapSearchSevice: MKLocalSearchCompleterDelegate {
     func completer(_ completer: MKLocalSearchCompleter,
                    didFailWithError error: Error) {
         if let error = error as NSError? {
-//            print("위치 가져오기 에러 발생: \(error.localizedDescription)")
+            print("위치 가져오기 에러 발생: \(error.localizedDescription)")
         }
     }
     
@@ -94,7 +105,6 @@ extension MapSearchSevice {
     private func search(for suggestedCompletion: MKLocalSearchCompletion) {
         let searchRequest = MKLocalSearch.Request(completion: suggestedCompletion)
         
-        searchRequest.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
         searchRequest.naturalLanguageQuery = suggestedCompletion.title
         
         search(using: searchRequest)
@@ -104,7 +114,6 @@ extension MapSearchSevice {
    private func search(for queryString: String?) {
         let searchRequest = MKLocalSearch.Request()
        
-        searchRequest.pointOfInterestFilter = MKPointOfInterestFilter(including: MKPointOfInterestCategory.travelPointsOfInterest)
         searchRequest.naturalLanguageQuery = queryString
        
         search(using: searchRequest)

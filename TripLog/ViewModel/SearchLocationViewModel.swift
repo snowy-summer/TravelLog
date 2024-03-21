@@ -11,6 +11,10 @@ final class SearchLocationViewModel {
     
     var list: Observable<[LocationModel]> = Observable([])
     
+    deinit {
+        print("viewModel 해제")
+    }
+    
 }
 
 extension SearchLocationViewModel {
@@ -31,12 +35,14 @@ extension SearchLocationViewModel {
     }
     
     func openInMap(id: UUID) {
-        let index = list.value.firstIndex { locationModel in
-            locationModel.id == id
-        }
-        
-        guard let index = index else { return }
-        list.value[index].mapItem?.openInMaps()
+        selectedLocation(id: id).mapItem?.openInMaps()
     }
     
+    func mapCoordinate(id: UUID) -> CLLocationCoordinate2D? {
+        selectedLocation(id: id).mapItem?.placemark.coordinate
+    }
+    
+    func mapCoordinate(location: LocationModel) -> CLLocationCoordinate2D? {
+        location.mapItem?.placemark.coordinate
+    }
 }

@@ -25,7 +25,18 @@ final class SubCardsCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //MARK: - Method
+    
+    func saveSnapshot(id: [UUID]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(id,toSection: .main)
+        diffableDataSource?.apply(snapshot, animatingDifferences: false)
+    }
+    
 }
+
+//MARK: - Configuration
 
 extension SubCardsCollectionView {
     
@@ -72,15 +83,4 @@ extension SubCardsCollectionView {
     
     }
     
-    func saveSnapshot(id: [UUID]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(id,toSection: .main)
-        diffableDataSource?.apply(snapshot, animatingDifferences: false)
-    }
-    
-}
-
-enum Section {
-    case main
 }

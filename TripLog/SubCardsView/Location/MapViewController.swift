@@ -16,6 +16,8 @@ final class MapViewController: UIViewController {
     init(delegate: MapViewControllerDelegate? = nil) {
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
+        
+        print("mapView 생성")
     }
     
     required init?(coder: NSCoder) {
@@ -34,6 +36,11 @@ final class MapViewController: UIViewController {
         presentModal()
     }
     
+    deinit {
+        print("mapView 해제")
+        print(CFGetRetainCount(searchViewController))
+    }
+    
 }
 
 //MARK: - Configuration
@@ -46,6 +53,7 @@ extension MapViewController {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.isZoomEnabled = true
         mapView.isScrollEnabled = true
+        mapView.isPitchEnabled = false
         
         let mapViewConstraints = [
             mapView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -78,41 +86,31 @@ extension MapViewController {
     func presentModal() {
         
         searchViewController.isModalInPresentation = true
+        searchViewController.delegate = self
         searchViewController.configureInformationViewDelegate(delegate: self)
-        
-        let lowDetentIdentifier = UISheetPresentationController.Detent.Identifier("low")
-        let defaultDetentIdentifier = UISheetPresentationController.Detent.Identifier("default")
-        
-        let lowDetent = UISheetPresentationController.Detent.custom(identifier: lowDetentIdentifier) { [weak self] _ in
-            guard let self = self else { return 0}
-            return self.view.bounds.height * 0.1
-        }
-        
-        let defaultDetent = UISheetPresentationController.Detent.custom(identifier: defaultDetentIdentifier) { [weak self] _ in
-            guard let self = self else { return 0}
-            return self.view.bounds.height * 0.35
-        }
-                
+
         if let sheet = searchViewController.sheetPresentationController {
             
             sheet.detents = [
-                defaultDetent,
+                CustomDetent.base.detent(view: self.view),
                 .large(),
-                lowDetent
+                CustomDetent.low.detent(view: self.view)
             ]
             
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .large
-            sheet.selectedDetentIdentifier = defaultDetentIdentifier
+            sheet.selectedDetentIdentifier = CustomDetent.base.idetifier
     
         }
         self.present(searchViewController, animated: false)
+        
+        
     }
 }
 
 extension MapViewController: InformationViewDelegate {
     
-    func backToViewController(location: LocationModel) {
+    func saveLocation(location: LocationModel) {
         searchViewController.dismiss(animated: true)
         navigationController?.popViewController(animated: true)
         delegate?.updateLocation(location: location)
@@ -124,8 +122,24 @@ extension MapViewController: InformationViewDelegate {
     
 }
 
-protocol MapViewControllerDelegate: AnyObject {
+extension MapViewController: SearchLocationViewDelegate {
     
-    func updateLocation(location: LocationModel)
-    
+    func updateMapView(where coordinate: CLLocationCoordinate2D) {
+        mapView.removeAnnotations(mapView.annotations)
+        
+        let span = MKCoordinateSpan(latitudeDelta: 0.01,
+                                    longitudeDelta: 0.01)
+        
+        let annotation = MKPointAnnotation()
+        
+        annotation.coordinate = coordinate
+        
+        let group = DispatchGroup()
+        
+        mapView.setRegion(MKCoordinateRegion(center: coordinate,
+                                             span: span),
+                          animated: true)
+
+        mapView.addAnnotation(annotation)
+    }
 }

@@ -43,14 +43,9 @@ final class SubCardEditViewController: UIViewController {
 extension SubCardEditViewController {
     
     private func loadSubCard(selectedCardId: UUID) {
-        let index = viewModel.list.value.firstIndex { subCard in
-            subCard.id == selectedCardId
-        }
-        guard let index = index else { return }
+        guard let card = viewModel.selectCard(id: selectedCardId) else { return }
         
-        let card = viewModel.list.value[index]
         scrollView.updateContent(card: card)
-       
     }
 
 }
@@ -84,8 +79,6 @@ extension SubCardEditViewController {
     }
 
 }
-
-
 
 //MARK: - Configuration
 
@@ -133,12 +126,13 @@ extension SubCardEditViewController: PresentViewDelegate {
     
 }
 
+//MARK: - MapViewDelegate
+
 extension SubCardEditViewController: MapViewControllerDelegate {
-    
+   
     func updateLocation(location: LocationModel) {
         guard let id = selctedCardId else {
-            
-            scrollView.locationView.updateLocationModel(location: location)
+            scrollView.locationView.updateLocationView(with: location)
             return
         }
         

@@ -92,7 +92,7 @@ extension LocationView {
         NSLayoutConstraint.activate(textFieldConstraints)
     }
     
-    func updateLocationModel(location: LocationModel?) {
+    func updateLocationView(with location: LocationModel?) {
         locationModel = location
 
         guard let mapitem = locationModel?.mapItem,

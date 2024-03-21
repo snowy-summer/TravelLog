@@ -45,7 +45,7 @@ extension SubCardScrollView {
         starRateView.starState = card.starsState
         starRateView.updateButton()
         priceView.updatePrice(price: card.money)
-        locationView.updateLocationModel(location: card.location)
+        locationView.updateLocationView(with: card.location)
         scriptTextView.text = card.script
         
         if let cardImages = card.images,

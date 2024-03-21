@@ -18,32 +18,20 @@ final class SearchListCollectionView: UICollectionView {
         self.collectionViewLayout = createBasicLayout()
         
         configureDataSource()
+        print("SearchListCollectionView 생성")
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        print("SearchListCollectionView 끝~~~~~~~~~~~~~~~~~~~~~")
+    }
 
 }
 
 extension SearchListCollectionView {
-    
-    func configureAutoLayout(superView: UIView) {
-        superView.addSubview(self)
-        
-        self.translatesAutoresizingMaskIntoConstraints = false
-        
-        let safeArea = superView.safeAreaLayoutGuide
-        let constraints = [
-            self.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            self.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            self.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            self.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
-        
-    }
     
     private func createBasicLayout() -> UICollectionViewCompositionalLayout {
         var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .plain)

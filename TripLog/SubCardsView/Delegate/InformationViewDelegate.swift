@@ -9,7 +9,7 @@ import Foundation
 
 protocol InformationViewDelegate: AnyObject {
     
-    func backToViewController(location: LocationModel)
+    func saveLocation(location: LocationModel)
     func hideInformationView()
     
 }

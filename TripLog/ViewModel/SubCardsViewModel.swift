@@ -14,6 +14,17 @@ final class SubCardsViewModel {
 
 extension SubCardsViewModel {
     
+    func selectCard(id: UUID) -> SubCardModel? {
+        let index = list.value.firstIndex { subCard in
+            subCard.id == id
+        }
+        guard let index = index else { return nil }
+        
+        let card = list.value[index]
+        
+        return card
+    }
+    
     func appendSubCard(title: String?,
                        images: [UIImage]?,
                        starsState: [Bool],
