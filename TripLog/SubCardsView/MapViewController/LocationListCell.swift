@@ -15,7 +15,7 @@ final class LocationListCell: UICollectionViewCell {
     private var titleLabel = UILabel()
     private var subTitleLabel = UILabel()
     private var icon = UIImageView()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -34,6 +34,12 @@ final class LocationListCell: UICollectionViewCell {
         subTitleLabel.text = nil
         icon.image = nil
     }
+    
+}
+
+//MARK: - Configuration
+
+extension LocationListCell {
     
     private func configureIcon() {
         contentView.addSubview(icon)

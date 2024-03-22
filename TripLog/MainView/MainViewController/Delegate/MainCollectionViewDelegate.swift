@@ -9,6 +9,6 @@ import Foundation
 
 protocol MainCollectionViewDelegate: AnyObject {
     
-    func goToEditView(id: UUID)
+    func presentEditViewController(id: UUID)
     
 }

@@ -10,6 +10,7 @@ import MapKit
 final class SearchLocationViewModel {
     
     var list: Observable<[LocationModel]> = Observable([])
+    var savedLocation: Observable<LocationModel> = Observable<LocationModel>(LocationModel())
     
     deinit {
         print("viewModel 해제")
@@ -45,4 +46,10 @@ extension SearchLocationViewModel {
     func mapCoordinate(location: LocationModel) -> CLLocationCoordinate2D? {
         location.mapItem?.placemark.coordinate
     }
+    
+    func changeSavedLocation(location: LocationModel) {
+        savedLocation.value = location
+        print(savedLocation.value)
+    }
+
 }

@@ -16,7 +16,7 @@
 		6B1E78842BA9796F00008CAF /* MapSearchSevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E78832BA9796F00008CAF /* MapSearchSevice.swift */; };
 		6B36F1C12B988F3C005A396E /* SubCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B36F1C02B988F3C005A396E /* SubCardsViewController.swift */; };
 		6B5253532BA6D200008EF1BA /* SubCardScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5253522BA6D200008EF1BA /* SubCardScrollView.swift */; };
-		6B5253552BA6D93C008EF1BA /* PresentViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5253542BA6D93C008EF1BA /* PresentViewDelegate.swift */; };
+		6B5253552BA6D93C008EF1BA /* SubscrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5253542BA6D93C008EF1BA /* SubscrollViewDelegate.swift */; };
 		6B861AB52B98973600D1D7F7 /* SubCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B861AB42B98973600D1D7F7 /* SubCardsViewModel.swift */; };
 		6B861AB72B996D9F00D1D7F7 /* SubCardsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B861AB62B996D9F00D1D7F7 /* SubCardsCollectionView.swift */; };
 		6B861AB92B99845A00D1D7F7 /* CircularLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B861AB82B99845A00D1D7F7 /* CircularLayout.swift */; };
@@ -25,11 +25,12 @@
 		6B87F0F32B8F256E0036A53B /* SubCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F22B8F256E0036A53B /* SubCardModel.swift */; };
 		6B87F0F52B8F3C880036A53B /* MainCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */; };
 		6B87F0F72B8F458F0036A53B /* MainCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F62B8F458F0036A53B /* MainCardCell.swift */; };
-		6B87F0FA2B90A8360036A53B /* EditOfMainCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F92B90A8360036A53B /* EditOfMainCardViewController.swift */; };
+		6B87F0FA2B90A8360036A53B /* MainCardEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B87F0F92B90A8360036A53B /* MainCardEditViewController.swift */; };
 		6B8A45F22BAB216C00D14118 /* MapViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8A45F12BAB216C00D14118 /* MapViewControllerDelegate.swift */; };
 		6B8A45F42BABE7D900D14118 /* CustomAnnotaionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8A45F32BABE7D900D14118 /* CustomAnnotaionView.swift */; };
-		6B8A45F62BABF8DD00D14118 /* SearchLocationViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8A45F52BABF8DD00D14118 /* SearchLocationViewDelegate.swift */; };
-		6B9BD8F62BA1844B0050F02A /* MainCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9BD8F52BA1844B0050F02A /* MainCardDelegate.swift */; };
+		6B8A45F62BABF8DD00D14118 /* SearchLocationViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8A45F52BABF8DD00D14118 /* SearchLocationViewControllerDelegate.swift */; };
+		6B99FA7B2BAD4C2600F5CF48 /* SelectedImageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99FA7A2BAD4C2600F5CF48 /* SelectedImageViewDelegate.swift */; };
+		6B9BD8F62BA1844B0050F02A /* SubCardsViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9BD8F52BA1844B0050F02A /* SubCardsViewControllerDelegate.swift */; };
 		6B9BD8F92BA184810050F02A /* CellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9BD8F82BA184810050F02A /* CellDelegate.swift */; };
 		6B9BD8FB2BA184960050F02A /* MainCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9BD8FA2BA184960050F02A /* MainCollectionViewDelegate.swift */; };
 		6B9BD8FE2BA185010050F02A /* MainViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9BD8FD2BA185010050F02A /* MainViewModelProtocol.swift */; };
@@ -63,7 +64,7 @@
 		6B1E78832BA9796F00008CAF /* MapSearchSevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchSevice.swift; sourceTree = "<group>"; };
 		6B36F1C02B988F3C005A396E /* SubCardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardsViewController.swift; sourceTree = "<group>"; };
 		6B5253522BA6D200008EF1BA /* SubCardScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardScrollView.swift; sourceTree = "<group>"; };
-		6B5253542BA6D93C008EF1BA /* PresentViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentViewDelegate.swift; sourceTree = "<group>"; };
+		6B5253542BA6D93C008EF1BA /* SubscrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscrollViewDelegate.swift; sourceTree = "<group>"; };
 		6B861AB42B98973600D1D7F7 /* SubCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardsViewModel.swift; sourceTree = "<group>"; };
 		6B861AB62B996D9F00D1D7F7 /* SubCardsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardsCollectionView.swift; sourceTree = "<group>"; };
 		6B861AB82B99845A00D1D7F7 /* CircularLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularLayout.swift; sourceTree = "<group>"; };
@@ -72,11 +73,12 @@
 		6B87F0F22B8F256E0036A53B /* SubCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardModel.swift; sourceTree = "<group>"; };
 		6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionView.swift; sourceTree = "<group>"; };
 		6B87F0F62B8F458F0036A53B /* MainCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardCell.swift; sourceTree = "<group>"; };
-		6B87F0F92B90A8360036A53B /* EditOfMainCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOfMainCardViewController.swift; sourceTree = "<group>"; };
+		6B87F0F92B90A8360036A53B /* MainCardEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardEditViewController.swift; sourceTree = "<group>"; };
 		6B8A45F12BAB216C00D14118 /* MapViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerDelegate.swift; sourceTree = "<group>"; };
 		6B8A45F32BABE7D900D14118 /* CustomAnnotaionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotaionView.swift; sourceTree = "<group>"; };
-		6B8A45F52BABF8DD00D14118 /* SearchLocationViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationViewDelegate.swift; sourceTree = "<group>"; };
-		6B9BD8F52BA1844B0050F02A /* MainCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardDelegate.swift; sourceTree = "<group>"; };
+		6B8A45F52BABF8DD00D14118 /* SearchLocationViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationViewControllerDelegate.swift; sourceTree = "<group>"; };
+		6B99FA7A2BAD4C2600F5CF48 /* SelectedImageViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedImageViewDelegate.swift; sourceTree = "<group>"; };
+		6B9BD8F52BA1844B0050F02A /* SubCardsViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardsViewControllerDelegate.swift; sourceTree = "<group>"; };
 		6B9BD8F82BA184810050F02A /* CellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDelegate.swift; sourceTree = "<group>"; };
 		6B9BD8FA2BA184960050F02A /* MainCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		6B9BD8FD2BA185010050F02A /* MainViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -124,13 +126,9 @@
 		6B36F1BF2B988EFD005A396E /* SubCardsView */ = {
 			isa = PBXGroup;
 			children = (
-				6B36F1C02B988F3C005A396E /* SubCardsViewController.swift */,
-				6B861AB62B996D9F00D1D7F7 /* SubCardsCollectionView.swift */,
-				6BB80BF12B9ECDD000DE2926 /* SubCardEditViewController.swift */,
-				6B5253522BA6D200008EF1BA /* SubCardScrollView.swift */,
-				6B861ABC2B99B48B00D1D7F7 /* SubCardCell.swift */,
-				6BB8D16D2BA4360B00F96229 /* Location */,
-				6B9BD8F42BA1842D0050F02A /* Delegate */,
+				6B99FA7E2BAD4DB200F5CF48 /* SubCardsViewController */,
+				6B8A45F72BAC104D00D14118 /* SubCardEditViewController */,
+				6BB8D16D2BA4360B00F96229 /* MapViewController */,
 			);
 			path = SubCardsView;
 			sourceTree = "<group>";
@@ -155,14 +153,68 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		6B8A45F72BAC104D00D14118 /* SubCardEditViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6BB80BF12B9ECDD000DE2926 /* SubCardEditViewController.swift */,
+				6B5253522BA6D200008EF1BA /* SubCardScrollView.swift */,
+				6B99FA802BAD4E1300F5CF48 /* Delegate */,
+			);
+			path = SubCardEditViewController;
+			sourceTree = "<group>";
+		};
+		6B99FA7C2BAD4D4200F5CF48 /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6BEAA2432B8E17AE0017318C /* MainViewController.swift */,
+				6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */,
+				6B87F0F62B8F458F0036A53B /* MainCardCell.swift */,
+				6B9BD8F72BA184700050F02A /* Delegate */,
+			);
+			path = MainViewController;
+			sourceTree = "<group>";
+		};
+		6B99FA7D2BAD4D5D00F5CF48 /* MainCardEditViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6B87F0F92B90A8360036A53B /* MainCardEditViewController.swift */,
+			);
+			path = MainCardEditViewController;
+			sourceTree = "<group>";
+		};
+		6B99FA7E2BAD4DB200F5CF48 /* SubCardsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6B36F1C02B988F3C005A396E /* SubCardsViewController.swift */,
+				6B861AB62B996D9F00D1D7F7 /* SubCardsCollectionView.swift */,
+				6B861ABC2B99B48B00D1D7F7 /* SubCardCell.swift */,
+				6B99FA7F2BAD4DCA00F5CF48 /* Delegate */,
+			);
+			path = SubCardsViewController;
+			sourceTree = "<group>";
+		};
+		6B99FA7F2BAD4DCA00F5CF48 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				6B9BD8F52BA1844B0050F02A /* SubCardsViewControllerDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
+		6B99FA802BAD4E1300F5CF48 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				6B5253542BA6D93C008EF1BA /* SubscrollViewDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
 		6B9BD8F42BA1842D0050F02A /* Delegate */ = {
 			isa = PBXGroup;
 			children = (
-				6B9BD8F52BA1844B0050F02A /* MainCardDelegate.swift */,
-				6B1E78812BA95E7200008CAF /* InformationViewDelegate.swift */,
-				6B5253542BA6D93C008EF1BA /* PresentViewDelegate.swift */,
 				6B8A45F12BAB216C00D14118 /* MapViewControllerDelegate.swift */,
-				6B8A45F52BABF8DD00D14118 /* SearchLocationViewDelegate.swift */,
+				6B1E78812BA95E7200008CAF /* InformationViewDelegate.swift */,
+				6B8A45F52BABF8DD00D14118 /* SearchLocationViewControllerDelegate.swift */,
 			);
 			path = Delegate;
 			sourceTree = "<group>";
@@ -193,7 +245,7 @@
 			path = LIfeCycle;
 			sourceTree = "<group>";
 		};
-		6BB8D16D2BA4360B00F96229 /* Location */ = {
+		6BB8D16D2BA4360B00F96229 /* MapViewController */ = {
 			isa = PBXGroup;
 			children = (
 				6B9BD8FF2BA1C4560050F02A /* MapViewController.swift */,
@@ -201,8 +253,9 @@
 				6B1E787D2BA81BC800008CAF /* SearchListCollectionView.swift */,
 				6B1E787F2BA8672B00008CAF /* SelectedLocationInformationView.swift */,
 				6BB8D16E2BA43EFF00F96229 /* LocationListCell.swift */,
+				6B9BD8F42BA1842D0050F02A /* Delegate */,
 			);
-			path = Location;
+			path = MapViewController;
 			sourceTree = "<group>";
 		};
 		6BCC92092B8F026200931D0C /* Model */ = {
@@ -218,11 +271,8 @@
 		6BCC920A2B8F029A00931D0C /* MainView */ = {
 			isa = PBXGroup;
 			children = (
-				6BEAA2432B8E17AE0017318C /* MainViewController.swift */,
-				6B87F0F42B8F3C880036A53B /* MainCollectionView.swift */,
-				6B87F0F62B8F458F0036A53B /* MainCardCell.swift */,
-				6B87F0F92B90A8360036A53B /* EditOfMainCardViewController.swift */,
-				6B9BD8F72BA184700050F02A /* Delegate */,
+				6B99FA7C2BAD4D4200F5CF48 /* MainViewController */,
+				6B99FA7D2BAD4D5D00F5CF48 /* MainCardEditViewController */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -243,6 +293,7 @@
 				6BE523BB2BA02DC900A551DB /* PriceView.swift */,
 				6BE523BF2BA0356300A551DB /* TitleView.swift */,
 				6BBB9F8B2BA2B92F0013A82B /* SelectedImageView.swift */,
+				6B99FA7A2BAD4C2600F5CF48 /* SelectedImageViewDelegate.swift */,
 				6BE523BD2BA0343200A551DB /* LocationView.swift */,
 				6B8A45F32BABE7D900D14118 /* CustomAnnotaionView.swift */,
 				6B861ABE2B9B1BE500D1D7F7 /* CollectionViewLayout */,
@@ -362,7 +413,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B8A45F62BABF8DD00D14118 /* SearchLocationViewDelegate.swift in Sources */,
+				6B99FA7B2BAD4C2600F5CF48 /* SelectedImageViewDelegate.swift in Sources */,
+				6B8A45F62BABF8DD00D14118 /* SearchLocationViewControllerDelegate.swift in Sources */,
 				6B861ABD2B99B48B00D1D7F7 /* SubCardCell.swift in Sources */,
 				6BCC92152B8F0D7700931D0C /* Observable.swift in Sources */,
 				6B36F1C12B988F3C005A396E /* SubCardsViewController.swift in Sources */,
@@ -373,7 +425,7 @@
 				6BB8D16F2BA43EFF00F96229 /* LocationListCell.swift in Sources */,
 				6BE523BA2BA02AA200A551DB /* StarRateView.swift in Sources */,
 				6B1E787C2BA80F4E00008CAF /* SearchLocationViewModel.swift in Sources */,
-				6B9BD8F62BA1844B0050F02A /* MainCardDelegate.swift in Sources */,
+				6B9BD8F62BA1844B0050F02A /* SubCardsViewControllerDelegate.swift in Sources */,
 				6B9BD8F92BA184810050F02A /* CellDelegate.swift in Sources */,
 				6B861AB92B99845A00D1D7F7 /* CircularLayout.swift in Sources */,
 				6B861ABB2B99B29E00D1D7F7 /* CircularAttributes.swift in Sources */,
@@ -383,7 +435,7 @@
 				6B8A45F42BABE7D900D14118 /* CustomAnnotaionView.swift in Sources */,
 				6B9BD8FB2BA184960050F02A /* MainCollectionViewDelegate.swift in Sources */,
 				6B87F0F32B8F256E0036A53B /* SubCardModel.swift in Sources */,
-				6B87F0FA2B90A8360036A53B /* EditOfMainCardViewController.swift in Sources */,
+				6B87F0FA2B90A8360036A53B /* MainCardEditViewController.swift in Sources */,
 				6BEAA2402B8E17AE0017318C /* AppDelegate.swift in Sources */,
 				6BBB9F8C2BA2B92F0013A82B /* SelectedImageView.swift in Sources */,
 				6BEAA2422B8E17AE0017318C /* SceneDelegate.swift in Sources */,
@@ -403,7 +455,7 @@
 				6B1E78802BA8672B00008CAF /* SelectedLocationInformationView.swift in Sources */,
 				6BE523BC2BA02DC900A551DB /* PriceView.swift in Sources */,
 				6B87F0F52B8F3C880036A53B /* MainCollectionView.swift in Sources */,
-				6B5253552BA6D93C008EF1BA /* PresentViewDelegate.swift in Sources */,
+				6B5253552BA6D93C008EF1BA /* SubscrollViewDelegate.swift in Sources */,
 				6B9BD9002BA1C4560050F02A /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,7 +598,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -576,7 +628,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

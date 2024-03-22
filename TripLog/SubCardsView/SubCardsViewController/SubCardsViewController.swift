@@ -11,14 +11,17 @@ final class SubCardsViewController: UIViewController {
     
     private let mainCardId: UUID
     private let viewModel = SubCardsViewModel()
-    weak var delegate: MainCardDelegate?
+    weak var delegate: SubCardsViewControllerDelegate?
     
     private lazy var collectionView = SubCardsCollectionView(viewModel: viewModel,
                                                              size: view.bounds.size)
     private lazy var addButton = UIButton()
     
     
-    init(mainCardId: UUID, delegate: MainCardDelegate? = nil, subcards: [SubCardModel]) {
+    init(mainCardId: UUID,
+         delegate: SubCardsViewControllerDelegate? = nil,
+         subcards: [SubCardModel]) {
+        
         self.mainCardId = mainCardId
         self.delegate = delegate
         self.viewModel.list.value = subcards
@@ -51,6 +54,34 @@ extension SubCardsViewController {
             self.delegate?.changeSubCards(mainCardId: mainCardId, card: subCards)
         }
     }
+    
+    @objc private func tapAddButton() {
+        
+        navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
+                                                 animated: true)
+        
+    }
+}
+
+//MARK: - UICollectionDelegate
+
+extension SubCardsViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
+        
+        guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
+                                                                           selectedCardId: id),
+                                                 animated: true)
+    }
+}
+
+//MARK: - Configuration
+
+extension SubCardsViewController {
     
     private func configureNavigationBar() {
         let menuButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"),
@@ -103,26 +134,5 @@ extension SubCardsViewController {
         
         NSLayoutConstraint.activate(addButtonConstraints)
         
-    }
-    
-    @objc private func tapAddButton() {
-        
-        navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
-                                                 animated: true)
-        
-    }
-}
-
-extension SubCardsViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
-        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
-        
-        guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
-        
-        navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
-                                                                           selectedCardId: id),
-                                                 animated: true)
     }
 }

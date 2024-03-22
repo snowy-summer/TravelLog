@@ -80,43 +80,12 @@ extension SubCardEditViewController {
 
 }
 
-//MARK: - Configuration
-
-extension SubCardEditViewController {
-    
-    private func configureNavigationBar() {
-        let doneButton = UIBarButtonItem(title: "완료",
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(doneAction))
-        navigationItem.rightBarButtonItem = doneButton
-    }
-    
-    private func configureScrollView() {
-        view.addSubview(scrollView)
-        
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.configureDelegate(delegate: self)
-        scrollView.mapViewController.delegate = self
-
-        let scrollViewConstraints = [
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(scrollViewConstraints)
-    }
-
-}
-
 //MARK: - PresentViewDelegate
 
-extension SubCardEditViewController: PresentViewDelegate {
+extension SubCardEditViewController: SubscrollViewDelegate {
     
-    func pushViewController(where viewController: UIViewController) {
-        self.navigationController?.pushViewController(viewController, animated: true)
+    func pushMapViewController() {
+        self.navigationController?.pushViewController(MapViewController(delegate: self), animated: true)
     }
     
     
@@ -140,4 +109,34 @@ extension SubCardEditViewController: MapViewControllerDelegate {
         loadSubCard(selectedCardId: id)
     }
     
+}
+
+//MARK: - Configuration
+
+extension SubCardEditViewController {
+    
+    private func configureNavigationBar() {
+        let doneButton = UIBarButtonItem(title: "완료",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(doneAction))
+        navigationItem.rightBarButtonItem = doneButton
+    }
+    
+    private func configureScrollView() {
+        view.addSubview(scrollView)
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.configureDelegate(delegate: self)
+
+        let scrollViewConstraints = [
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ]
+        
+        NSLayoutConstraint.activate(scrollViewConstraints)
+    }
+
 }

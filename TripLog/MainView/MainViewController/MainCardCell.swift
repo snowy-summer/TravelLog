@@ -38,6 +38,30 @@ final class MainCardCell: UICollectionViewCell {
 
 extension MainCardCell {
     
+    func updateContent(title: String,
+                       image: UIImage?,
+                       date: Date,
+                       id: UUID) {
+        titleLabel.text = title
+        self.id = id
+        
+        if let sumbnailImage = image {
+            sumbnailImageView.image = sumbnailImage
+        } else {
+            sumbnailImageView.image = UIImage(resource: .skyBlue)
+        }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY / MM / dd"
+        dateLabel.text = formatter.string(from: date)
+    }
+    
+}
+
+//MARK: - Configuration
+
+extension MainCardCell {
+    
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -170,23 +194,4 @@ extension MainCardCell {
         menuButton.showsMenuAsPrimaryAction = true
         
     }
-    
-    func updateContent(title: String,
-                       image: UIImage?,
-                       date: Date,
-                       id: UUID) {
-        titleLabel.text = title
-        self.id = id
-        
-        if let sumbnailImage = image {
-            sumbnailImageView.image = sumbnailImage
-        } else {
-            sumbnailImageView.image = UIImage(resource: .skyBlue)
-        }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY / MM / dd"
-        dateLabel.text = formatter.string(from: date)
-    }
-    
 }

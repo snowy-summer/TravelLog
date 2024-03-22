@@ -9,7 +9,7 @@ import Foundation
 
 protocol InformationViewDelegate: AnyObject {
     
-    func saveLocation(location: LocationModel)
+    func popMapViewController()
     func hideInformationView()
     
 }

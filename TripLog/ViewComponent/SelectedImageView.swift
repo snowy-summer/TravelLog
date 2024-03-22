@@ -16,7 +16,7 @@ final class SelectedImageView: UIView {
     private var mainQueue = DispatchQueue.main
     var images = [UIImage]()
     
-    weak var delegate: PresentViewDelegate?
+    weak var delegate: SelectedImageViewDelegate?
  
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -115,7 +115,7 @@ extension SelectedImageView {
         addButton.addTarget(self,
                             action: #selector(addImage),
                             for: .touchUpInside)
-        
+//        
         let addButtonConstraints = [
             addButton.widthAnchor.constraint(equalTo: imageView.widthAnchor,
                                              multiplier: 0.2),
@@ -153,9 +153,11 @@ extension SelectedImageView {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
         configuration.selectionLimit = .max
+        
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
-        delegate?.presentViewController(where: picker)
+        
+        delegate?.presentPicker(where: picker)
     }
     
 }

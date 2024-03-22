@@ -9,21 +9,23 @@ import MapKit
 
 final class SearchLocationViewController: UIViewController {
 
-    private let locationViewModel = SearchLocationViewModel()
+    private let locationViewModel: SearchLocationViewModel
     private var mapSearchService: MapSearchSevice?
     private let searchBar = UISearchBar()
     
-    weak var delegate: SearchLocationViewDelegate?
+    weak var delegate: SearchLocationViewControllerDelegate?
 
     private var collectionView: SearchListCollectionView
     private var informationView: SelectedLocationInformationView
     
-    init() {
+    init(locationViewModel: SearchLocationViewModel) {
+        self.locationViewModel = locationViewModel
         self.mapSearchService = MapSearchSevice(viewModel: locationViewModel)
         self.collectionView = SearchListCollectionView(locationViewModel: locationViewModel)
         self.informationView = SelectedLocationInformationView(locationViewModel: locationViewModel)
         super.init(nibName: nil, bundle: nil)
         
+        bind()
         print("modal 생성")
     }
     
@@ -34,7 +36,6 @@ final class SearchLocationViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .basic
         
-        bind()
         configureSearchBar()
         configureCollectionView()
         configureInformationView()
@@ -44,6 +45,49 @@ final class SearchLocationViewController: UIViewController {
     deinit {
         print("modal 해제")
     }
+}
+
+extension SearchLocationViewController {
+    
+    private func bind() {
+        locationViewModel.list.observe { [weak self] locationModels in
+            self?.collectionView.saveSnapshot(id: locationModels.map{ $0.id })
+
+        }
+    }
+    
+    func isCollectionViewHidden(value: Bool) {
+        collectionView.isHidden = value
+        searchBar.isHidden = value
+        informationView.isHidden = !value
+    }
+    
+    func configureInformationViewDelegate(delegate: InformationViewDelegate) {
+        informationView.delegate = delegate
+    }
+}
+
+//MARK: - CollectionViewDelegate
+
+extension SearchLocationViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        
+        isCollectionViewHidden(value: true)
+        guard let dataSource = collectionView.dataSource as?
+                UICollectionViewDiffableDataSource<Section, UUID>,
+              let id = dataSource.itemIdentifier(for: indexPath) else { return }
+    
+        guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
+
+        delegate?.updateMapView(where: coordinate)
+        informationView.updateContent(id: id)
+        
+        self.sheetPresentationController?.selectedDetentIdentifier = CustomDetent.low.idetifier
+
+    }
+    
 }
 
 //MARK: - Configuration
@@ -104,47 +148,4 @@ extension SearchLocationViewController {
         
         informationView.isHidden = true
     }
-}
-
-extension SearchLocationViewController {
-    
-    private func bind() {
-        locationViewModel.list.observe { [weak self] locationModels in
-            self?.collectionView.saveSnapshot(id: locationModels.map{ $0.id })
-
-        }
-    }
-    
-    func isCollectionViewHidden(value: Bool) {
-        collectionView.isHidden = value
-        searchBar.isHidden = value
-        informationView.isHidden = !value
-    }
-    
-    func configureInformationViewDelegate(delegate: InformationViewDelegate) {
-        informationView.delegate = delegate
-    }
-}
-
-//MARK: - CollectionViewDelegate
-
-extension SearchLocationViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
-        
-        isCollectionViewHidden(value: true)
-        guard let dataSource = collectionView.dataSource as?
-                UICollectionViewDiffableDataSource<Section, UUID>,
-              let id = dataSource.itemIdentifier(for: indexPath) else { return }
-    
-        guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
-
-        delegate?.updateMapView(where: coordinate)
-        informationView.updateContent(id: id)
-        
-        self.sheetPresentationController?.selectedDetentIdentifier = CustomDetent.low.idetifier
-
-    }
-    
 }

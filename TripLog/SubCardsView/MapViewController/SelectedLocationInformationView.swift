@@ -45,6 +45,40 @@ final class SelectedLocationInformationView: UIView {
     
 }
 
+extension SelectedLocationInformationView {
+    
+    func updateContent(id: UUID) {
+        let locationModel = locationViewModel.selectedLocation(id: id)
+        
+        selectedId = id
+        titleLabel.text = locationModel.mapItem?.name
+        categoryLabel.text = locationModel.mapItem?.pointOfInterestCategory?.categoryName
+        
+    }
+    
+    @objc private func saveAction() {
+        guard let id = selectedId else { return }
+        
+        locationViewModel.changeSavedLocation(location: locationViewModel.selectedLocation(id: id))
+        delegate?.popMapViewController()
+    }
+    
+    @objc private func openInMapAction() {
+        guard let id = selectedId else { return }
+    
+        locationViewModel.openInMap(id: id)
+    }
+    
+    @objc private func searchAction() {
+        delegate?.hideInformationView()
+    }
+    
+    @objc private func noNameAction() {
+        
+    }
+    
+}
+
 //MARK: - Configuration
 
 extension SelectedLocationInformationView {
@@ -75,7 +109,7 @@ extension SelectedLocationInformationView {
         
         let categoryLabelConstraints = [
             categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                            constant: 8),
+                                               constant: 8),
             categoryLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             categoryLabel.widthAnchor.constraint(equalTo: self.widthAnchor)
         ]
@@ -127,7 +161,7 @@ extension SelectedLocationInformationView {
         openInMapButton.layer.cornerRadius = 20
         openInMapButton.backgroundColor = .lightGray
         openInMapButton.setImage(UIImage(systemName: "map.fill"),
-                            for: .normal)
+                                 for: .normal)
         openInMapButton.clipsToBounds = true
         
         openInMapButton.addTarget(self,
@@ -136,13 +170,13 @@ extension SelectedLocationInformationView {
         
         let openInMapButtonConstraints = [
             openInMapButton.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor,
-                                            constant: 16),
+                                                 constant: 16),
             openInMapButton.leadingAnchor.constraint(equalTo: saveButton.trailingAnchor,
-                                                constant: 16),
+                                                     constant: 16),
             openInMapButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.2),
+                                                   multiplier: 0.2),
             openInMapButton.heightAnchor.constraint(equalTo: openInMapButton.widthAnchor,
-                                               multiplier: 1.0)
+                                                    multiplier: 1.0)
         ]
         
         NSLayoutConstraint.activate(openInMapButtonConstraints)
@@ -159,7 +193,7 @@ extension SelectedLocationInformationView {
         searchButton.layer.cornerRadius = 20
         searchButton.backgroundColor = .lightGray
         searchButton.setImage(UIImage(systemName: "location.magnifyingglass"),
-                            for: .normal)
+                              for: .normal)
         searchButton.clipsToBounds = true
         
         
@@ -169,13 +203,13 @@ extension SelectedLocationInformationView {
         
         let searchButtonConstraints = [
             searchButton.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor,
-                                            constant: 16),
+                                              constant: 16),
             searchButton.leadingAnchor.constraint(equalTo: openInMapButton.trailingAnchor,
-                                                constant: 16),
+                                                  constant: 16),
             searchButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.2),
+                                                multiplier: 0.2),
             searchButton.heightAnchor.constraint(equalTo: searchButton.widthAnchor,
-                                               multiplier: 1.0)
+                                                 multiplier: 1.0)
         ]
         
         NSLayoutConstraint.activate(searchButtonConstraints)
@@ -195,13 +229,13 @@ extension SelectedLocationInformationView {
         
         let noNameButtonConstraints = [
             noNameButton.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor,
-                                            constant: 16),
+                                              constant: 16),
             noNameButton.leadingAnchor.constraint(equalTo: searchButton.trailingAnchor,
-                                                constant: 16),
+                                                  constant: 16),
             noNameButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.2),
+                                                multiplier: 0.2),
             noNameButton.heightAnchor.constraint(equalTo: noNameButton.widthAnchor,
-                                               multiplier: 1.0)
+                                                 multiplier: 1.0)
         ]
         
         NSLayoutConstraint.activate(noNameButtonConstraints)
@@ -218,35 +252,5 @@ extension SelectedLocationInformationView {
         return configuration
     }
     
-    
-    func updateContent(id: UUID) {
-        let locationModel = locationViewModel.selectedLocation(id: id)
-        
-        selectedId = id
-        titleLabel.text = locationModel.mapItem?.name
-        categoryLabel.text = locationModel.mapItem?.pointOfInterestCategory?.categoryName
-        
-    }
-    
-    @objc private func saveAction() {
-        guard let id = selectedId else { return }
-        
-        delegate?.saveLocation(location: locationViewModel.selectedLocation(id: id))
-    }
-    
-    @objc private func openInMapAction() {
-        guard let id = selectedId else { return }
-    
-        locationViewModel.openInMap(id: id)
-    }
-    
-    @objc private func searchAction() {
-        delegate?.hideInformationView()
-    }
-    
-    @objc private func noNameAction() {
-        
-    }
-    
 }
-
+    

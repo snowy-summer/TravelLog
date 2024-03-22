@@ -93,7 +93,7 @@ extension MainCollectionView {
             
             let editAction = UIContextualAction(style: .normal,
                                                 title: nil) { action, view, completion in
-                self?.collectionViewDelegate?.goToEditView(id: selectedId)
+                self?.collectionViewDelegate?.presentEditViewController(id: selectedId)
                 completion(true)
             }
             

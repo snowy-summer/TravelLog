@@ -8,7 +8,7 @@
 import UIKit
 import PhotosUI
 
-final class EditOfMainCardViewController: UIViewController {
+final class MainCardEditViewController: UIViewController {
     
     private let mainViewModel: MainViewModelProtocol
     private var selectedCardId: UUID?
@@ -46,7 +46,7 @@ final class EditOfMainCardViewController: UIViewController {
     }
 }
 
-extension EditOfMainCardViewController {
+extension MainCardEditViewController {
     
     private func loadMainCard(selectedCardID: UUID) {
         let index = mainViewModel.list.value.firstIndex { mainCard in
@@ -67,9 +67,80 @@ extension EditOfMainCardViewController {
     
 }
 
+//MARK: - objc Method
+ 
+extension MainCardEditViewController{
+
+    @objc private func addImage() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        self.present(picker, animated: true)
+    }
+    
+    @objc private func doneAction() {
+      
+        self.dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            guard let title = self.titleView.text else { return }
+            
+            let sumbnailImage = imageView.image
+            
+            guard let cardId = self.selectedCardId else {
+                
+                if sumbnailImage == nil {
+                    self.mainViewModel.appendMainCard(title: title, image: nil)
+                } else {
+                    self.mainViewModel.appendMainCard(title: title, image: sumbnailImage)
+                }
+                
+                return
+            }
+            
+            self.mainViewModel.editMainCardTitle(id: cardId, title: title)
+            self.mainViewModel.editMainCardImage(id: cardId, image: imageView.image)
+            self.mainViewModel.editMainCardDate(id: cardId, date: .now)
+        }
+        
+    }
+    
+    @objc private func cancelAction() {
+        self.dismiss(animated: true)
+    }
+    
+}
+
+//MARK: - PHPickerViewControllerDelegate
+
+extension MainCardEditViewController: PHPickerViewControllerDelegate {
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                self?.mainQueue.async {
+                    self?.imageView.image = image as? UIImage
+                }
+            }
+        }
+        
+        if imageView.image == nil  && results.isEmpty {
+            addButton.isHidden = false
+        } else {
+            addButton.isHidden = true
+        }
+    }
+    
+}
+
 //MARK: - Configuration
 
-extension EditOfMainCardViewController {
+extension MainCardEditViewController {
 
     private func configureTitleView() {
         view.addSubview(titleView)
@@ -161,75 +232,4 @@ extension EditOfMainCardViewController {
         NSLayoutConstraint.activate(addButtonConstraints)
     }
 
-}
-
-//MARK: - PHPickerViewControllerDelegate
-
-extension EditOfMainCardViewController: PHPickerViewControllerDelegate {
-    
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        let itemProvider = results.first?.itemProvider
-        
-        if let itemProvider = itemProvider,
-           itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                self?.mainQueue.async {
-                    self?.imageView.image = image as? UIImage
-                }
-            }
-        }
-        
-        if imageView.image == nil  && results.isEmpty {
-            addButton.isHidden = false
-        } else {
-            addButton.isHidden = true
-        }
-    }
-    
-}
-
-//MARK: - objc Method
- 
-extension EditOfMainCardViewController{
-
-    @objc private func addImage() {
-        var configuration = PHPickerConfiguration()
-        configuration.filter = .images
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        self.present(picker, animated: true)
-    }
-    
-    @objc private func doneAction() {
-      
-        self.dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            guard let title = self.titleView.text else { return }
-            
-            let sumbnailImage = imageView.image
-            
-            guard let cardId = self.selectedCardId else {
-                
-                if sumbnailImage == nil {
-                    self.mainViewModel.appendMainCard(title: title, image: nil)
-                } else {
-                    self.mainViewModel.appendMainCard(title: title, image: sumbnailImage)
-                }
-                
-                return
-            }
-            
-            self.mainViewModel.editMainCardTitle(id: cardId, title: title)
-            self.mainViewModel.editMainCardImage(id: cardId, image: imageView.image)
-            self.mainViewModel.editMainCardDate(id: cardId, date: .now)
-        }
-        
-    }
-    
-    @objc private func cancelAction() {
-        self.dismiss(animated: true)
-    }
-    
 }

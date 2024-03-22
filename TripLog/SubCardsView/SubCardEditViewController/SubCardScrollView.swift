@@ -9,8 +9,7 @@ import UIKit
 
 final class SubCardScrollView: UIScrollView {
 
-    let mapViewController = MapViewController()
-    weak var subCardScrollViewDelegate: PresentViewDelegate?
+    weak var subCardScrollViewDelegate: SubscrollViewDelegate?
     
     private(set) lazy var contentView = UIView()
     private(set) lazy var titleView = TitleView()
@@ -59,18 +58,27 @@ extension SubCardScrollView {
         }
     }
     
-    @objc private func presentSearchLocationView() {
-        subCardScrollViewDelegate?.pushViewController(where: mapViewController)
+    @objc private func pushMapViewController() {
+        subCardScrollViewDelegate?.pushMapViewController()
     }
+    
+}
+
+extension SubCardScrollView: SelectedImageViewDelegate {
+    
+    func presentPicker(where viewController: UIViewController) {
+        subCardScrollViewDelegate?.presentViewController(where: viewController)
+    }
+    
 }
 
 //MARK: - Configuration
 
 extension SubCardScrollView {
     
-    func configureDelegate(delegate: PresentViewDelegate) {
+    func configureDelegate(delegate: SubscrollViewDelegate) {
         subCardScrollViewDelegate = delegate
-        imageView.delegate = delegate
+        imageView.delegate = self
     }
     
     private func configureContentView() {
@@ -194,7 +202,7 @@ extension SubCardScrollView {
         locationView.layer.borderWidth = 1
         locationView.backgroundColor = .viewBackground
         locationView.addGestureRecognizer(UITapGestureRecognizer(target: self,
-                                                                 action: #selector(presentSearchLocationView)))
+                                                                 action: #selector(pushMapViewController)))
         
         let viewConstraints = [
             locationView.topAnchor.constraint(equalTo: priceView.bottomAnchor,

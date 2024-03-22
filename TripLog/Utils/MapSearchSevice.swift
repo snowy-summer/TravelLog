@@ -58,11 +58,12 @@ extension MapSearchSevice: UISearchBarDelegate {
         if searchText == "" {
             completerResults = nil
         }
+        searchCompleter?.queryFragment = searchBar.text!
     
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchCompleter?.queryFragment = searchBar.text!
+       
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -110,7 +111,6 @@ extension MapSearchSevice {
         search(using: searchRequest)
     }
     
-    //문자 기반 검색 실행
    private func search(for queryString: String?) {
         let searchRequest = MKLocalSearch.Request()
        
@@ -119,7 +119,6 @@ extension MapSearchSevice {
         search(using: searchRequest)
     }
     
-    //들어온 request를 기반으로 검색을 실행한다.
     private func search(using searchRequest: MKLocalSearch.Request) {
         searchRequest.resultTypes = .pointOfInterest
     

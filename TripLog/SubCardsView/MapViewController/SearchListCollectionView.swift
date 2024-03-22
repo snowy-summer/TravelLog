@@ -32,6 +32,19 @@ final class SearchListCollectionView: UICollectionView {
 }
 
 extension SearchListCollectionView {
+  
+    func saveSnapshot(id: [UUID]) {
+        var snaphot = NSDiffableDataSourceSnapshot<Section, UUID>()
+        snaphot.appendSections([.main])
+        snaphot.appendItems(id,toSection: .main)
+        diffableDataSource?.apply(snaphot, animatingDifferences: false)
+    }
+    
+}
+
+//MARK: - Configuration
+
+extension SearchListCollectionView {
     
     private func createBasicLayout() -> UICollectionViewCompositionalLayout {
         var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .plain)
@@ -73,12 +86,5 @@ extension SearchListCollectionView {
         })
     
     }
-    
-    func saveSnapshot(id: [UUID]) {
-        var snaphot = NSDiffableDataSourceSnapshot<Section, UUID>()
-        snaphot.appendSections([.main])
-        snaphot.appendItems(id,toSection: .main)
-        diffableDataSource?.apply(snaphot, animatingDifferences: false)
-    }
-    
+
 }

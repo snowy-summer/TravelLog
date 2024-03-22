@@ -66,7 +66,7 @@ extension MainViewController {
     }
     
     @objc private func tapAddButton() {
-        let modalNavigationController = UINavigationController(rootViewController: EditOfMainCardViewController(mainViewmodel: mainViewModel))
+        let modalNavigationController = UINavigationController(rootViewController: MainCardEditViewController(mainViewmodel: mainViewModel))
         self.present(modalNavigationController, animated: true)
     }
     
@@ -118,7 +118,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
 extension MainViewController: CellDelegate {
     
     func editCard(id: UUID) {
-        let modalNavigationController = UINavigationController(rootViewController: EditOfMainCardViewController(mainViewModel: mainViewModel, id: id))
+        let modalNavigationController = UINavigationController(rootViewController: MainCardEditViewController(mainViewModel: mainViewModel, id: id))
         self.present(modalNavigationController, animated: true)
     }
     
@@ -140,15 +140,15 @@ extension MainViewController: CellDelegate {
 
 extension MainViewController: MainCollectionViewDelegate {
     
-    func goToEditView(id: UUID) {
-        let modalNavigationController = UINavigationController(rootViewController: EditOfMainCardViewController(mainViewModel: mainViewModel, id: id))
+    func presentEditViewController(id: UUID) {
+        let modalNavigationController = UINavigationController(rootViewController: MainCardEditViewController(mainViewModel: mainViewModel, id: id))
         self.present(modalNavigationController, animated: true)
     }
     
 }
 
-//MARK: - MainCardDelegate
-extension MainViewController: MainCardDelegate {
+//MARK: - SubCardsViewControllerDelegate
+extension MainViewController: SubCardsViewControllerDelegate {
     
     func changeSubCards(mainCardId: UUID, card: [SubCardModel]) {
         mainViewModel.changeSubCards(id: mainCardId, cards: card)

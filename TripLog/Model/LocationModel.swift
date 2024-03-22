@@ -7,10 +7,20 @@
 
 import MapKit
 
-struct LocationModel: Hashable,Identifiable {
+struct LocationModel: Identifiable {
     var id = UUID()
     var searchCompletion: MKLocalSearchCompletion?
     var mapItem: MKMapItem?
+        
+}
+
+extension LocationModel: Hashable {
     
+    static func == (lhs: LocationModel, rhs: LocationModel) -> Bool {
+        lhs.id.hashValue == rhs.id.hashValue
+    }
     
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
