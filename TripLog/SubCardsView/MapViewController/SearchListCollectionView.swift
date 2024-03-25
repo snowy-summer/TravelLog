@@ -66,7 +66,7 @@ extension SearchListCollectionView {
             guard let location = subCardDictionary[itemIdentifier],
                   let mapitem = location.mapItem else { return }
             
-            let symbolIcon = location.mapItem?.pointOfInterestCategory?.symbolName
+            let symbolIcon = location.mapItem?.pointOfInterestCategory?.symbolIcon
                 ?? UIImage(systemName: "mappin.and.ellipse")?.withTintColor(.red,
                                                                             renderingMode: .alwaysOriginal)
             

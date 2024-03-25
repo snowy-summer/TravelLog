@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol StarRateViewDelegate: AnyObject {
+    
+    func updateViewModelValue(starState: [Bool])
+}
+
 final class StarRateView: UIView {
+    
+    weak var delegate: StarRateViewDelegate?
     
     private lazy var starStackView = UIStackView()
     private lazy var stars = [UIButton]()
@@ -116,6 +123,8 @@ extension StarRateView {
                 stars[i].setImage(starEmptyImage, for: .normal)
             }
         }
+        
+        delegate?.updateViewModelValue(starState: starState)
     }
     
     func updateButton() {

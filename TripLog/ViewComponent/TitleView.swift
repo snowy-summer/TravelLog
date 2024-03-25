@@ -9,7 +9,7 @@ import UIKit
 
 protocol TitleViewDelegate: AnyObject {
     
-    func viewModelValueUpdate(title: String?)
+    func updateViewModelValue(title: String?)
     
 }
 
@@ -46,7 +46,7 @@ extension TitleView {
     }
     
     @objc func didTextFieldChange() {
-        delegate?.viewModelValueUpdate(title: titleTextField.text)
+        delegate?.updateViewModelValue(title: titleTextField.text)
     }
     
 }

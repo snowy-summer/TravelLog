@@ -38,10 +38,6 @@ extension SearchLocationViewModel {
         
     }
     
-    func openInMap(id: UUID) {
-        selectedLocation(id: id).mapItem?.openInMaps()
-    }
-    
     func mapCoordinate(id: UUID) -> CLLocationCoordinate2D? {
         selectedLocation(id: id).mapItem?.placemark.coordinate
     }
@@ -56,6 +52,10 @@ extension SearchLocationViewModel {
     
     func updateSavedLocation(location: LocationModel) {
         savedLocation.value = location
+    }
+    
+    func updateSavedLocationMapItem(mapItem: MKMapItem?) {
+        savedLocation.value.mapItem = mapItem
     }
     
     func openInMap() {

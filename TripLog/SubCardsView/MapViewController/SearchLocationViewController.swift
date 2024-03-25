@@ -96,7 +96,8 @@ extension SearchLocationViewController: UICollectionViewDelegate {
     
         guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
 
-        delegate?.updateMapView(where: coordinate)
+        delegate?.updateMapView(where: coordinate,
+                                title: locationViewModel.savedLocationMapItem?.name)
         locationViewModel.updateSavedLocation(location: locationViewModel.selectedLocation(id: id))
         informationView.updateContent()
         

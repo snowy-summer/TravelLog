@@ -11,7 +11,7 @@ struct SubCardModel: Identifiable {
     var id: UUID = UUID()
     var title: String?
     var starsState: [Bool] = [Bool](repeating: false, count: 5)
-    var price: Int = 0
+    var price: Int?
     var images: [UIImage]?
     var script: String?
     var location: LocationModel?

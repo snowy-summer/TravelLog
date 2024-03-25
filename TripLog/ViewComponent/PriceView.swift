@@ -9,7 +9,7 @@ import UIKit
 
 protocol PriceViewDelegate: AnyObject {
     
-    func viewModelValueUpdate(price: String?)
+    func updateViewModelValue(price: String?)
     
 }
 
@@ -44,12 +44,13 @@ final class PriceView: UIView {
 
 extension PriceView {
     
-    func updatePrice(price: Int) {
+    func updatePrice(price: Int?) {
+        guard let price = price else { return }
         priceTextField.text = String(price)
     }
     
     @objc func didTextFieldChange() {
-        delegate?.viewModelValueUpdate(price: priceTextField.text)
+        delegate?.updateViewModelValue(price: priceTextField.text)
     }
 }
 
@@ -105,6 +106,9 @@ extension PriceView {
         priceTextField.translatesAutoresizingMaskIntoConstraints = false
         
         priceTextField.textAlignment = .right
+        priceTextField.addTarget(self,
+                                 action: #selector(didTextFieldChange),
+                                 for: .editingChanged)
         
         let textFieldConstraints = [
             priceTextField.topAnchor.constraint(equalTo: self.topAnchor,

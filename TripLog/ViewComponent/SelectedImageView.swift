@@ -11,7 +11,7 @@ import PhotosUI
 protocol SelectedImageViewDelegate: AnyObject {
     
     func presentPicker(where: UIViewController)
-    func updateViewModelImages(images: [UIImage]?)
+    func updateViewModelValue(images: [UIImage]?)
     
 }
 
@@ -192,12 +192,14 @@ extension SelectedImageView: PHPickerViewControllerDelegate {
                     self.mainQueue.async {
                         self.imageView.image = self.images[0]
                         self.pageControl.numberOfPages = self.images.count
+                        self.delegate?.updateViewModelValue(images: self.images)
                     }
+                   
                 }
             }
         }
         
-        delegate?.updateViewModelImages(images: images)
+      
         
         if imageView.image == nil  && results.isEmpty {
             addButton.isHidden = false

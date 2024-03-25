@@ -54,7 +54,6 @@ extension SubCardEditViewController {
     private func editSubCardBind() {
         viewModel.editingSubCard.observe{ [weak self] subCard in
             self?.scrollView.updateContent(card: subCard)
-            print(subCard)
         }
     }
 

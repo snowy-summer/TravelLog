@@ -10,6 +10,6 @@ import CoreLocation
 
 protocol SearchLocationViewControllerDelegate: AnyObject {
 
-    func updateMapView(where coordinate: CLLocationCoordinate2D)
+    func updateMapView(where coordinate: CLLocationCoordinate2D, title: String?)
     
 }

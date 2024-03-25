@@ -61,7 +61,7 @@ extension SubCardCell {
             !images.isEmpty {
             sumbnailImageView.image = images[0]
         } else {
-            sumbnailImageView.backgroundColor = .viewBackground
+            sumbnailImageView.backgroundColor = UIColor(resource: .viewBackground)
         }
     }
 }

@@ -56,7 +56,7 @@ extension SubCardsViewController {
     }
     
     @objc private func tapAddButton() {
-        
+        viewModel.editingSubCard.value = SubCardModel()
         navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
                                                  animated: true)
         

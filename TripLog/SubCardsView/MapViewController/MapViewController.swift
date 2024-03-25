@@ -107,15 +107,16 @@ extension MapViewController: InformationViewDelegate {
 
 extension MapViewController: SearchLocationViewControllerDelegate {
     
-    func updateMapView(where coordinate: CLLocationCoordinate2D) {
+    func updateMapView(where coordinate: CLLocationCoordinate2D, title: String?) {
         mapView.removeAnnotations(mapView.annotations)
         
-        let span = MKCoordinateSpan(latitudeDelta: 0.01,
-                                    longitudeDelta: 0.01)
+        let span = MKCoordinateSpan(latitudeDelta: 0.005,
+                                    longitudeDelta: 0.005)
         
         let annotation = MKPointAnnotation()
         
         annotation.coordinate = coordinate
+        annotation.title = title
         
         mapView.setRegion(MKCoordinateRegion(center: coordinate,
                                              span: span),
@@ -123,6 +124,52 @@ extension MapViewController: SearchLocationViewControllerDelegate {
 
         mapView.addAnnotation(annotation)
     }
+}
+
+extension MapViewController: MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+        
+        guard let featureAnnotation = annotation as? MKMapFeatureAnnotation else { return }
+        
+        let request = MKMapItemRequest(mapFeatureAnnotation: featureAnnotation)
+        request.getMapItem {[weak self] mapItem, error in
+            
+            if let mapItem {
+                
+                self?.updateMapView(where: mapItem.placemark.coordinate,
+                                    title: mapItem.name)
+                self?.locationViewModel.updateSavedLocationMapItem(mapItem: mapItem)
+
+            }
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView,
+                 viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation { return nil }
+        
+        let identifier = "CustomAnnotation"
+        
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
+        
+        if annotationView == nil {
+            annotationView = MKMarkerAnnotationView(annotation: annotation,
+                                                    reuseIdentifier: identifier)
+        
+            annotationView?.markerTintColor = .clear
+        } else {
+            annotationView?.annotation = annotation
+         
+        }
+        annotationView?.setSelected(true, animated: true)
+        annotationView?.markerTintColor = locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.annotationColor
+        annotationView?.glyphImage = locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.annotationSymbol
+        
+                
+        return annotationView
+    }
+
 }
 
 //MARK: - Configuration
@@ -133,9 +180,15 @@ extension MapViewController {
         view.addSubview(mapView)
         
         mapView.translatesAutoresizingMaskIntoConstraints = false
+        
+        mapView.delegate = self
         mapView.isZoomEnabled = true
         mapView.isScrollEnabled = true
         mapView.isPitchEnabled = false
+        mapView.selectableMapFeatures = [.pointsOfInterest]
+        
+        let mapConfiguration = MKStandardMapConfiguration()
+        mapView.preferredConfiguration = mapConfiguration
         
         let mapViewConstraints = [
             mapView.topAnchor.constraint(equalTo: view.topAnchor),

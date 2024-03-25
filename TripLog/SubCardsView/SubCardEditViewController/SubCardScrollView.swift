@@ -68,29 +68,38 @@ extension SubCardScrollView {
     
 }
 
-extension SubCardScrollView: TitleViewDelegate, PriceViewDelegate, SelectedImageViewDelegate {
+extension SubCardScrollView: TitleViewDelegate,
+                             PriceViewDelegate,
+                             SelectedImageViewDelegate,
+                             StarRateViewDelegate {
     
     //MARK: - TitleViewDelegate
     
-    func viewModelValueUpdate(title: String?) {
+    func updateViewModelValue(title: String?) {
         viewModel.updateEditingCardTitle(title: title)
     }
     
     //MARK: - PriceViewDelegate
     
-    func viewModelValueUpdate(price: String?) {
+    func updateViewModelValue(price: String?) {
         viewModel.updateEditingCardPrice(price: price)
     }
     
     //MARK: - SelectedImageViewDelegate
     
-    func updateViewModelImages(images: [UIImage]?) {
+    func updateViewModelValue(images: [UIImage]?) {
         viewModel.updateEditingCardImages(images: images)
     }
     
     
     func presentPicker(where viewController: UIViewController) {
         subCardScrollViewDelegate?.presentViewController(where: viewController)
+    }
+    
+    //MARK: - StarRateViewDelegate
+    
+    func updateViewModelValue(starState: [Bool]) {
+        viewModel.updateEditingCardStarState(starState: starState)
     }
 }
 
@@ -177,6 +186,7 @@ extension SubCardScrollView {
         
         starRateView.translatesAutoresizingMaskIntoConstraints = false
         
+        starRateView.delegate = self
         starRateView.layer.cornerRadius = 8
         starRateView.layer.borderWidth = 1
         starRateView.backgroundColor = UIColor(resource: .viewBackground)
