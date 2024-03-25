@@ -123,7 +123,7 @@ extension SubCardEditViewController {
         view.addSubview(scrollView)
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.configureDelegate(delegate: self)
+        scrollView.subCardScrollViewDelegate = self
 
         let scrollViewConstraints = [
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

@@ -14,10 +14,10 @@ final class SubCardScrollView: UIScrollView {
     weak var subCardScrollViewDelegate: SubscrollViewDelegate?
     
     private(set) lazy var contentView = UIView()
-    private(set) lazy var titleView = TitleView(viewModel: viewModel)
+    private(set) lazy var titleView = TitleView()
     private(set) lazy var imageView = SelectedImageView()
     private(set) lazy var starRateView = StarRateView()
-    private(set) lazy var priceView = PriceView(viewModel: viewModel)
+    private(set) lazy var priceView = PriceView()
     private(set) lazy var locationView = LocationView()
     private(set) lazy var scriptTextView = UITextView()
     
@@ -68,20 +68,21 @@ extension SubCardScrollView {
     
 }
 
-extension SubCardScrollView: UITextFieldDelegate {
+extension SubCardScrollView: TitleViewDelegate, PriceViewDelegate, SelectedImageViewDelegate {
     
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-            
-        viewModel.updateEditingCardTitle(title: string)
-        
-        return true
+    //MARK: - TitleViewDelegate
+    
+    func viewModelValueUpdate(title: String?) {
+        viewModel.updateEditingCardTitle(title: title)
     }
     
-}
-
-extension SubCardScrollView: SelectedImageViewDelegate {
+    //MARK: - PriceViewDelegate
+    
+    func viewModelValueUpdate(price: String?) {
+        viewModel.updateEditingCardPrice(price: price)
+    }
+    
+    //MARK: - SelectedImageViewDelegate
     
     func updateViewModelImages(images: [UIImage]?) {
         viewModel.updateEditingCardImages(images: images)
@@ -91,7 +92,6 @@ extension SubCardScrollView: SelectedImageViewDelegate {
     func presentPicker(where viewController: UIViewController) {
         subCardScrollViewDelegate?.presentViewController(where: viewController)
     }
-    
 }
 
 extension SubCardScrollView: UITextViewDelegate {
@@ -104,11 +104,6 @@ extension SubCardScrollView: UITextViewDelegate {
 //MARK: - Configuration
 
 extension SubCardScrollView {
-    
-    func configureDelegate(delegate: SubscrollViewDelegate) {
-        subCardScrollViewDelegate = delegate
-        imageView.delegate = self
-    }
     
     private func configureContentView() {
         self.addSubview(contentView)
@@ -131,9 +126,10 @@ extension SubCardScrollView {
         
         titleView.translatesAutoresizingMaskIntoConstraints = false
         
+        titleView.delegate = self
         titleView.layer.cornerRadius = 8
         titleView.layer.borderWidth = 1
-        titleView.backgroundColor = .viewBackground
+        titleView.backgroundColor = UIColor(resource: .viewBackground)
         
         let viewConstraints = [
             titleView.topAnchor.constraint(equalTo: contentView.topAnchor,
@@ -154,6 +150,7 @@ extension SubCardScrollView {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+        imageView.delegate = self
         imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 8
         imageView.backgroundColor = .viewBackground
@@ -182,7 +179,7 @@ extension SubCardScrollView {
         
         starRateView.layer.cornerRadius = 8
         starRateView.layer.borderWidth = 1
-        starRateView.backgroundColor = .viewBackground
+        starRateView.backgroundColor = UIColor(resource: .viewBackground)
         
         let viewConstraints = [
             starRateView.topAnchor.constraint(equalTo: imageView.bottomAnchor,
@@ -204,7 +201,8 @@ extension SubCardScrollView {
         
         priceView.translatesAutoresizingMaskIntoConstraints = false
         
-        priceView.backgroundColor = .viewBackground
+        priceView.delegate = self
+        priceView.backgroundColor = UIColor(resource: .viewBackground)
         priceView.layer.cornerRadius = 8
         priceView.layer.borderWidth = 1
         

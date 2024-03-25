@@ -7,22 +7,27 @@
 
 import UIKit
 
+protocol PriceViewDelegate: AnyObject {
+    
+    func viewModelValueUpdate(price: String?)
+    
+}
+
 final class PriceView: UIView {
     
     private lazy var priceLabel = UILabel()
     private lazy var priceTextField = UITextField()
     private lazy var priceImage = UIImageView()
     
-    private let viewModel: SubCardsViewModel
+    weak var delegate: PriceViewDelegate?
     
     var price: Int {
         guard let price = Int(priceTextField.text!) else { return 0 }
         return price
     }
     
-    init(viewModel: SubCardsViewModel) {
-        self.viewModel = viewModel
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         configurePriceLabel()
         configurePriceImage()
@@ -41,6 +46,10 @@ extension PriceView {
     
     func updatePrice(price: Int) {
         priceTextField.text = String(price)
+    }
+    
+    @objc func didTextFieldChange() {
+        delegate?.viewModelValueUpdate(price: priceTextField.text)
     }
 }
 
@@ -95,7 +104,6 @@ extension PriceView {
         
         priceTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        priceTextField.delegate = self
         priceTextField.textAlignment = .right
         
         let textFieldConstraints = [
@@ -110,19 +118,5 @@ extension PriceView {
         ]
         
         NSLayoutConstraint.activate(textFieldConstraints)
-    }
-}
-
-//MARK: - UITextFieldDelegate
-
-extension PriceView: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-            
-        viewModel.updateEditingCardPrice(price: textField.text )
-
-        return true
     }
 }

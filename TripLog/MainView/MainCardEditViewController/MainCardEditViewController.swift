@@ -14,7 +14,7 @@ final class MainCardEditViewController: UIViewController {
     private var selectedCardId: UUID?
     private var mainQueue = DispatchQueue.main
     
-    private lazy var titleView = TitleView(viewModel: nil)
+    private lazy var titleView = TitleView()
     private lazy var imageView = UIImageView()
     private lazy var addButton = UIButton()
     

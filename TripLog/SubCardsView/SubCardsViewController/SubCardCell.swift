@@ -11,7 +11,7 @@ final class SubCardCell: UICollectionViewCell {
     
     static let identifier = "SubCardCell"
     
-    private lazy var titleView = TitleView(viewModel: nil)
+    private lazy var titleView = TitleView()
     private lazy var sumbnailImageView = UIImageView()
     private lazy var starRateView = StarRateView()
     private lazy var scriptTextView = UITextView()

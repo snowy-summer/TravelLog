@@ -7,18 +7,24 @@
 
 import UIKit
 
+protocol TitleViewDelegate: AnyObject {
+    
+    func viewModelValueUpdate(title: String?)
+    
+}
+
 final class TitleView: UIView {
     
+    weak var delegate: TitleViewDelegate?
+    
     private lazy var titleTextField = UITextField()
-    private let viewModel: SubCardsViewModel?
     
     var text: String? {
         guard let title = titleTextField.text else { return nil }
         return title
     }
     
-    init(viewModel: SubCardsViewModel?) {
-        self.viewModel = viewModel
+    override init(frame: CGRect) {
         super.init(frame: .zero)
         
         configureTitleTextField()
@@ -39,6 +45,10 @@ extension TitleView {
         titleTextField.text = text
     }
     
+    @objc func didTextFieldChange() {
+        delegate?.viewModelValueUpdate(title: titleTextField.text)
+    }
+    
 }
 
 //MARK: - Configuration
@@ -50,12 +60,15 @@ extension TitleView {
         
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        titleTextField.delegate = self
         titleTextField.placeholder = "제목"
         titleTextField.font = .preferredFont(forTextStyle: .title1)
         titleTextField.textColor = .black
         titleTextField.autocorrectionType = .no
         titleTextField.spellCheckingType = .no
+        
+        titleTextField.addTarget(self,
+                                 action: #selector(didTextFieldChange),
+                                 for: .editingChanged)
         
         let titleTextFieldConstraints = [
             titleTextField.topAnchor.constraint(equalTo: self.topAnchor,
@@ -72,19 +85,4 @@ extension TitleView {
         
     }
     
-}
-
-extension TitleView: UITextFieldDelegate {
-    
-    
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-        
-        guard let viewModel = viewModel else { return true }
-        
-        viewModel.updateEditingCardTitle(title: textField.text)
-        
-        return true
-    }
 }
