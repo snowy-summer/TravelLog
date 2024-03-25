@@ -11,7 +11,7 @@ final class SubCardCell: UICollectionViewCell {
     
     static let identifier = "SubCardCell"
     
-    private lazy var titleView = TitleView()
+    private lazy var titleView = TitleView(viewModel: nil)
     private lazy var sumbnailImageView = UIImageView()
     private lazy var starRateView = StarRateView()
     private lazy var scriptTextView = UITextView()
@@ -78,7 +78,7 @@ extension SubCardCell {
         
         titleView.isUserInteractionEnabled = false
         titleView.layer.cornerRadius = 8
-        titleView.backgroundColor = .viewBackground
+        titleView.backgroundColor = UIColor(resource: .viewBackground)
         
         let titleViewConstraints = [
             titleView.topAnchor.constraint(equalTo: contentView.topAnchor,

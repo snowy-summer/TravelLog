@@ -12,7 +12,8 @@ final class SubCardEditViewController: UIViewController {
     private let viewModel: SubCardsViewModel
     private var selctedCardId: UUID?
     
-    private lazy var scrollView = SubCardScrollView()
+    private lazy var scrollView = SubCardScrollView(viewModel: viewModel,
+                                                    selctedCardId: selctedCardId)
     
     init(viewModel: SubCardsViewModel) {
         self.viewModel = viewModel
@@ -33,9 +34,11 @@ final class SubCardEditViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .basic
         
+        editSubCardBind()
         configureNavigationBar()
         configureScrollView()
     }
+    
 }
 
 //MARK: - Method
@@ -45,7 +48,14 @@ extension SubCardEditViewController {
     private func loadSubCard(selectedCardId: UUID) {
         guard let card = viewModel.selectCard(id: selectedCardId) else { return }
         
-        scrollView.updateContent(card: card)
+        viewModel.editingSubCard.value = card
+    }
+    
+    private func editSubCardBind() {
+        viewModel.editingSubCard.observe{ [weak self] subCard in
+            self?.scrollView.updateContent(card: subCard)
+            print(subCard)
+        }
     }
 
 }
@@ -57,22 +67,11 @@ extension SubCardEditViewController {
     @objc private func doneAction() {
         
         if let cardId = selctedCardId {
-            
-            viewModel.updateContent(selectedCardId: cardId,
-                                    title: scrollView.titleView.text,
-                                    images: scrollView.imageView.images,
-                                    starsState: scrollView.starRateView.starState,
-                                    price: scrollView.priceView.price,
-                                    script: scrollView.scriptTextView.text)
-            
+            viewModel.updateSubCard(id: cardId,
+                                    card: viewModel.editingSubCard.value)
+                
         } else {
-            
-            viewModel.appendSubCard(title: scrollView.titleView.text,
-                                    images: scrollView.imageView.images,
-                                    starsState: scrollView.starRateView.starState,
-                                    price: scrollView.priceView.price,
-                                    location: scrollView.locationView.locationModel,
-                                    script: scrollView.scriptTextView.text)
+            viewModel.list.value.append(viewModel.editingSubCard.value)
         }
         
         navigationController?.popViewController(animated: true)
@@ -80,12 +79,15 @@ extension SubCardEditViewController {
 
 }
 
-//MARK: - PresentViewDelegate
+//MARK: - SubscrollViewDelegate
 
 extension SubCardEditViewController: SubscrollViewDelegate {
     
     func pushMapViewController() {
-        self.navigationController?.pushViewController(MapViewController(delegate: self), animated: true)
+        
+        self.navigationController?.pushViewController(MapViewController(delegate: self,
+                                                                        location: viewModel.editingSubCard.value.location),
+                                                      animated: true)
     }
     
     
@@ -95,18 +97,12 @@ extension SubCardEditViewController: SubscrollViewDelegate {
     
 }
 
-//MARK: - MapViewDelegate
+//MARK: - MapViewControllerDelegate
 
 extension SubCardEditViewController: MapViewControllerDelegate {
    
     func updateLocation(location: LocationModel) {
-        guard let id = selctedCardId else {
-            scrollView.locationView.updateLocationView(with: location)
-            return
-        }
-        
-        viewModel.updateLocation(selectedCardId: id, location: location)
-        loadSubCard(selectedCardId: id)
+        viewModel.updateEditingCardLocation(location: location)
     }
     
 }

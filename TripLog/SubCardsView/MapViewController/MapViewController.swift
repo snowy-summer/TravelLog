@@ -15,11 +15,15 @@ final class MapViewController: UIViewController {
     private let mapView = MKMapView()
     private let searchViewController: SearchLocationViewController
     
-    init(delegate: MapViewControllerDelegate? = nil) {
+    init(delegate: MapViewControllerDelegate? = nil, location: LocationModel?) {
         self.delegate = delegate
         self.searchViewController = SearchLocationViewController(locationViewModel: locationViewModel)
         super.init(nibName: nil, bundle: nil)
       
+        if let location = location {
+            locationViewModel.updateSavedLocation(location: location)
+        }
+        
         print("mapView 생성")
     }
     
@@ -49,7 +53,8 @@ extension MapViewController {
     
     private func savedLocationBind() {
          locationViewModel.savedLocation.observe { [weak self] location in
-             self?.delegate?.updateLocation(location: location)
+             self?.searchViewController.updateInformationView()
+             
          }
      }
     
@@ -61,11 +66,11 @@ extension MapViewController {
 
         if let sheet = searchViewController.sheetPresentationController {
             
-//            sheet.detents = [
-//                CustomDetent.base.detent(view: self.view),
-//                .large(),
-//                CustomDetent.low.detent(view: self.view)
-//            ]
+            sheet.detents = [
+                CustomDetent.base.detent(view: self.view),
+                .large(),
+                CustomDetent.low.detent(view: self.view)
+            ]
             
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
@@ -78,6 +83,7 @@ extension MapViewController {
     }
     
     @objc private func popViewController() {
+        delegate?.updateLocation(location: locationViewModel.savedLocation.value)
         searchViewController.isModalInPresentation = false
         searchViewController.dismiss(animated: true)
         navigationController?.popViewController(animated: true)
@@ -87,6 +93,7 @@ extension MapViewController {
 extension MapViewController: InformationViewDelegate {
     
     func popMapViewController() {
+        delegate?.updateLocation(location: locationViewModel.savedLocation.value)
         searchViewController.dismiss(animated: true)
         navigationController?.popViewController(animated: true)
     }

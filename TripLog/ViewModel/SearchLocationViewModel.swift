@@ -12,6 +12,9 @@ final class SearchLocationViewModel {
     var list: Observable<[LocationModel]> = Observable([])
     var savedLocation: Observable<LocationModel> = Observable<LocationModel>(LocationModel())
     
+    var savedLocationMapItem: MKMapItem? {
+        savedLocation.value.mapItem
+    }
     deinit {
         print("viewModel 해제")
     }
@@ -47,9 +50,17 @@ extension SearchLocationViewModel {
         location.mapItem?.placemark.coordinate
     }
     
-    func changeSavedLocation(location: LocationModel) {
-        savedLocation.value = location
-        print(savedLocation.value)
-    }
+}
 
+extension SearchLocationViewModel {
+    
+    func updateSavedLocation(location: LocationModel) {
+        savedLocation.value = location
+    }
+    
+    func openInMap() {
+       savedLocationMapItem?.openInMaps()
+    }
+    
+    
 }

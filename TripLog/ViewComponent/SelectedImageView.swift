@@ -8,6 +8,13 @@
 import UIKit
 import PhotosUI
 
+protocol SelectedImageViewDelegate: AnyObject {
+    
+    func presentPicker(where: UIViewController)
+    func updateViewModelImages(images: [UIImage]?)
+    
+}
+
 final class SelectedImageView: UIView {
     
     private lazy var imageView = UIImageView()
@@ -115,7 +122,7 @@ extension SelectedImageView {
         addButton.addTarget(self,
                             action: #selector(addImage),
                             for: .touchUpInside)
-//        
+       
         let addButtonConstraints = [
             addButton.widthAnchor.constraint(equalTo: imageView.widthAnchor,
                                              multiplier: 0.2),
@@ -189,6 +196,8 @@ extension SelectedImageView: PHPickerViewControllerDelegate {
                 }
             }
         }
+        
+        delegate?.updateViewModelImages(images: images)
         
         if imageView.image == nil  && results.isEmpty {
             addButton.isHidden = false

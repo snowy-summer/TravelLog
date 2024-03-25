@@ -10,14 +10,16 @@ import UIKit
 final class TitleView: UIView {
     
     private lazy var titleTextField = UITextField()
+    private let viewModel: SubCardsViewModel?
     
     var text: String? {
         guard let title = titleTextField.text else { return nil }
         return title
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(viewModel: SubCardsViewModel?) {
+        self.viewModel = viewModel
+        super.init(frame: .zero)
         
         configureTitleTextField()
     }
@@ -48,6 +50,7 @@ extension TitleView {
         
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
+        titleTextField.delegate = self
         titleTextField.placeholder = "제목"
         titleTextField.font = .preferredFont(forTextStyle: .title1)
         titleTextField.textColor = .black
@@ -69,4 +72,19 @@ extension TitleView {
         
     }
     
+}
+
+extension TitleView: UITextFieldDelegate {
+    
+    
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        
+        guard let viewModel = viewModel else { return true }
+        
+        viewModel.updateEditingCardTitle(title: textField.text)
+        
+        return true
+    }
 }

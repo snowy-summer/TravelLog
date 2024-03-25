@@ -39,7 +39,18 @@ final class SearchLocationViewController: UIViewController {
         configureSearchBar()
         configureCollectionView()
         configureInformationView()
+        
+        
+        if locationViewModel.savedLocationMapItem == nil{
+            isCollectionViewHidden(value: false)
+        } else {
+            isCollectionViewHidden(value: true)
+        }
        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
     }
     
     deinit {
@@ -65,6 +76,10 @@ extension SearchLocationViewController {
     func configureInformationViewDelegate(delegate: InformationViewDelegate) {
         informationView.delegate = delegate
     }
+    
+    func updateInformationView() {
+        informationView.updateContent()
+    }
 }
 
 //MARK: - CollectionViewDelegate
@@ -82,7 +97,8 @@ extension SearchLocationViewController: UICollectionViewDelegate {
         guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
 
         delegate?.updateMapView(where: coordinate)
-        informationView.updateContent(id: id)
+        locationViewModel.updateSavedLocation(location: locationViewModel.selectedLocation(id: id))
+        informationView.updateContent()
         
         self.sheetPresentationController?.selectedDetentIdentifier = CustomDetent.low.idetifier
 

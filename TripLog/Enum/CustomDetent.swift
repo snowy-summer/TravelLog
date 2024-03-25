@@ -20,16 +20,16 @@ enum CustomDetent: String {
         }
     }
     
-//    func detent(view: UIView) -> UISheetPresentationController.Detent {
-//        switch self {
-//        case .low:
-//            return UISheetPresentationController.Detent.custom(identifier: self.idetifier) { _ in
-//                return view.bounds.height * 0.2
-//            }
-//        case .base:
-//            return UISheetPresentationController.Detent.custom(identifier: self.idetifier) { _ in
-//                return view.bounds.height * 0.35
-//            }
-//        }
-//    }
+    func detent(view: UIView) -> UISheetPresentationController.Detent {
+        switch self {
+        case .low:
+            return UISheetPresentationController.Detent.custom(identifier: self.idetifier) { _ in
+                return view.bounds.height * 0.2
+            }
+        case .base:
+            return UISheetPresentationController.Detent.custom(identifier: self.idetifier) { _ in
+                return view.bounds.height * 0.35
+            }
+        }
+    }
 }

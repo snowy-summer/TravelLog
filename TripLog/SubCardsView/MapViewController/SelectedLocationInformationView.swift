@@ -10,7 +10,6 @@ import UIKit
 final class SelectedLocationInformationView: UIView {
     
     private var locationViewModel: SearchLocationViewModel
-    private var selectedId: UUID?
     
     weak var delegate: InformationViewDelegate?
     
@@ -47,26 +46,18 @@ final class SelectedLocationInformationView: UIView {
 
 extension SelectedLocationInformationView {
     
-    func updateContent(id: UUID) {
-        let locationModel = locationViewModel.selectedLocation(id: id)
-        
-        selectedId = id
-        titleLabel.text = locationModel.mapItem?.name
-        categoryLabel.text = locationModel.mapItem?.pointOfInterestCategory?.categoryName
+    func updateContent() {
+        titleLabel.text = locationViewModel.savedLocationMapItem?.name
+        categoryLabel.text = locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.categoryName
         
     }
     
     @objc private func saveAction() {
-        guard let id = selectedId else { return }
-        
-        locationViewModel.changeSavedLocation(location: locationViewModel.selectedLocation(id: id))
         delegate?.popMapViewController()
     }
     
     @objc private func openInMapAction() {
-        guard let id = selectedId else { return }
-    
-        locationViewModel.openInMap(id: id)
+        locationViewModel.openInMap()
     }
     
     @objc private func searchAction() {

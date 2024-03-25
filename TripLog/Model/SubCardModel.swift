@@ -8,10 +8,10 @@
 import UIKit
 
 struct SubCardModel: Identifiable {
-    var id = UUID()
+    var id: UUID = UUID()
     var title: String?
-    var starsState: [Bool]
-    var money: Int
+    var starsState: [Bool] = [Bool](repeating: false, count: 5)
+    var price: Int = 0
     var images: [UIImage]?
     var script: String?
     var location: LocationModel?

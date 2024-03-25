@@ -13,13 +13,16 @@ final class PriceView: UIView {
     private lazy var priceTextField = UITextField()
     private lazy var priceImage = UIImageView()
     
+    private let viewModel: SubCardsViewModel
+    
     var price: Int {
         guard let price = Int(priceTextField.text!) else { return 0 }
         return price
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(viewModel: SubCardsViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: .zero)
         
         configurePriceLabel()
         configurePriceImage()
@@ -89,7 +92,10 @@ extension PriceView {
     
     private func configurePriceTextField() {
         self.addSubview(priceTextField)
+        
         priceTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        priceTextField.delegate = self
         priceTextField.textAlignment = .right
         
         let textFieldConstraints = [
@@ -104,5 +110,19 @@ extension PriceView {
         ]
         
         NSLayoutConstraint.activate(textFieldConstraints)
+    }
+}
+
+//MARK: - UITextFieldDelegate
+
+extension PriceView: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+            
+        viewModel.updateEditingCardPrice(price: textField.text )
+
+        return true
     }
 }

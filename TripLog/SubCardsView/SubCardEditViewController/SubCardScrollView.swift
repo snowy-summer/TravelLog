@@ -9,18 +9,22 @@ import UIKit
 
 final class SubCardScrollView: UIScrollView {
 
+    private let viewModel: SubCardsViewModel
+    private let selctedCardId: UUID?
     weak var subCardScrollViewDelegate: SubscrollViewDelegate?
     
     private(set) lazy var contentView = UIView()
-    private(set) lazy var titleView = TitleView()
+    private(set) lazy var titleView = TitleView(viewModel: viewModel)
     private(set) lazy var imageView = SelectedImageView()
     private(set) lazy var starRateView = StarRateView()
-    private(set) lazy var priceView = PriceView()
+    private(set) lazy var priceView = PriceView(viewModel: viewModel)
     private(set) lazy var locationView = LocationView()
     private(set) lazy var scriptTextView = UITextView()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(viewModel: SubCardsViewModel, selctedCardId: UUID?) {
+        self.viewModel = viewModel
+        self.selctedCardId = selctedCardId
+        super.init(frame: .zero)
         
         configureContentView()
         configureTitleView()
@@ -43,7 +47,7 @@ extension SubCardScrollView {
         titleView.updateText(card.title)
         starRateView.starState = card.starsState
         starRateView.updateButton()
-        priceView.updatePrice(price: card.money)
+        priceView.updatePrice(price: card.price)
         locationView.updateLocationView(with: card.location)
         scriptTextView.text = card.script
         
@@ -64,12 +68,37 @@ extension SubCardScrollView {
     
 }
 
+extension SubCardScrollView: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+            
+        viewModel.updateEditingCardTitle(title: string)
+        
+        return true
+    }
+    
+}
+
 extension SubCardScrollView: SelectedImageViewDelegate {
+    
+    func updateViewModelImages(images: [UIImage]?) {
+        viewModel.updateEditingCardImages(images: images)
+    }
+    
     
     func presentPicker(where viewController: UIViewController) {
         subCardScrollViewDelegate?.presentViewController(where: viewController)
     }
     
+}
+
+extension SubCardScrollView: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        viewModel.updateEditingCardScript(text: textView.text)
+    }
 }
 
 //MARK: - Configuration
@@ -223,6 +252,7 @@ extension SubCardScrollView {
         
         scriptTextView.translatesAutoresizingMaskIntoConstraints = false
         
+        scriptTextView.delegate = self
         scriptTextView.font = .preferredFont(forTextStyle: .body)
         scriptTextView.isScrollEnabled = false
         scriptTextView.layer.cornerRadius = 8
