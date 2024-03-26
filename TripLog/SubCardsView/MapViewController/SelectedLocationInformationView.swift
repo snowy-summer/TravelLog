@@ -47,8 +47,12 @@ final class SelectedLocationInformationView: UIView {
 extension SelectedLocationInformationView {
     
     func updateContent() {
-        titleLabel.text = locationViewModel.savedLocationMapItem?.name
-        categoryLabel.text = locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.categoryName
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.titleLabel.text = self.locationViewModel.savedLocationMapItem?.name
+            self.categoryLabel.text = self.locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.categoryName
+        }
+       
         
     }
     

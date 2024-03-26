@@ -108,21 +108,26 @@ extension MapViewController: InformationViewDelegate {
 extension MapViewController: SearchLocationViewControllerDelegate {
     
     func updateMapView(where coordinate: CLLocationCoordinate2D, title: String?) {
-        mapView.removeAnnotations(mapView.annotations)
         
-        let span = MKCoordinateSpan(latitudeDelta: 0.005,
-                                    longitudeDelta: 0.005)
-        
-        let annotation = MKPointAnnotation()
-        
-        annotation.coordinate = coordinate
-        annotation.title = title
-        
-        mapView.setRegion(MKCoordinateRegion(center: coordinate,
-                                             span: span),
-                          animated: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            
+            let span = MKCoordinateSpan(latitudeDelta: 0.005,
+                                        longitudeDelta: 0.005)
+            
+            let annotation = MKPointAnnotation()
+            
+            annotation.coordinate = coordinate
+            annotation.title = title
+            
+            self.mapView.setRegion(MKCoordinateRegion(center: coordinate,
+                                                 span: span),
+                              animated: true)
 
-        mapView.addAnnotation(annotation)
+            self.mapView.addAnnotation(annotation)
+        }
+        
     }
 }
 
@@ -137,9 +142,9 @@ extension MapViewController: MKMapViewDelegate {
             
             if let mapItem {
                 
+                self?.locationViewModel.updateSavedLocationMapItem(mapItem: mapItem)
                 self?.updateMapView(where: mapItem.placemark.coordinate,
                                     title: mapItem.name)
-                self?.locationViewModel.updateSavedLocationMapItem(mapItem: mapItem)
 
             }
         }
@@ -157,12 +162,12 @@ extension MapViewController: MKMapViewDelegate {
             annotationView = MKMarkerAnnotationView(annotation: annotation,
                                                     reuseIdentifier: identifier)
         
-            annotationView?.markerTintColor = .clear
         } else {
             annotationView?.annotation = annotation
          
         }
         annotationView?.setSelected(true, animated: true)
+        annotationView?.titleVisibility = .visible
         annotationView?.markerTintColor = locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.annotationColor
         annotationView?.glyphImage = locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.annotationSymbol
         

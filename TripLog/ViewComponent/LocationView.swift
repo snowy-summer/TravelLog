@@ -96,8 +96,7 @@ extension LocationView {
         locationModel = location
 
         guard let mapitem = locationModel?.mapItem,
-              let name = mapitem.name,
-              let address = mapitem.placemark.title else { return }
+              let name = mapitem.name else { return }
         
         locationText.text = name
     }

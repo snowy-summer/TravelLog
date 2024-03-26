@@ -48,11 +48,7 @@ final class SearchLocationViewController: UIViewController {
         }
        
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-    
+
     deinit {
         print("modal 해제")
     }

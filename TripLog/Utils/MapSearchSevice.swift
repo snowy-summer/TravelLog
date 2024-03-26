@@ -9,7 +9,8 @@ import MapKit
 
 final class MapSearchSevice: NSObject {
     
-    private var locationViewModel: SearchLocationViewModel?
+    private let locationViewModel: SearchLocationViewModel?
+    private let debouncer = Debouncer(seconds: 1)
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchRegion = MKCoordinateRegion(MKMapRect.world)
     private var completerResults: [MKLocalSearchCompletion]?
@@ -62,10 +63,6 @@ extension MapSearchSevice: UISearchBarDelegate {
     
     }
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-       
-    }
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         search(for: searchBar.text)
@@ -81,11 +78,14 @@ extension MapSearchSevice: MKLocalSearchCompleterDelegate {
         guard let completerResults = completerResults else { return }
         
         if !completerResults.isEmpty {
-            places.removeAll()
-            
-            for completion in completerResults {
-                search(for: completion)
+            debouncer.run { [weak self] in
+                self?.places.removeAll()
+                
+                for completion in completerResults {
+                    self?.search(for: completion)
+                }
             }
+            
         }
     }
 
