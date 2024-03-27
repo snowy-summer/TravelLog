@@ -10,7 +10,7 @@ import MapKit
 final class MapSearchSevice: NSObject {
     
     private let locationViewModel: SearchLocationViewModel?
-    private let debouncer = Debouncer(seconds: 1)
+    private let debouncer = Debouncer(seconds: 0.5)
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchRegion = MKCoordinateRegion(MKMapRect.world)
     private var completerResults: [MKLocalSearchCompletion]?
@@ -41,22 +41,12 @@ final class MapSearchSevice: NSObject {
         searchCompleter?.region = searchRegion
     }
 
-}
-
-extension MapSearchSevice: UISearchBarDelegate {
-
-    func searchBar(_ searchBar: UISearchBar,
-                   textDidChange searchText: String) {
-        if searchText == "" {
-            completerResults = nil
-        }
-        searchCompleter?.queryFragment = searchBar.text!
-    
+    func upadteCompleterResults(results: [MKLocalSearchCompletion]?) {
+        completerResults = results
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        search(for: searchBar.text)
+    func updateCompleter(query: String) {
+        searchCompleter?.queryFragment = query
     }
 }
 
@@ -94,7 +84,7 @@ extension MapSearchSevice: MKLocalSearchCompleterDelegate {
 
 extension MapSearchSevice {
     
-    private func search(for suggestedCompletion: MKLocalSearchCompletion) {
+    func search(for suggestedCompletion: MKLocalSearchCompletion) {
         let searchRequest = MKLocalSearch.Request(completion: suggestedCompletion)
         
         searchRequest.naturalLanguageQuery = suggestedCompletion.title
@@ -102,7 +92,7 @@ extension MapSearchSevice {
         search(using: searchRequest)
     }
     
-   private func search(for queryString: String?) {
+    func search(for queryString: String?) {
         let searchRequest = MKLocalSearch.Request()
        
         searchRequest.naturalLanguageQuery = queryString
@@ -110,7 +100,7 @@ extension MapSearchSevice {
         search(using: searchRequest)
     }
     
-    private func search(using searchRequest: MKLocalSearch.Request) {
+    func search(using searchRequest: MKLocalSearch.Request) {
         searchRequest.resultTypes = .pointOfInterest
     
         localSearch = MKLocalSearch(request: searchRequest)

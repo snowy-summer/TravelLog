@@ -1,5 +1,3 @@
-# Created by https://www.toptal.com/developers/gitignore/api/swift,xcode,swiftpackagemanager
-# Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode,swiftpackagemanager
 
 ### Swift ###
 # Xcode
@@ -104,4 +102,3 @@ xcuserdata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 
-# End of https://www.toptal.com/developers/gitignore/api/swift,xcode,swiftpackagemanager

@@ -72,7 +72,7 @@ extension MKPointOfInterestCategory {
         case .brewery, .nightlife, .winery:
             return .beerAnnotation
         case .cafe:
-            return .cafe.withRenderingMode(.alwaysOriginal)
+            return .caffeAnnotation
         case .restaurant:
             return .restaurantAnnotation
             

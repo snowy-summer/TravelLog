@@ -11,6 +11,7 @@ import CoreLocation
 protocol SearchLocationViewDelegate: AnyObject {
 
     func updateMapView(where coordinate: CLLocationCoordinate2D, title: String?)
-    func changeModalConstraint()
+    func changeModalMaxConstraint()
+    func changeModalLowConstraint()
     
 }

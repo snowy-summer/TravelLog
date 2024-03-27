@@ -16,7 +16,7 @@ enum ModalHeight {
     func height(of view: UIView) -> CGFloat {
         switch self {
         case .max:
-            return view.frame.height * 0.85
+            return view.frame.height * 0.875
         case .mideum:
             return view.frame.height * 0.45
         case .low:

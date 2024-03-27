@@ -49,7 +49,7 @@ final class SearchLocationView: UIView {
         informationView.isHidden = !value
     }
     
-    func configureInformationViewDelegate(delegate: InformationViewDelegate) {
+    func configureInformationViewDelegate(who delegate: InformationViewDelegate) {
         informationView.delegate = delegate
     }
     
@@ -75,11 +75,13 @@ extension SearchLocationView: UICollectionViewDelegate {
     
         guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
         
-        delegate?.changeModalConstraint()
+        delegate?.changeModalLowConstraint()
         delegate?.updateMapView(where: coordinate,
                                 title: locationViewModel.savedLocationMapItem?.name)
         locationViewModel.updateSavedLocation(location: locationViewModel.selectedLocation(id: id))
         informationView.updateContent()
+        
+        endEditing(true)
 
     }
     

@@ -28,8 +28,6 @@ final class MapViewController: UIViewController {
         
         if let location = location {
             locationViewModel.updateSavedLocation(location: location)
-            currentModalHeight = ModalHeight.low.height(of: view)
-            print(currentModalHeight)
         }
         
     }
@@ -44,6 +42,7 @@ final class MapViewController: UIViewController {
         configureDelegate()
         configureMapView()
         configureNavigationBar()
+        loadSearchView()
         configureSearchView()
     }
     
@@ -154,10 +153,17 @@ extension MapViewController: SearchLocationViewDelegate {
         
     }
     
-    func changeModalConstraint() {
+    func changeModalLowConstraint() {
         mainQueue.async { [weak self] in
             guard let self = self else { return }
             animateModalHeight(ModalHeight.low.height(of: view))
+        }
+    }
+    
+    func changeModalMaxConstraint() {
+        mainQueue.async { [weak self] in
+            guard let self = self else { return }
+            animateModalHeight(ModalHeight.max.height(of: view))
         }
     }
 }
@@ -167,6 +173,7 @@ extension MapViewController: SearchLocationViewDelegate {
 extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+       
         
         guard let featureAnnotation = annotation as? MKMapFeatureAnnotation else { return }
         
@@ -209,6 +216,27 @@ extension MapViewController: MKMapViewDelegate {
     
 }
 
+extension MapViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        changeModalMaxConstraint()
+    }
+
+    func searchBar(_ searchBar: UISearchBar,
+                   textDidChange searchText: String) {
+        if searchText == "" {
+            mapSearchService.upadteCompleterResults(results: nil)
+        }
+        
+        mapSearchService.updateCompleter(query: searchBar.text!)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        mapSearchService.search(for: searchBar.text)
+    }
+}
+
 //MARK: - Configuration
 
 extension MapViewController {
@@ -216,8 +244,8 @@ extension MapViewController {
     private func configureDelegate() {
         mapView.delegate = self
         searchView.delegate = self
-        searchView.configureSearchBarDelegate(who: mapSearchService)
-        searchView.configureInformationViewDelegate(delegate: self)
+        searchView.configureSearchBarDelegate(who: self)
+        searchView.configureInformationViewDelegate(who: self)
     }
     
     private func configureMapView() {
@@ -243,6 +271,16 @@ extension MapViewController {
         NSLayoutConstraint.activate(mapViewConstraints)
     }
     
+    private func loadSearchView() {
+
+        if let mapItem = locationViewModel.savedLocation.value.mapItem {
+            currentModalHeight = ModalHeight.low.height(of: view)
+            searchView.isCollectionViewHidden(value: true)
+            updateMapView(where: mapItem.placemark.coordinate,
+                          title: mapItem.name)
+        }
+    }
+    
     private func configureSearchView() {
         view.addSubview(searchView)
         
@@ -254,7 +292,7 @@ extension MapViewController {
         panGesture.delaysTouchesEnded = false
         
         searchView.addGestureRecognizer(panGesture)
-        //MARK: - aasdadsadasdsadasdasdsadsa
+        
         modalHeightConstraint = searchView.heightAnchor.constraint(equalToConstant: currentModalHeight)
         guard let height = modalHeightConstraint else { return }
         
