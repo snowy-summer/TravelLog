@@ -1,66 +1,46 @@
 //
-//  SearchLocationViewController.swift
+//  SearchLocationView.swift
 //  TripLog
 //
-//  Created by 최승범 on 2024/03/15.
+//  Created by 최승범 on 2024/03/27.
 //
 
-import MapKit
+import UIKit
 
-final class SearchLocationViewController: UIViewController {
-
+final class SearchLocationView: UIView {
+    
     private let locationViewModel: SearchLocationViewModel
-    private var mapSearchService: MapSearchSevice?
+    private let grabberView = UIView()
     private let searchBar = UISearchBar()
     
-    weak var delegate: SearchLocationViewControllerDelegate?
+    weak var delegate: SearchLocationViewDelegate?
 
-    private var collectionView: SearchListCollectionView
-    private var informationView: SelectedLocationInformationView
+    private lazy var collectionView = SearchListCollectionView(locationViewModel: locationViewModel)
+    private lazy var informationView = SelectedLocationInformationView(locationViewModel: locationViewModel)
     
     init(locationViewModel: SearchLocationViewModel) {
         self.locationViewModel = locationViewModel
-        self.mapSearchService = MapSearchSevice(viewModel: locationViewModel)
-        self.collectionView = SearchListCollectionView(locationViewModel: locationViewModel)
-        self.informationView = SelectedLocationInformationView(locationViewModel: locationViewModel)
-        super.init(nibName: nil, bundle: nil)
-        
-        bind()
-        print("modal 생성")
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        view.backgroundColor = .basic
+        super.init(frame: .zero)
         
         configureSearchBar()
         configureCollectionView()
         configureInformationView()
-        
+        configureView()
+        configureGrabber()
         
         if locationViewModel.savedLocationMapItem == nil{
             isCollectionViewHidden(value: false)
         } else {
             isCollectionViewHidden(value: true)
         }
-       
     }
-
-    deinit {
-        print("modal 해제")
-    }
-}
-
-extension SearchLocationViewController {
     
-    private func bind() {
-        locationViewModel.list.observe { [weak self] locationModels in
-            self?.collectionView.saveSnapshot(id: locationModels.map{ $0.id })
-
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+ 
+    func saveSnapshot(id: [UUID]) {
+        collectionView.saveSnapshot(id: id)
     }
     
     func isCollectionViewHidden(value: Bool) {
@@ -73,14 +53,17 @@ extension SearchLocationViewController {
         informationView.delegate = delegate
     }
     
+    func configureSearchBarDelegate(who delegate: UISearchBarDelegate) {
+        searchBar.delegate = delegate
+    }
+    
     func updateInformationView() {
         informationView.updateContent()
     }
+    
 }
 
-//MARK: - CollectionViewDelegate
-
-extension SearchLocationViewController: UICollectionViewDelegate {
+extension SearchLocationView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
@@ -91,13 +74,12 @@ extension SearchLocationViewController: UICollectionViewDelegate {
               let id = dataSource.itemIdentifier(for: indexPath) else { return }
     
         guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
-
+        
+        delegate?.changeModalConstraint()
         delegate?.updateMapView(where: coordinate,
                                 title: locationViewModel.savedLocationMapItem?.name)
         locationViewModel.updateSavedLocation(location: locationViewModel.selectedLocation(id: id))
         informationView.updateContent()
-        
-        self.sheetPresentationController?.selectedDetentIdentifier = CustomDetent.low.idetifier
 
     }
     
@@ -105,17 +87,42 @@ extension SearchLocationViewController: UICollectionViewDelegate {
 
 //MARK: - Configuration
 
-extension SearchLocationViewController {
+extension SearchLocationView {
+    
+    private func configureView() {
+        self.backgroundColor = .basic
+        self.layer.cornerRadius = 12
+    }
+    
+    private func configureGrabber() {
+        self.addSubview(grabberView)
+        
+        grabberView.translatesAutoresizingMaskIntoConstraints = false
+        
+        grabberView.layer.cornerRadius = 4
+        grabberView.backgroundColor = .lightGray
+        
+        let grabberConstraints = [
+            grabberView.topAnchor.constraint(equalTo: self.topAnchor,
+                                             constant: 8),
+            grabberView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            grabberView.widthAnchor.constraint(equalTo: self.widthAnchor,
+                                               multiplier: 0.2),
+            grabberView.heightAnchor.constraint(equalToConstant: 8)
+        ]
+        
+        NSLayoutConstraint.activate(grabberConstraints)
+    }
     
     private func configureSearchBar() {
-        view.addSubview(searchBar)
+        self.addSubview(searchBar)
         
         searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.delegate = mapSearchService
+        
         searchBar.searchBarStyle = .minimal
         searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.9697164893, green: 0.9697164893, blue: 0.9697164893, alpha: 1)
         
-        let safeArea = view.safeAreaLayoutGuide
+        let safeArea = self.safeAreaLayoutGuide
         let searchBarConstraints = [
             searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor,
                                            constant: 16),
@@ -130,31 +137,31 @@ extension SearchLocationViewController {
     }
     
     private func configureCollectionView() {
-        view.addSubview(collectionView)
+        self.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
       
         let collectionViewConstraints = [
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(collectionViewConstraints)
     }
     
     private func configureInformationView() {
-        view.addSubview(informationView)
+        self.addSubview(informationView)
         
         informationView.translatesAutoresizingMaskIntoConstraints = false
       
         let informationViewConstraints = [
-            informationView.topAnchor.constraint(equalTo: view.topAnchor),
-            informationView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            informationView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            informationView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            informationView.topAnchor.constraint(equalTo: self.topAnchor),
+            informationView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            informationView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            informationView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(informationViewConstraints)

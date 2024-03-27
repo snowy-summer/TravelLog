@@ -31,17 +31,11 @@ final class SelectedLocationInformationView: UIView {
         configureOpenInMapButton()
         configureSearchButton()
         configureNoNameButton()
-        print("SelectedLocationInformationView 생성")
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        print("SelectedLocationInformationView 끝~~~~~~~~~~~~~~~~~~~~~")
-    }
-    
 }
 
 extension SelectedLocationInformationView {
@@ -106,7 +100,8 @@ extension SelectedLocationInformationView {
             categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                constant: 8),
             categoryLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            categoryLabel.widthAnchor.constraint(equalTo: self.widthAnchor)
+            categoryLabel.widthAnchor.constraint(equalTo: self.widthAnchor),
+            categoryLabel.heightAnchor.constraint(equalToConstant: 20)
         ]
         
         NSLayoutConstraint.activate(categoryLabelConstraints)

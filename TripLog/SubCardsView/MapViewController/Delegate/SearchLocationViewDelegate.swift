@@ -8,8 +8,9 @@
 import Foundation
 import CoreLocation
 
-protocol SearchLocationViewControllerDelegate: AnyObject {
+protocol SearchLocationViewDelegate: AnyObject {
 
     func updateMapView(where coordinate: CLLocationCoordinate2D, title: String?)
+    func changeModalConstraint()
     
 }

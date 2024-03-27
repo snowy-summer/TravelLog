@@ -15,9 +15,6 @@ final class SearchLocationViewModel {
     var savedLocationMapItem: MKMapItem? {
         savedLocation.value.mapItem
     }
-    deinit {
-        print("viewModel 해제")
-    }
     
 }
 

@@ -18,17 +18,11 @@ final class SearchListCollectionView: UICollectionView {
         self.collectionViewLayout = createBasicLayout()
         
         configureDataSource()
-        print("SearchListCollectionView 생성")
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        print("SearchListCollectionView 끝~~~~~~~~~~~~~~~~~~~~~")
-    }
-
 }
 
 extension SearchListCollectionView {

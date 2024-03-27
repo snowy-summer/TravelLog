@@ -32,24 +32,15 @@ final class MapSearchSevice: NSObject {
         super.init()
         
         configureSearchCompleter()
-        
-        print("MapSearchService 생성")
     }
-    
-    deinit {
-        print("MapSearchService 해제")
-    }
-    
+
     private func configureSearchCompleter() {
         searchCompleter = MKLocalSearchCompleter()
         searchCompleter?.delegate = self
         searchCompleter?.resultTypes = .pointOfInterest
         searchCompleter?.region = searchRegion
     }
-    
-    func de() {
-        searchCompleter = nil
-    }
+
 }
 
 extension MapSearchSevice: UISearchBarDelegate {
