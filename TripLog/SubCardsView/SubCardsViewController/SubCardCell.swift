@@ -19,7 +19,7 @@ final class SubCardCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = #colorLiteral(red: 0.6251164079, green: 0.8091775775, blue: 1, alpha: 1)
+        self.backgroundColor = .defaultCell
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 20
         
@@ -31,6 +31,10 @@ final class SubCardCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        self.backgroundColor = .defaultCell
     }
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

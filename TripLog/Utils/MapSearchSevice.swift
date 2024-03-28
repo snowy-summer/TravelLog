@@ -7,9 +7,16 @@
 
 import MapKit
 
+protocol MapSearchSeviceDelegate: AnyObject {
+    
+    func appendLocationModel(mapitem: MKMapItem?)
+    func clearPlaces()
+}
+
 final class MapSearchSevice: NSObject {
     
-    private let locationViewModel: SearchLocationViewModel?
+    weak var delegate: MapSearchSeviceDelegate?
+    
     private let debouncer = Debouncer(seconds: 0.5)
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchRegion = MKCoordinateRegion(MKMapRect.world)
@@ -18,17 +25,16 @@ final class MapSearchSevice: NSObject {
     
     private var places = [MKMapItem]() {
         didSet {
-            locationViewModel?.list.value.removeAll()
+            delegate?.clearPlaces()
             
             for place in places {
-                locationViewModel?.appendLocationModel(mapitem: place)
+                delegate?.appendLocationModel(mapitem: place)
             }
             
         }
     }
     
-    init(viewModel: SearchLocationViewModel) {
-        self.locationViewModel = viewModel
+   override init() {
         super.init()
         
         configureSearchCompleter()

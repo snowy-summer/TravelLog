@@ -16,6 +16,14 @@ final class SubCardsViewController: UIViewController {
     private lazy var collectionView = SubCardsCollectionView(viewModel: viewModel,
                                                              size: view.bounds.size)
     private lazy var addButton = UIButton()
+    private lazy var deleteButton = UIButton()
+    private lazy var cancelButton = UIButton()
+    
+    private var isSelectingMode: Bool {
+        didSet {
+                isSelectingModeOn(state: isSelectingMode)
+        }
+    }
     
     
     init(mainCardId: UUID,
@@ -25,6 +33,7 @@ final class SubCardsViewController: UIViewController {
         self.mainCardId = mainCardId
         self.delegate = delegate
         self.viewModel.list.value = subcards
+        self.isSelectingMode = false
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,6 +50,9 @@ final class SubCardsViewController: UIViewController {
         configureNavigationBar()
         bind()
         configureAddButton()
+        configureDeleteButton()
+        configureCancelButton()
+        isSelectingModeOn(state: isSelectingMode)
         
     }
 }
@@ -55,12 +67,48 @@ extension SubCardsViewController {
         }
     }
     
+    private func isSelectingModeOn(state: Bool) {
+        addButton.isHidden = state
+        deleteButton.isHidden = !state
+        cancelButton.isHidden = !state
+    
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+            for indexPath in selectedItems {
+                collectionView.deselectItem(at: indexPath, animated: false)
+                let cell = collectionView.cellForItem(at: indexPath)
+                cell?.backgroundColor = .defaultCell
+            }
+        }
+    }
+    
     @objc private func tapAddButton() {
         viewModel.editingSubCard.value = SubCardModel()
         navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
                                                  animated: true)
-        
     }
+    
+    @objc private func tapDeleteButton() {
+        var uuidsToDelete = Set<UUID>()
+        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
+        
+       
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+         
+            for indexPath in selectedItems {
+                guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
+            uuidsToDelete.insert(id)
+                
+            }
+        }
+        
+        viewModel.deleteSubCard(uuidsToDelete: uuidsToDelete)
+        isSelectingMode = false
+    }
+    
+    @objc private func tapCancelButton() {
+        isSelectingMode = false
+    }
+    
 }
 
 //MARK: - UICollectionDelegate
@@ -73,9 +121,24 @@ extension SubCardsViewController: UICollectionViewDelegate {
         
         guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
         
-        navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
-                                                                           selectedCardId: id),
-                                                 animated: true)
+        if isSelectingMode, let cell = collectionView.cellForItem(at: indexPath)  {
+            cell.backgroundColor = .black
+            
+        } else {
+            
+            navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
+                                                                               selectedCardId: id),
+                                                     animated: true)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
+        
+        if isSelectingMode, let cell = collectionView.cellForItem(at: indexPath)  {
+            cell.backgroundColor = .defaultCell
+            
+        }
     }
 }
 
@@ -99,7 +162,11 @@ extension SubCardsViewController {
         }
         
         let select = UIAction(title: "선택",
-                              image: UIImage(systemName: "checkmark.circle")  ) { action in
+                              image: UIImage(systemName: "checkmark.circle")  ) { [weak self] action in
+            
+            guard let self = self else { return }
+            isSelectingMode = true
+            collectionView.allowsMultipleSelection = true
         }
         
         let items = [
@@ -130,6 +197,61 @@ extension SubCardsViewController {
                                              multiplier: 0.2),
             addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
             addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ]
+        
+        NSLayoutConstraint.activate(addButtonConstraints)
+        
+    }
+    
+    private func configureDeleteButton() {
+        view.addSubview(deleteButton)
+        
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        deleteButton.setImage(UIImage(resource: .deleteButton),
+                              for: .normal)
+        deleteButton.contentVerticalAlignment = .fill
+        deleteButton.contentHorizontalAlignment = .fill
+        deleteButton.addTarget(self,
+                               action: #selector(tapDeleteButton),
+                               for: .touchUpInside)
+        
+        let safeArea = view.safeAreaLayoutGuide
+        let addButtonConstraints = [
+            deleteButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor,
+                                                 constant: -view.bounds.height * 0.01),
+            deleteButton.trailingAnchor.constraint(equalTo: addButton.leadingAnchor),
+            deleteButton.widthAnchor.constraint(equalTo: view.widthAnchor,
+                                                multiplier: 0.2),
+            deleteButton.heightAnchor.constraint(equalTo: deleteButton.widthAnchor)
+        ]
+        
+        NSLayoutConstraint.activate(addButtonConstraints)
+        
+    }
+    
+    private func configureCancelButton() {
+        view.addSubview(cancelButton)
+        
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        cancelButton.setImage(UIImage(resource: .cancelButton),
+                              for: .normal)
+        cancelButton.contentVerticalAlignment = .fill
+        cancelButton.contentHorizontalAlignment = .fill
+        cancelButton.addTarget(self,
+                               action: #selector(tapCancelButton),
+                               for: .touchUpInside)
+        
+        let safeArea = view.safeAreaLayoutGuide
+        let addButtonConstraints = [
+            cancelButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor,
+                                                 constant: -view.bounds.height * 0.01),
+            cancelButton.leadingAnchor.constraint(equalTo: addButton.trailingAnchor),
+            cancelButton.widthAnchor.constraint(equalTo: view.widthAnchor,
+                                                multiplier: 0.2),
+            cancelButton.heightAnchor.constraint(equalTo: cancelButton.widthAnchor),
+            
         ]
         
         NSLayoutConstraint.activate(addButtonConstraints)

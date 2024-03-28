@@ -10,7 +10,7 @@ import MapKit
 final class MapViewController: UIViewController {
     
     private let locationViewModel = SearchLocationViewModel()
-    private lazy var mapSearchService = MapSearchSevice(viewModel: locationViewModel)
+    private lazy var mapSearchService = MapSearchSevice()
     weak var delegate: MapViewControllerDelegate?
     
     private let mapView = MKMapView()
@@ -246,6 +246,7 @@ extension MapViewController {
         searchView.delegate = self
         searchView.configureSearchBarDelegate(who: self)
         searchView.configureInformationViewDelegate(who: self)
+        mapSearchService.delegate = locationViewModel
     }
     
     private func configureMapView() {

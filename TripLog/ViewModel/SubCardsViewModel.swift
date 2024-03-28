@@ -37,89 +37,13 @@ extension SubCardsViewModel {
         
     }
     
-    func appendSubCard(title: String?,
-                       images: [UIImage]?,
-                       starsState: [Bool],
-                       price: Int,
-                       location: LocationModel?,
-                       script: String) {
+    func deleteSubCard(uuidsToDelete: Set<UUID>) {
         
-        list.value.append(SubCardModel(title: title,
-                                       starsState: starsState,
-                                       price: price,
-                                       images: images,
-                                       script: script,
-                                       location: location))
-    }
-    
-    func updateContent(selectedCardId: UUID,
-                       title: String?,
-                       images: [UIImage]?,
-                       starsState: [Bool],
-                       price: Int,
-                       script: String) {
-        
-        let index = list.value.firstIndex { subCard in
-            subCard.id == selectedCardId
+        list.value = list.value.filter { subCard in
+            !uuidsToDelete.contains(subCard.id)
         }
-        guard let index = index else { return }
-        
-        list.value[index] = SubCardModel(title: title,
-                                         starsState: starsState,
-                                         price: price,
-                                         images: images,
-                                         script: script,
-                                         location:  list.value[index].location)
-        
     }
-    
-    func updateTitle(selectedCardId: UUID,
-                     title: String?) {
-        
-        let index = list.value.firstIndex { subcard in
-            subcard.id == selectedCardId
-        }
-        guard let index = index else { return }
-        
-        list.value[index].title = title
-        
-    }
-    
-    func updateImages(selectedCardId: UUID,
-                      images: [UIImage]?) {
-        
-        let index = list.value.firstIndex { subcard in
-            subcard.id == selectedCardId
-        }
-        guard let index = index else { return }
-        
-        list.value[index].images = images
-        
-    }
-    
-    func updateLocation(selectedCardId: UUID,
-                        location: LocationModel) {
-        
-        let index = list.value.firstIndex { subcard in
-            subcard.id == selectedCardId
-        }
-        guard let index = index else { return }
-        
-        list.value[index].location = location
-        
-    }
-    
-    func appendImage(selectedCardId: UUID,
-                     image: UIImage) {
-        
-        let index = list.value.firstIndex { subCard in
-            subCard.id == selectedCardId
-        }
-        guard let index = index else { return }
-        
-        list.value[index].images?.append(image)
-    }
-
+  
 }
 
 extension SubCardsViewModel {

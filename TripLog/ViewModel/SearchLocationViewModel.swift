@@ -20,11 +20,6 @@ final class SearchLocationViewModel {
 
 extension SearchLocationViewModel {
     
-    func appendLocationModel(mapitem: MKMapItem?) {
-        let locationModel = LocationModel(mapItem: mapitem)
-        list.value.append(locationModel)
-    }
-    
     func selectedLocation(id: UUID) -> LocationModel {
         let index = list.value.firstIndex { locationModel in
             locationModel.id == id
@@ -39,9 +34,6 @@ extension SearchLocationViewModel {
         selectedLocation(id: id).mapItem?.placemark.coordinate
     }
     
-    func mapCoordinate(location: LocationModel) -> CLLocationCoordinate2D? {
-        location.mapItem?.placemark.coordinate
-    }
     
 }
 
@@ -59,5 +51,16 @@ extension SearchLocationViewModel {
        savedLocationMapItem?.openInMaps()
     }
     
+}
+
+extension SearchLocationViewModel: MapSearchSeviceDelegate {
     
+    func appendLocationModel(mapitem: MKMapItem?) {
+        let locationModel = LocationModel(mapItem: mapitem)
+        list.value.append(locationModel)
+    }
+    
+    func clearPlaces() {
+        list.value.removeAll()
+    }
 }
