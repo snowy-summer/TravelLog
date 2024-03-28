@@ -12,7 +12,7 @@ final class SubCardCell: UICollectionViewCell {
     static let identifier = "SubCardCell"
     
     private lazy var titleView = TitleView()
-    private lazy var sumbnailImageView = UIImageView()
+    private lazy var thumbnailImageView = UIImageView()
     private lazy var starRateView = StarRateView()
     private lazy var scriptTextView = UITextView()
     
@@ -24,7 +24,7 @@ final class SubCardCell: UICollectionViewCell {
         self.layer.cornerRadius = 20
         
         configureTitleView()
-        configureSumbnailImageView()
+        configureThumbnailImageView()
         configureStarsRateView()
         configureScript()
     }
@@ -63,9 +63,9 @@ extension SubCardCell {
         
         if let images = images, 
             !images.isEmpty {
-            sumbnailImageView.image = images[0]
+            thumbnailImageView.image = images[0]
         } else {
-            sumbnailImageView.backgroundColor = UIColor(resource: .viewBackground)
+            thumbnailImageView.backgroundColor = UIColor(resource: .viewBackground)
         }
     }
 }
@@ -99,22 +99,22 @@ extension SubCardCell {
         
     }
     
-    private func configureSumbnailImageView() {
-        contentView.addSubview(sumbnailImageView)
+    private func configureThumbnailImageView() {
+        contentView.addSubview(thumbnailImageView)
         
-        sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        sumbnailImageView.layer.cornerRadius = 8
-        sumbnailImageView.clipsToBounds = true
+        thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImageView.clipsToBounds = true
         
         let imageViewConstraints = [
-            sumbnailImageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
+            thumbnailImageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
                                                    constant: 8),
-            sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                        constant: 16),
-            sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                    constant: -16),
-            sumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor,
+            thumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor,
                                                       multiplier: 0.4)
         ]
         
@@ -131,7 +131,7 @@ extension SubCardCell {
         starRateView.isUserInteractionEnabled = false
         
        let viewConstraint = [
-        starRateView.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
+        starRateView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
                                           constant: 8),
         starRateView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                               constant: 16),

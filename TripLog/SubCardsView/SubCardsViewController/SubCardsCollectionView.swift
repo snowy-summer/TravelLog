@@ -58,7 +58,7 @@ extension SubCardsCollectionView {
     }
     
     private func configureDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<SubCardCell, UUID>  { [weak self] cell, indexPath, itemIdentifier in
+        let cellRegistration = UICollectionView.CellRegistration<SubCardCell, UUID> { [weak self] cell, indexPath, itemIdentifier in
             guard let self = self else { return }
             let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
             let subCardDictionary: [UUID: SubCardModel] = Dictionary(uniqueKeysWithValues: tupleArray)

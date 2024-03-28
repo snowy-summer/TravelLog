@@ -15,7 +15,7 @@ final class MainCardCell: UICollectionViewCell {
     weak var delegate: CellDelegate?
     
     private lazy var titleLabel = UILabel()
-    private lazy var sumbnailImageView = UIImageView()
+    private lazy var thumbnailImageView = UIImageView()
     private lazy var dateLabel = UILabel()
     private lazy var menuButton = UIButton()
     
@@ -23,7 +23,7 @@ final class MainCardCell: UICollectionViewCell {
         super.init(frame: frame)
         
         configureContentView()
-        configureSumbnailImageView()
+        configureThumbnailImageView()
         configureTitlLabel()
         configureDateLabel()
         configureMenuButton()
@@ -45,10 +45,10 @@ extension MainCardCell {
         titleLabel.text = title
         self.id = id
         
-        if let sumbnailImage = image {
-            sumbnailImageView.image = sumbnailImage
+        if let thumbnailImage = image {
+            thumbnailImageView.image = thumbnailImage
         } else {
-            sumbnailImageView.image = UIImage(resource: .skyBlue)
+            thumbnailImageView.image = UIImage(resource: .skyBlue)
         }
         
         let formatter = DateFormatter()
@@ -84,18 +84,18 @@ extension MainCardCell {
         
     }
     
-    private func configureSumbnailImageView() {
-        contentView.addSubview(sumbnailImageView)
+    private func configureThumbnailImageView() {
+        contentView.addSubview(thumbnailImageView)
         
-        sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        sumbnailImageView.contentMode = .scaleToFill
+        thumbnailImageView.contentMode = .scaleToFill
         
         let imageViewConstraints = [
-            sumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            sumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor,
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            thumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor,
                                                       multiplier: 0.5)
             
         ]
@@ -112,7 +112,7 @@ extension MainCardCell {
         titleLabel.textColor = .basic
         
         let titleLabelConstraints = [
-            titleLabel.bottomAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
+            titleLabel.bottomAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
                                                constant: -16),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                 constant: 16),
@@ -129,7 +129,7 @@ extension MainCardCell {
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let dateLabelConstraints = [
-            dateLabel.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
+            dateLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
             dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
@@ -148,7 +148,7 @@ extension MainCardCell {
         menuButton.tintColor = .black
         
         let moreButtonConstraints = [
-            menuButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
+            menuButton.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor),
             menuButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                  constant: -16),
             menuButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,

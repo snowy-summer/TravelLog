@@ -57,8 +57,8 @@ extension MainCardEditViewController {
         
         titleView.updateText(card.title)
         
-        if let sumbnailImage = card.image {
-            imageView.image = sumbnailImage
+        if let thumbnailImage = card.image {
+            imageView.image = thumbnailImage
             addButton.isHidden = true
         } else {
             addButton.isHidden = false
@@ -86,14 +86,14 @@ extension MainCardEditViewController{
             guard let self = self else { return }
             guard let title = self.titleView.text else { return }
             
-            let sumbnailImage = imageView.image
+            let thumbnailImage = imageView.image
             
             guard let cardId = self.selectedCardId else {
                 
-                if sumbnailImage == nil {
+                if thumbnailImage == nil {
                     self.mainViewModel.appendMainCard(title: title, image: nil)
                 } else {
-                    self.mainViewModel.appendMainCard(title: title, image: sumbnailImage)
+                    self.mainViewModel.appendMainCard(title: title, image: thumbnailImage)
                 }
                 
                 return
