@@ -68,7 +68,6 @@ extension SubCardEditViewController {
         if let cardId = selctedCardId {
             viewModel.updateSubCard(id: cardId,
                                     card: viewModel.editingSubCard.value)
-                
         } else {
             viewModel.list.value.append(viewModel.editingSubCard.value)
         }

@@ -11,7 +11,6 @@ final class SubCardListCell: UICollectionViewCell {
     
     static let identifier = "SubCardListCell"
     
-    private let informationStackView = UIStackView()
     private let scoreImageView = UIImageView()
     private let titleLabel = UILabel()
     private let priceLabel = UILabel()
@@ -20,8 +19,10 @@ final class SubCardListCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        contentView.backgroundColor = .defaultCell
+        
+        configureContentView()
         configureThumbnailImageView()
-        configureStackView()
         configureScoreImageView()
         configureTitleLabel()
         configurePriceLabel()
@@ -37,13 +38,22 @@ final class SubCardListCell: UICollectionViewCell {
 
 extension SubCardListCell {
     
-    func updateCotent(image: UIImage?,
+    func updateCotent(images: [UIImage]?,
                       title: String?,
-                      price: String?) {
+                      price: Int?) {
         
-        thumbnailImageView.image = image
         titleLabel.text = title
-        priceLabel.text = price
+        
+        if let price = price {
+            priceLabel.text = String(price)
+        }
+        
+        if let images = images,
+            !images.isEmpty {
+            thumbnailImageView.image = images[0]
+        } else {
+            thumbnailImageView.backgroundColor = UIColor(resource: .viewBackground)
+        }
     }
 }
 
@@ -51,56 +61,68 @@ extension SubCardListCell {
 
 extension SubCardListCell {
     
+    private func configureContentView() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.layer.cornerRadius = 8
+        contentView.clipsToBounds = true
+        
+        let contentViewConstraints = [
+            contentView.topAnchor.constraint(equalTo: self.topAnchor,
+                                             constant: 8),
+            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
+                                                constant: -8),
+            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor,
+                                                 constant: 16),
+            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor,
+                                                  constant: -16)
+        ]
+        
+        NSLayoutConstraint.activate(contentViewConstraints)
+        
+    }
+    
     private func configureThumbnailImageView() {
-        self.addSubview(thumbnailImageView)
+        contentView.addSubview(thumbnailImageView)
         
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
         thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImageView.clipsToBounds = true
         
         let thumbnailImageViewConstraints = [
-            thumbnailImageView.topAnchor.constraint(equalTo: self.topAnchor,
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                     constant: 8),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                                       constant: -8),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor,
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                          constant: -8),
-            thumbnailImageView.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                      multiplier: 0.3),
+            thumbnailImageView.widthAnchor.constraint(greaterThanOrEqualTo: contentView.widthAnchor,
+                                                      multiplier: 0.4),
+            thumbnailImageView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor,
+                                                      multiplier: 0.5),
             thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
-                                                       multiplier: 1.0)
+                                                       multiplier: 3/4),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                       constant: -8),
         ]
         
         NSLayoutConstraint.activate(thumbnailImageViewConstraints)
     }
     
-    private func configureStackView() {
-        self.addSubview(informationStackView)
-        
-        informationStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        informationStackView.alignment = .leading
-        
-        let stackViewConstraints = [
-            informationStackView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor),
-            informationStackView.bottomAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor),
-            informationStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                          constant: 8),
-            informationStackView.trailingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor,
-                                                           constant: -16),
-        ]
-        
-        NSLayoutConstraint.activate(stackViewConstraints)
-    }
-    
     private func configureScoreImageView() {
-        informationStackView.addArrangedSubview(scoreImageView)
+        contentView.addSubview(scoreImageView)
+        
+        scoreImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scoreImageView.image = UIImage(resource: .airport)
         
         let scoreImageViewConstraints = [
-            scoreImageView.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                  multiplier: 1/15),
-            scoreImageView.heightAnchor.constraint(equalTo: scoreImageView.widthAnchor,
-                                                   multiplier: 1.0)
+            scoreImageView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor),
+            scoreImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                    constant: 16),
+            scoreImageView.heightAnchor.constraint(equalTo: thumbnailImageView.heightAnchor,
+                                                   multiplier: 0.2),
+            scoreImageView.widthAnchor.constraint(equalTo: scoreImageView.heightAnchor,
+                                                  multiplier: 1.0)
         ]
         
         NSLayoutConstraint.activate(scoreImageViewConstraints)
@@ -108,16 +130,39 @@ extension SubCardListCell {
     }
     
     private func configureTitleLabel() {
-        informationStackView.addArrangedSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         
-        titleLabel.font = .preferredFont(forTextStyle: .title2)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        titleLabel.font = .preferredFont(forTextStyle: .title1)
+        
+        let titleLabelConstraints = [
+            titleLabel.topAnchor.constraint(equalTo: scoreImageView.bottomAnchor,
+                                            constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 16)
+        ]
+        
+        NSLayoutConstraint.activate(titleLabelConstraints)
+        
         
     }
     
     private func configurePriceLabel() {
-        informationStackView.addArrangedSubview(priceLabel)
+        contentView.addSubview(priceLabel)
         
-        priceLabel.font = .preferredFont(forTextStyle: .body)
+        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        priceLabel.font = .preferredFont(forTextStyle: .caption2)
     
+        let priceLabelConstraints = [
+            priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                            constant: 8),
+            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 16)
+        ]
+        
+        NSLayoutConstraint.activate(priceLabelConstraints)
     }
+
 }

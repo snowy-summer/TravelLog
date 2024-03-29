@@ -95,8 +95,8 @@ extension MainCardCell {
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor,
-                                                      multiplier: 0.5)
+            thumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: thumbnailImageView.widthAnchor,
+                                                       multiplier: 0.75)
             
         ]
         

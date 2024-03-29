@@ -85,7 +85,7 @@ extension SelectedImageView {
         
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = true
-        pageControl.currentPageIndicatorTintColor = .cyan
+        pageControl.currentPageIndicatorTintColor = .darkGray
         
         
         let pageControlConstraints = [
