@@ -11,7 +11,14 @@ final class SubCardListCell: UICollectionViewCell {
     
     static let identifier = "SubCardListCell"
     
-    private let scoreImageView = UIImageView()
+    private var scoreImagesStackView = UIStackView()
+   
+    private let firstStarImageView = UIImageView()
+    private let secondStarImageView = UIImageView()
+    private let thirdStarImageView = UIImageView()
+    private let fourthStarImageView = UIImageView()
+    private let fifthStarImageView = UIImageView()
+    
     private let titleLabel = UILabel()
     private let priceLabel = UILabel()
     private let thumbnailImageView = UIImageView()
@@ -23,7 +30,7 @@ final class SubCardListCell: UICollectionViewCell {
         
         configureContentView()
         configureThumbnailImageView()
-        configureScoreImageView()
+        configureScoreStackView()
         configureTitleLabel()
         configurePriceLabel()
     }
@@ -40,20 +47,29 @@ extension SubCardListCell {
     
     func updateCotent(images: [UIImage]?,
                       title: String?,
-                      price: Int?) {
+                      price: Int?,
+                      starState: [Bool]) {
         
-        titleLabel.text = title
+        titleLabel.text = title ?? ""
         
         if let price = price {
-            priceLabel.text = String(price)
+            priceLabel.text = "₩ \(price)"
+        } else {
+            priceLabel.text = ""
         }
         
         if let images = images,
             !images.isEmpty {
             thumbnailImageView.image = images[0]
         } else {
-            thumbnailImageView.backgroundColor = UIColor(resource: .viewBackground)
+            thumbnailImageView.image = nil
         }
+        
+        for i in 0..<5 {
+            let imageView = scoreImagesStackView.arrangedSubviews[i] as! UIImageView
+            imageView.image = starState[i] ? UIImage(systemName: "star.fill") :  UIImage(systemName: "star")
+        }
+        
     }
 }
 
@@ -87,46 +103,48 @@ extension SubCardListCell {
         
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImageView.clipsToBounds = true
-        
         let thumbnailImageViewConstraints = [
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                     constant: 8),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                          constant: -8),
-            thumbnailImageView.widthAnchor.constraint(greaterThanOrEqualTo: contentView.widthAnchor,
-                                                      multiplier: 0.4),
-            thumbnailImageView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor,
+            thumbnailImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor,
                                                       multiplier: 0.5),
             thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
-                                                       multiplier: 3/4),
+                                                       multiplier: 1.0),
             thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                        constant: -8),
         ]
         
         NSLayoutConstraint.activate(thumbnailImageViewConstraints)
+        
+        thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImageView.clipsToBounds = true
     }
-    
-    private func configureScoreImageView() {
-        contentView.addSubview(scoreImageView)
+    private func configureScoreStackView() {
+        contentView.addSubview(scoreImagesStackView)
         
-        scoreImageView.translatesAutoresizingMaskIntoConstraints = false
+        scoreImagesStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        scoreImageView.image = UIImage(resource: .airport)
+        scoreImagesStackView.addArrangedSubview(firstStarImageView)
+        scoreImagesStackView.addArrangedSubview(secondStarImageView)
+        scoreImagesStackView.addArrangedSubview(thirdStarImageView)
+        scoreImagesStackView.addArrangedSubview(fourthStarImageView)
+        scoreImagesStackView.addArrangedSubview(fifthStarImageView)
         
-        let scoreImageViewConstraints = [
-            scoreImageView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor),
-            scoreImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                    constant: 16),
-            scoreImageView.heightAnchor.constraint(equalTo: thumbnailImageView.heightAnchor,
-                                                   multiplier: 0.2),
-            scoreImageView.widthAnchor.constraint(equalTo: scoreImageView.heightAnchor,
-                                                  multiplier: 1.0)
+        scoreImagesStackView.spacing = 4
+        scoreImagesStackView.axis = .horizontal
+        scoreImagesStackView.distribution = .fillEqually
+        
+        let stackViewConstraints = [
+            scoreImagesStackView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor),
+            scoreImagesStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                    constant: 8),
+            scoreImagesStackView.heightAnchor.constraint(equalTo: contentView.heightAnchor,
+                                                         multiplier: 0.1)
         ]
         
-        NSLayoutConstraint.activate(scoreImageViewConstraints)
-        
+        NSLayoutConstraint.activate(stackViewConstraints)
     }
     
     private func configureTitleLabel() {
@@ -137,7 +155,7 @@ extension SubCardListCell {
         titleLabel.font = .preferredFont(forTextStyle: .title1)
         
         let titleLabelConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: scoreImageView.bottomAnchor,
+            titleLabel.topAnchor.constraint(equalTo: scoreImagesStackView.bottomAnchor,
                                             constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                 constant: 16)

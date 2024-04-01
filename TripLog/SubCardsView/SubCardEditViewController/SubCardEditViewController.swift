@@ -34,7 +34,7 @@ final class SubCardEditViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .basic
         
-        editSubCardBind()
+        bind()
         configureNavigationBar()
         configureScrollView()
     }
@@ -51,7 +51,7 @@ extension SubCardEditViewController {
         viewModel.editingSubCard.value = card
     }
     
-    private func editSubCardBind() {
+    private func bind() {
         viewModel.editingSubCard.observe{ [weak self] subCard in
             self?.scrollView.updateContent(card: subCard)
         }

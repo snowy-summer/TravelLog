@@ -102,7 +102,6 @@ final class MainDataManager {
             print(error.localizedDescription)
         }
         
-        
     }
     
     func deleteMainCard(id: UUID) {
