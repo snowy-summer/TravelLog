@@ -20,7 +20,6 @@ final class SubCardCell: UICollectionViewCell {
         super.init(frame: frame)
         
         self.backgroundColor = .defaultCell
-        self.layer.borderWidth = 1
         self.layer.cornerRadius = 20
         
         configureTitleView()

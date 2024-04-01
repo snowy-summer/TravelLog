@@ -65,9 +65,9 @@ extension MainCardCell {
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.layer.borderWidth = 1
         contentView.layer.cornerRadius = 20
         contentView.clipsToBounds = true
+        contentView.backgroundColor = UIColor(resource: .bseOfCell)
         
         let contentViewConstraints = [
             contentView.topAnchor.constraint(equalTo: self.topAnchor,

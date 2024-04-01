@@ -137,12 +137,11 @@ extension SubCardScrollView {
         
         titleView.delegate = self
         titleView.layer.cornerRadius = 8
-        titleView.layer.borderWidth = 1
         titleView.backgroundColor = UIColor(resource: .viewBackground)
         
         let viewConstraints = [
             titleView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                           constant: 16),
+                                           constant: 8),
             titleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
             titleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -160,14 +159,13 @@ extension SubCardScrollView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         imageView.delegate = self
-        imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 8
         imageView.backgroundColor = .viewBackground
         imageView.clipsToBounds = true
         
         let imageViewConstraints = [
             imageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
-                                           constant: 16),
+                                           constant: 8),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -188,12 +186,11 @@ extension SubCardScrollView {
         
         starRateView.delegate = self
         starRateView.layer.cornerRadius = 8
-        starRateView.layer.borderWidth = 1
         starRateView.backgroundColor = UIColor(resource: .viewBackground)
         
         let viewConstraints = [
             starRateView.topAnchor.constraint(equalTo: imageView.bottomAnchor,
-                                              constant: 16),
+                                              constant: 8),
             starRateView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                   constant: 16),
             starRateView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -214,11 +211,10 @@ extension SubCardScrollView {
         priceView.delegate = self
         priceView.backgroundColor = UIColor(resource: .viewBackground)
         priceView.layer.cornerRadius = 8
-        priceView.layer.borderWidth = 1
         
         let viewConstraints = [
             priceView.topAnchor.constraint(equalTo: starRateView.bottomAnchor,
-                                           constant: 16),
+                                           constant: 8),
             priceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
             priceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -236,14 +232,13 @@ extension SubCardScrollView {
         locationView.translatesAutoresizingMaskIntoConstraints = false
         
         locationView.layer.cornerRadius = 8
-        locationView.layer.borderWidth = 1
         locationView.backgroundColor = .viewBackground
         locationView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                  action: #selector(pushMapViewController)))
         
         let viewConstraints = [
             locationView.topAnchor.constraint(equalTo: priceView.bottomAnchor,
-                                              constant: 16),
+                                              constant: 8),
             locationView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                   constant: 16),
             locationView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -264,12 +259,11 @@ extension SubCardScrollView {
         scriptTextView.font = .preferredFont(forTextStyle: .body)
         scriptTextView.isScrollEnabled = false
         scriptTextView.layer.cornerRadius = 8
-        scriptTextView.layer.borderWidth = 1
         scriptTextView.backgroundColor = .viewBackground
         
         let viewConstraints = [
             scriptTextView.topAnchor.constraint(equalTo: locationView.bottomAnchor,
-                                                constant: 16),
+                                                constant: 8),
             scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                     constant: 16),
             scriptTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,

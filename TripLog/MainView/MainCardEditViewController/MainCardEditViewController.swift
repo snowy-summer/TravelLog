@@ -147,7 +147,6 @@ extension MainCardEditViewController {
         
         titleView.translatesAutoresizingMaskIntoConstraints = false
         
-        titleView.layer.borderWidth = 1
         titleView.layer.cornerRadius = 20
         
         let safeArea = view.safeAreaLayoutGuide
@@ -172,7 +171,6 @@ extension MainCardEditViewController {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         
