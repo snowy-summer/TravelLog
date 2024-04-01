@@ -49,11 +49,14 @@ extension SubCardListCell {
                       title: String?,
                       price: Int?,
                       starState: [Bool]) {
+        let numberFormmater = NumberFormatter()
+        numberFormmater.numberStyle = .decimal
         
         titleLabel.text = title ?? ""
         
-        if let price = price {
-            priceLabel.text = "₩ \(price)"
+        if let price = price,
+           let formattedNumber = numberFormmater.string(from: NSNumber(value: price)) {
+            priceLabel.text = "₩ " + formattedNumber
         } else {
             priceLabel.text = ""
         }
@@ -105,15 +108,13 @@ extension SubCardListCell {
         
         let thumbnailImageViewConstraints = [
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                    constant: 8),
+                                                    constant: 12),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                          constant: -8),
             thumbnailImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor,
                                                       multiplier: 0.5),
-            thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
-                                                       multiplier: 1.0),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                       constant: -8),
+            thumbnailImageView.heightAnchor.constraint(equalTo: contentView.widthAnchor,
+                                                       multiplier: 0.5)
         ]
         
         NSLayoutConstraint.activate(thumbnailImageViewConstraints)
