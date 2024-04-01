@@ -24,8 +24,18 @@ final class MainViewController: UIViewController {
         mainCollectionView.dataSource = self
         mainCollectionView.configureAutoLayout(superView: view)
         
+        do {
+            mainViewModel.list.value = try mainViewModel.mainDataManager.readAllMainCards()
+        } catch {
+            print(error)
+        }
+        
         configureAddButton()
         bind()
+    }
+    
+    deinit {
+        mainViewModel.mainDataManager.saveContext()
     }
 
 }
@@ -61,7 +71,11 @@ extension MainViewController {
     private func bind() {
         mainViewModel.list.observe { [weak self] mainCards in
             guard let self = self else { return }
-            self.mainCollectionView.reloadData()
+            mainCollectionView.reloadData()
+            
+            for mainCard in mainCards {
+                mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
+            }
         }
     }
     

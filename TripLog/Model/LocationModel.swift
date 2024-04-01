@@ -9,7 +9,6 @@ import MapKit
 
 struct LocationModel: Identifiable {
     var id = UUID()
-    var searchCompletion: MKLocalSearchCompletion?
     var mapItem: MKMapItem?
         
 }

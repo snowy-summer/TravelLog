@@ -10,6 +10,7 @@ import UIKit
 protocol MainViewModelProtocol {
     
     var list: Observable<[MainCardModel]> { get }
+    var mainDataManager: MainDataManager { get }
     
     func appendMainCard(title: String, image: UIImage?)
     func changeSubCards(id: UUID, cards: [SubCardModel])

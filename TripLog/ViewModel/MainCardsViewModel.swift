@@ -12,6 +12,8 @@ import UIKit
 final class MainCardsViewModel {
     
     var list: Observable<[MainCardModel]> = Observable([])
+    
+    let mainDataManager = MainDataManager()
 
 }
 
@@ -31,6 +33,7 @@ extension MainCardsViewModel: MainViewModelProtocol {
     
     func deleteCard(id: UUID) {
         list.value = list.value.filter{ $0.id != id }
+        mainDataManager.deleteMainCard(id: id)
     }
     
     func bookmarkCard(id: UUID) {

@@ -38,7 +38,7 @@ final class MainCardCell: UICollectionViewCell {
 
 extension MainCardCell {
     
-    func updateContent(title: String,
+    func updateContent(title: String?,
                        image: UIImage?,
                        date: Date,
                        id: UUID) {

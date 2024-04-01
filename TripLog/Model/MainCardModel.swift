@@ -9,10 +9,10 @@ import UIKit
 
 struct MainCardModel: Identifiable {
     
-    var title: String
+    var id: UUID = UUID()
+    var title: String?
     var image: UIImage?
     var isBookMarked = false
-    var id: UUID = UUID()
     var date: Date = Date.now
     var subCards: [SubCardModel]
     
