@@ -6,13 +6,20 @@
 //
 
 import CoreData
+import MapKit
 import UIKit
 
 final class MainDataManager {
     
     private let coreDataManager = CoreDataManager.shared
     
-    func readAllMainCards() throws -> [MainCardModel] {
+    func saveContext() {
+        coreDataManager.saveContext()
+    }
+    
+    //MARK: - MainCard
+    
+    func readMainCards() throws -> [MainCardModel] {
         let context = coreDataManager.context
         let request: NSFetchRequest<MainCard> = MainCard.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
@@ -119,9 +126,7 @@ final class MainDataManager {
         
     }
     
-    func saveContext() {
-        coreDataManager.saveContext()
-    }
+    //MARK: - SubCard
     
     private func writeSubCard(where mainCard: MainCard,
                       what mainCardModel: MainCardModel) -> [SubCard] {
@@ -146,16 +151,7 @@ final class MainDataManager {
                 subCard.imagesData = images.map{ $0.pngData() } as NSObject
             }
             
-            if let locationModel = subCardmodel.location {
-                
-                let locationEntity = Location.entity()
-                let location = Location(entity: locationEntity,
-                                        insertInto: context)
-                
-                location.id = locationModel.id
-                
-                subCard.location = location
-            }
+            subCard.location = writeLocation(subCardModel: subCardmodel)
             
             return subCard
         }
@@ -182,16 +178,56 @@ final class MainDataManager {
                 subCardModel.images = imagesData.compactMap { UIImage(data: $0) }
             }
             
-            if let location = subCard.location,
-               let id = location.id {
-                
-                let locationModel = LocationModel(id: id)
-                subCardModel.location = locationModel
-            }
+            let location = readLocation(who: subCard)
+            subCardModel.location = location
             
             return subCardModel
         }
         
         return subCards
     }
+    
+    //MARK: - Location
+    
+    private func writeLocation(subCardModel: SubCardModel) -> Location? {
+        let context = coreDataManager.context
+        
+        guard let locationModel = subCardModel.location else { return nil }
+        
+        let locationEntity = Location.entity()
+        let location = Location(entity: locationEntity,
+                                insertInto: context)
+        
+        guard let mapItem = locationModel.mapItem else { return nil }
+        
+        location.id = locationModel.id
+        location.latitude = mapItem.placemark.coordinate.latitude
+        location.longitude = mapItem.placemark.coordinate.longitude
+        location.title = mapItem.name
+        location.categoryName = mapItem.pointOfInterestCategory?.categoryName
+        
+        return location
+    }
+    
+    private func readLocation(who subCard: SubCard) -> LocationModel {
+        var locationModel = LocationModel()
+        
+        if let location = subCard.location,
+           let id = location.id {
+            
+            let coordinate = CLLocationCoordinate2D(latitude: location.latitude,
+                                                    longitude: location.longitude)
+            let placemark = MKPlacemark(coordinate: coordinate)
+            let mapItem = MKMapItem(placemark: placemark)
+            mapItem.name = location.title
+            
+           locationModel = LocationModel(id: id,
+                                              mapItem: mapItem)
+            
+           return locationModel
+        }
+        
+        return locationModel
+    }
+    
 }

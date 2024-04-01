@@ -25,7 +25,7 @@ final class MainViewController: UIViewController {
         mainCollectionView.configureAutoLayout(superView: view)
         
         do {
-            mainViewModel.list.value = try mainViewModel.mainDataManager.readAllMainCards()
+            mainViewModel.list.value = try mainViewModel.mainDataManager.readMainCards()
         } catch {
             print(error)
         }

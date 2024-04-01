@@ -2,7 +2,7 @@
 //  Location+CoreDataProperties.swift
 //  TripLog
 //
-//  Created by 최승범 on 2024/03/29.
+//  Created by 최승범 on 2024/04/01.
 //
 //
 
@@ -17,8 +17,10 @@ extension Location {
     }
 
     @NSManaged public var id: UUID?
-    @NSManaged public var searchCompletionData: Data?
-    @NSManaged public var mapItemData: Data?
+    @NSManaged public var latitude: Double
+    @NSManaged public var longitude: Double
+    @NSManaged public var title: String?
+    @NSManaged public var categoryName: String?
     @NSManaged public var subCard: SubCard?
 
 }
