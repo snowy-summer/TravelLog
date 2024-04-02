@@ -9,6 +9,7 @@ import Foundation
 
 protocol SubCardsViewControllerDelegate: AnyObject {
     
-    func changeSubCards(mainCardId: UUID, card: [SubCardModel])
+    func changeSubCards(mainCardId: UUID,
+                        card: [SubCardModel])
     
 }

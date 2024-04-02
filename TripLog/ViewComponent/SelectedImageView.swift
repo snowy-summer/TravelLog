@@ -17,9 +17,9 @@ protocol SelectedImageViewDelegate: AnyObject {
 
 final class SelectedImageView: UIView {
     
-    private lazy var imageView = UIImageView()
+    private var imageView = UIImageView()
+    private var addButton = UIButton()
     private lazy var pageControl = UIPageControl()
-    private lazy var addButton = UIButton()
     private var mainQueue = DispatchQueue.main
     var images = [UIImage]()
     
@@ -173,7 +173,8 @@ extension SelectedImageView {
 
 extension SelectedImageView: PHPickerViewControllerDelegate {
     
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    func picker(_ picker: PHPickerViewController,
+                didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         
         if results.count != 0 {

@@ -159,7 +159,9 @@ extension SubCardListCell {
             titleLabel.topAnchor.constraint(equalTo: scoreImagesStackView.bottomAnchor,
                                             constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: 16)
+                                                constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor,
+                                                 constant: 16)
         ]
         
         NSLayoutConstraint.activate(titleLabelConstraints)
@@ -178,7 +180,9 @@ extension SubCardListCell {
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                             constant: 8),
             priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: 16)
+                                                constant: 16),
+            priceLabel.trailingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor,
+                                                 constant: 16)
         ]
         
         NSLayoutConstraint.activate(priceLabelConstraints)

@@ -52,6 +52,7 @@ extension MainCardEditViewController {
         let index = mainViewModel.list.value.firstIndex { mainCard in
             mainCard.id == selectedCardID
         }
+        
         guard let index = index else { return }
         let card = mainViewModel.list.value[index]
         
@@ -116,7 +117,8 @@ extension MainCardEditViewController{
 
 extension MainCardEditViewController: PHPickerViewControllerDelegate {
     
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    func picker(_ picker: PHPickerViewController,
+                didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         let itemProvider = results.first?.itemProvider
         
@@ -148,6 +150,7 @@ extension MainCardEditViewController {
         titleView.translatesAutoresizingMaskIntoConstraints = false
         
         titleView.layer.cornerRadius = 20
+        titleView.backgroundColor = UIColor(resource: .baseOfCell)
         
         let safeArea = view.safeAreaLayoutGuide
         let titleViewConstraints = [
@@ -171,6 +174,7 @@ extension MainCardEditViewController {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+        imageView.backgroundColor = UIColor(resource: .baseOfCell)
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         

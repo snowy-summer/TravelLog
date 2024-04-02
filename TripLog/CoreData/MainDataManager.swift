@@ -24,39 +24,36 @@ final class MainDataManager {
         let request: NSFetchRequest<MainCard> = MainCard.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
         
-        do {
-            let mainCards = try context.fetch(request)
+        guard let mainCards = try? context.fetch(request) else {
+            throw CoreDataError.failToreadMainCard
+        }
+        
+        return mainCards.compactMap { mainCard -> MainCardModel? in
             
-            return mainCards.compactMap { mainCard -> MainCardModel? in
-                
-                guard let id = mainCard.id,
-                      let date = mainCard.date else { return nil }
-                
-                var mainCardModel = MainCardModel(id: id,
-                                                  title: mainCard.title,
-                                                  image: nil,
-                                                  isBookMarked: mainCard.isBookMarked,
-                                                  date: date,
-                                                  subCards: [])
-                
-                if let imageData = mainCard.image {
-                    mainCardModel.image = UIImage(data: imageData)
-                }
-                
-                
-                if let subCardsSet = mainCard.subCards as? Set<SubCard> {
-
-                    let subCards = readSubCard(who: subCardsSet)
-                    mainCardModel.subCards = subCards.map { $0! }
-                }
-                
-                return mainCardModel
+            guard let id = mainCard.id,
+                  let date = mainCard.date else { return nil }
+            
+            var mainCardModel = MainCardModel(id: id,
+                                              title: mainCard.title,
+                                              image: nil,
+                                              isBookMarked: mainCard.isBookMarked,
+                                              date: date,
+                                              subCards: [])
+            
+            if let imageData = mainCard.image {
+                mainCardModel.image = UIImage(data: imageData)
             }
             
             
-        } catch {
-            throw error
+            if let subCardsSet = mainCard.subCards as? Set<SubCard> {
+                
+                let subCards = readSubCard(who: subCardsSet)
+                mainCardModel.subCards = subCards.map { $0! }
+            }
+            
+            return mainCardModel
         }
+        
     }
     
     
@@ -140,10 +137,11 @@ final class MainDataManager {
             subCard.id = subCardmodel.id
             subCard.script = subCardmodel.script
             subCard.starsState = subCardmodel.starsState
+            subCard.category = subCardmodel.category?.rawValue
             subCard.mainCard = mainCard
             
             if let price = subCardmodel.price {
-                subCard.price = Int32(price)
+                subCard.price = Int64(price)
             }
             
             if let images = subCardmodel.images {
@@ -172,6 +170,10 @@ final class MainDataManager {
                                             images: [],
                                             script: subCard.script,
                                             location: nil)
+            
+            if let category = subCard.category {
+                subCardModel.category = CardCategory(rawValue: category)
+            }
             
             if let imagesData = subCard.imagesData as? [Data] {
                 subCardModel.images = imagesData.compactMap { UIImage(data: $0) }

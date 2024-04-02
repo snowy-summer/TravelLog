@@ -13,13 +13,14 @@ final class SubCardScrollView: UIScrollView {
     private let selctedCardId: UUID?
     weak var subCardScrollViewDelegate: SubscrollViewDelegate?
     
-    private(set) lazy var contentView = UIView()
-    private(set) lazy var titleView = TitleView()
-    private(set) lazy var imageView = SelectedImageView()
-    private(set) lazy var starRateView = StarRateView()
-    private(set) lazy var priceView = PriceView()
-    private(set) lazy var locationView = LocationView()
-    private(set) lazy var scriptTextView = UITextView()
+    private(set) var contentView = UIView()
+    private(set) var titleView = TitleView()
+    private(set) var imageView = SelectedImageView()
+    private(set) var starRateView = StarRateView()
+    private(set) var priceView = PriceView()
+    private(set) var locationView = LocationView()
+    private(set) var categoryView = CategoryView()
+    private(set) var scriptTextView = UITextView()
     
     init(viewModel: SubCardsViewModel, selctedCardId: UUID?) {
         self.viewModel = viewModel
@@ -32,6 +33,7 @@ final class SubCardScrollView: UIScrollView {
         configureStarsView()
         configurePriceView()
         configureLocationView()
+        configureCategoryView()
         configureScriptView()
     }
     
@@ -49,6 +51,7 @@ extension SubCardScrollView {
         starRateView.updateButton()
         priceView.updatePrice(price: card.price)
         locationView.updateLocationView(with: card.location)
+        categoryView.updateButton(category: card.category)
         scriptTextView.text = card.script
         
         if let cardImages = card.images,
@@ -71,7 +74,8 @@ extension SubCardScrollView {
 extension SubCardScrollView: TitleViewDelegate,
                              PriceViewDelegate,
                              SelectedImageViewDelegate,
-                             StarRateViewDelegate {
+                             StarRateViewDelegate,
+                             CardCategoryViewDelegate {
     
     //MARK: - TitleViewDelegate
     
@@ -100,6 +104,12 @@ extension SubCardScrollView: TitleViewDelegate,
     
     func updateViewModelValue(starState: [Bool]) {
         viewModel.updateEditingCardStarState(starState: starState)
+    }
+    
+    //MARK: - CardCategoryViewDelegate
+    
+    func updateViewModelCategory(category: CardCategory) {
+        viewModel.updateEditingCardCategory(category: category)
     }
 }
 
@@ -170,10 +180,8 @@ extension SubCardScrollView {
                                                constant: 16),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                 constant: -16),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: self.heightAnchor,
-                                              multiplier: 0.3),
-            imageView.heightAnchor.constraint(greaterThanOrEqualTo: self.heightAnchor,
-                                              multiplier: 0.25)
+            imageView.heightAnchor.constraint(equalTo: contentView.widthAnchor,
+                                              multiplier: 0.75)
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)
@@ -250,6 +258,29 @@ extension SubCardScrollView {
         NSLayoutConstraint.activate(viewConstraints)
     }
     
+    private func configureCategoryView() {
+        contentView.addSubview(categoryView)
+        
+        categoryView.translatesAutoresizingMaskIntoConstraints = false
+        
+        categoryView.backgroundColor = .viewBackground
+        categoryView.layer.cornerRadius = 8
+        categoryView.delegate = self
+        
+        let categoryViewConstraints = [
+            categoryView.topAnchor.constraint(equalTo: locationView.bottomAnchor,
+                                              constant: 8),
+            categoryView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                  constant: 16),
+            categoryView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                   constant: -16),
+            categoryView.heightAnchor.constraint(greaterThanOrEqualTo: self.heightAnchor,
+                                                 multiplier: 0.1)
+        ]
+        
+        NSLayoutConstraint.activate(categoryViewConstraints)
+    }
+    
     private func configureScriptView() {
         contentView.addSubview(scriptTextView)
         
@@ -262,7 +293,7 @@ extension SubCardScrollView {
         scriptTextView.backgroundColor = .viewBackground
         
         let viewConstraints = [
-            scriptTextView.topAnchor.constraint(equalTo: locationView.bottomAnchor,
+            scriptTextView.topAnchor.constraint(equalTo: categoryView.bottomAnchor,
                                                 constant: 8),
             scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                     constant: 16),

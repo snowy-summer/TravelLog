@@ -17,9 +17,10 @@
         <relationship name="subCards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SubCard" inverseName="mainCard" inverseEntity="SubCard"/>
     </entity>
     <entity name="SubCard" representedClassName="SubCard" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="imagesData" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[UIImage]"/>
-        <attribute name="price" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="imagesData" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="price" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="script" optional="YES" attributeType="String"/>
         <attribute name="starsState" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Bool]"/>
         <attribute name="title" optional="YES" attributeType="String"/>

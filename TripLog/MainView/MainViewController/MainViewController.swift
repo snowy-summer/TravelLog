@@ -27,7 +27,7 @@ final class MainViewController: UIViewController {
         do {
             mainViewModel.list.value = try mainViewModel.mainDataManager.readMainCards()
         } catch {
-            print(error)
+            failAlert(message: error.localizedDescription)
         }
         
         configureAddButton()
@@ -41,6 +41,17 @@ final class MainViewController: UIViewController {
 }
 
 extension MainViewController {
+    
+    private func bind() {
+        mainViewModel.list.observe { [weak self] mainCards in
+            guard let self = self else { return }
+            mainCollectionView.reloadData()
+            
+            for mainCard in mainCards {
+                mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
+            }
+        }
+    }
     
     private func configureAddButton() {
         view.addSubview(addButton)
@@ -68,20 +79,25 @@ extension MainViewController {
         
     }
     
-    private func bind() {
-        mainViewModel.list.observe { [weak self] mainCards in
-            guard let self = self else { return }
-            mainCollectionView.reloadData()
-            
-            for mainCard in mainCards {
-                mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
-            }
-        }
-    }
-    
     @objc private func tapAddButton() {
         let modalNavigationController = UINavigationController(rootViewController: MainCardEditViewController(mainViewmodel: mainViewModel))
         self.present(modalNavigationController, animated: true)
+    }
+    
+    private func failAlert(message: String) {
+        let failAlert = UIAlertController(title: "알림",
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: "확인",
+                                          style: .default) { _ in
+            failAlert.dismiss(animated: true)
+        }
+        
+        failAlert.addAction(confirmAction)
+        
+        self.present(failAlert,
+                     animated: true)
     }
     
 }
@@ -115,7 +131,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         let id = mainViewModel.list.value[indexPath.row].id
         let subCards = mainViewModel.list.value[indexPath.row].subCards
         
@@ -164,7 +181,8 @@ extension MainViewController: MainCollectionViewDelegate {
 //MARK: - SubCardsViewControllerDelegate
 extension MainViewController: SubCardsViewControllerDelegate {
     
-    func changeSubCards(mainCardId: UUID, card: [SubCardModel]) {
+    func changeSubCards(mainCardId: UUID,
+                        card: [SubCardModel]) {
         mainViewModel.changeSubCards(id: mainCardId, cards: card)
     }
     

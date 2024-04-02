@@ -14,7 +14,6 @@ final class SubCardCell: UICollectionViewCell {
     private lazy var titleView = TitleView()
     private lazy var thumbnailImageView = UIImageView()
     private lazy var starRateView = StarRateView()
-    private lazy var scriptTextView = UITextView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,7 +24,6 @@ final class SubCardCell: UICollectionViewCell {
         configureTitleView()
         configureThumbnailImageView()
         configureStarsRateView()
-        configureScript()
     }
     
     required init?(coder: NSCoder) {
@@ -52,11 +50,9 @@ extension SubCardCell {
     
     func updateContent(title: String?,
                        images: [UIImage]?,
-                       starState: [Bool],
-                       script: String?) {
+                       starState: [Bool]){
         
         titleView.updateText(title)
-        scriptTextView.text = script
         starRateView.starState = starState
         starRateView.updateButton()
         
@@ -142,28 +138,5 @@ extension SubCardCell {
         NSLayoutConstraint.activate(viewConstraint)
     }
     
-    private func configureScript() {
-        contentView.addSubview(scriptTextView)
-        
-        scriptTextView.translatesAutoresizingMaskIntoConstraints = false
-        
-        scriptTextView.layer.cornerRadius = 8
-        
-        scriptTextView.font = .preferredFont(forTextStyle: .title1)
-        scriptTextView.backgroundColor = .viewBackground
-        scriptTextView.isUserInteractionEnabled = false
-        
-        let imageViewConstraints = [
-            scriptTextView.topAnchor.constraint(equalTo: starRateView.bottomAnchor,
-                                                constant: 8),
-            scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                    constant: 16),
-            scriptTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                     constant: -16),
-            scriptTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                   constant: -16)
-        ]
-        
-        NSLayoutConstraint.activate(imageViewConstraints)
-    }
+    
 }

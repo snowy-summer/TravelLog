@@ -14,6 +14,7 @@ struct SubCardModel: Identifiable {
     var price: Int?
     var images: [UIImage]?
     var script: String?
+    var category: CardCategory?
     var location: LocationModel?
 }
 

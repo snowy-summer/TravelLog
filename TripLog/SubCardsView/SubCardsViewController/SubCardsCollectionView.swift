@@ -18,7 +18,9 @@ final class SubCardsCollectionView: UICollectionView {
             saveSnapshot(id: viewModel.list.value.map{ $0.id })
         }
     }
-    init(viewModel: SubCardsViewModel, size: CGSize) {
+    
+    init(viewModel: SubCardsViewModel,
+         size: CGSize) {
         self.viewModel = viewModel
         super.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         self.collectionViewLayout = createBasicCompositionalLayout()
@@ -92,8 +94,7 @@ extension SubCardsCollectionView {
             
             cell.updateContent(title: subCard.title,
                                images: subCard.images,
-                               starState: subCard.starsState,
-                               script: subCard.script)
+                               starState: subCard.starsState)
             
         }
         

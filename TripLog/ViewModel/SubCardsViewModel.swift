@@ -72,6 +72,10 @@ extension SubCardsViewModel {
         
     }
     
+    func updateEditingCardCategory(category: CardCategory) {
+        editingSubCard.value.category = category
+    }
+    
     func updateEditingCardScript(text: String?) {
         editingSubCard.value.script = text
     }

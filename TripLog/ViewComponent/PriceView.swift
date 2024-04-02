@@ -46,11 +46,17 @@ extension PriceView {
     
     func updatePrice(price: Int?) {
         guard let price = price else { return }
-        priceTextField.text = String(price)
+        
+        let numberFormmater = NumberFormatter()
+        numberFormmater.numberStyle = .decimal
+        let formattedNumber = numberFormmater.string(from: NSNumber(value: price))
+        
+        priceTextField.text = formattedNumber
     }
     
     @objc func didTextFieldChange() {
-        delegate?.updateViewModelValue(price: priceTextField.text)
+        let text = priceTextField.text?.split(separator: ",").joined()
+        delegate?.updateViewModelValue(price: text)
     }
 }
 

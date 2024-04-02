@@ -11,8 +11,10 @@ final class MainCollectionView: UICollectionView {
     
     private var mainViewModel: MainViewModelProtocol
     weak var collectionViewDelegate: MainCollectionViewDelegate?
+    private var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
     
-    init(frame: CGRect, mainViewModel: MainViewModelProtocol) {
+    init(frame: CGRect,
+         mainViewModel: MainViewModelProtocol) {
         self.mainViewModel = mainViewModel
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         self.register(MainCardCell.self,

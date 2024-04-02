@@ -67,7 +67,7 @@ extension MainCardCell {
         
         contentView.layer.cornerRadius = 20
         contentView.clipsToBounds = true
-        contentView.backgroundColor = UIColor(resource: .bseOfCell)
+        contentView.backgroundColor = UIColor(resource: .baseOfCell)
         
         let contentViewConstraints = [
             contentView.topAnchor.constraint(equalTo: self.topAnchor,
@@ -191,6 +191,7 @@ extension MainCardCell {
             share,
             delete
         ]
+        
         menuButton.menu = UIMenu(children: items)
         menuButton.showsMenuAsPrimaryAction = true
         

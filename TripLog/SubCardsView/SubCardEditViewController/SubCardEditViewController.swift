@@ -20,7 +20,8 @@ final class SubCardEditViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    convenience init(viewModel: SubCardsViewModel, selectedCardId: UUID) {
+    convenience init(viewModel: SubCardsViewModel,
+                     selectedCardId: UUID) {
         self.init(viewModel: viewModel)
         self.selctedCardId = selectedCardId
         
@@ -82,7 +83,6 @@ extension SubCardEditViewController {
 extension SubCardEditViewController: SubscrollViewDelegate {
     
     func pushMapViewController() {
-        
         self.navigationController?.pushViewController(MapViewController(delegate: self,
                                                                         location: viewModel.editingSubCard.value.location),
                                                       animated: true)
