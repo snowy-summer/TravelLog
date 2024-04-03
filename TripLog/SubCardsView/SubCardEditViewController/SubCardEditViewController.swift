@@ -134,3 +134,7 @@ extension SubCardEditViewController {
     }
 
 }
+
+#Preview {
+    return SubCardEditViewController(viewModel: SubCardsViewModel())
+}

@@ -89,6 +89,23 @@ extension SubCardScrollView: TitleViewDelegate,
         viewModel.updateEditingCardPrice(price: price)
     }
     
+    func presentCurrencyList() {
+        let currencyList = UIAlertController(title: "통화 목록",
+                                             message: nil,
+                                             preferredStyle: .actionSheet)
+        
+        CurrencyList.allCases.forEach { currency in
+            let action = UIAlertAction(title: currency.rawValue,
+                                       style: .default) { action in
+                // 통화 변경하고, 버튼 이름 변경, 기존의 통화 환전해서 변경
+            }
+            currencyList.addAction(action)
+        }
+        
+        
+        subCardScrollViewDelegate?.presentViewController(where: currencyList)
+    }
+    
     //MARK: - SelectedImageViewDelegate
     
     func updateViewModelValue(images: [UIImage]?) {
@@ -217,7 +234,7 @@ extension SubCardScrollView {
         priceView.translatesAutoresizingMaskIntoConstraints = false
         
         priceView.delegate = self
-        priceView.backgroundColor = UIColor(resource: .viewBackground)
+//        priceView.backgroundColor = UIColor(resource: .viewBackground)
         priceView.layer.cornerRadius = 8
         
         let viewConstraints = [
