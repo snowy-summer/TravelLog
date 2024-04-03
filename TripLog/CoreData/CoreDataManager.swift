@@ -30,17 +30,12 @@ final class CoreDataManager {
         
     }
     
-    func saveContext(backgroudContext: NSManagedObjectContext? = nil) {
+    func saveContext(backgroudContext: NSManagedObjectContext? = nil) throws {
         let context = backgroudContext ?? context
         guard context.hasChanges else { return }
         
-        do {
-            try context.save()
-            
-        } catch let error as NSError {
-            print("Error: \(error), \(error.userInfo)")
-            
-        }
+        try context.save()
+
     }
     
 }

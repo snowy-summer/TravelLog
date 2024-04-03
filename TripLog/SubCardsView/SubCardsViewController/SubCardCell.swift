@@ -18,8 +18,8 @@ final class SubCardCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .defaultCell
-        self.layer.cornerRadius = 20
+        contentView.layer.cornerRadius = 20
+        contentView.backgroundColor = .defaultCell
         
         configureTitleView()
         configureThumbnailImageView()
@@ -31,7 +31,8 @@ final class SubCardCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        self.backgroundColor = .defaultCell
+        contentView.layer.cornerRadius = 20
+        contentView.backgroundColor = .defaultCell
     }
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

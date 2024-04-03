@@ -33,7 +33,11 @@ extension MainCardsViewModel: MainViewModelProtocol {
     
     func deleteCard(id: UUID) {
         list.value = list.value.filter{ $0.id != id }
-        mainDataManager.deleteMainCard(id: id)
+        do {
+            try mainDataManager.deleteMainCard(id: id)
+        } catch {
+            print(error)
+        }
     }
     
     func bookmarkCard(id: UUID) {

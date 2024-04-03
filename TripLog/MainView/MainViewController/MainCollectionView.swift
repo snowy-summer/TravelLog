@@ -11,7 +11,6 @@ final class MainCollectionView: UICollectionView {
     
     private var mainViewModel: MainViewModelProtocol
     weak var collectionViewDelegate: MainCollectionViewDelegate?
-    private var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
     
     init(frame: CGRect,
          mainViewModel: MainViewModelProtocol) {
@@ -67,11 +66,7 @@ extension MainCollectionView {
                 return  UISwipeActionsConfiguration(actions: [bookmarkAction])
             }
             
-            if isBookmarked  {
-                bookmarkAction.image = UIImage(resource: .customBookmarkOn)
-            } else {
-                bookmarkAction.image = UIImage(resource: .customBookmarkOff)
-            }
+            bookmarkAction.image = isBookmarked ? .customBookmarkOn : .customBookmarkOff
             
             bookmarkAction.backgroundColor = .basic
             
@@ -119,3 +114,4 @@ extension MainCollectionView {
     }
     
 }
+

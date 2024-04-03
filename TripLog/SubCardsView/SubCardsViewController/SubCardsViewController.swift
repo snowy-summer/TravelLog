@@ -116,7 +116,7 @@ extension SubCardsViewController {
     
 }
 
-//MARK: - UICollectionDelegate
+//MARK: - UICollectionViewDelegate
 
 extension SubCardsViewController: UICollectionViewDelegate {
     

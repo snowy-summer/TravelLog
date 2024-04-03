@@ -8,18 +8,23 @@
 import UIKit
 
 enum CardCategory: String, CaseIterable {
+    case transportation = "교통"
     case hotel = "숙소"
     case food = "음식"
     case activity = "활동"
-    
-    var color: UIColor {
+   
+    var image: UIImage? {
         switch self {
+            
+        case .transportation:
+            return UIImage(systemName: "airplane.departure")
         case .hotel:
-            return UIColor(resource: .hotel)
+            return UIImage(systemName: "bed.double.fill")
         case .food:
-            return UIColor(resource: .food)
+            return UIImage(systemName: "fork.knife")
         case .activity:
-            return UIColor(resource: .activity)
+            return UIImage(systemName: "figure.open.water.swim")
+            
         }
     }
     

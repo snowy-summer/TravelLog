@@ -33,11 +33,10 @@ final class CategoryView: UIView {
     
     func updateButton(category: CardCategory?) {
         guard let category = category else { return }
-        
         buttons.forEach { button in
-            if let title = button.titleLabel?.text,
+            if let title = button.title(for: .normal),
                let buttonCategory = CardCategory(rawValue: title) {
-                button.backgroundColor = buttonCategory == category ? buttonCategory.color : .baseOfCell
+                button.configuration?.baseBackgroundColor = buttonCategory == category ? .white : .viewBackground
             }
         }
     }
@@ -49,17 +48,13 @@ final class CategoryView: UIView {
         
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
-        stackView.spacing = 16
+        stackView.spacing = 4
         
         let stackConstraints = [
-            stackView.topAnchor.constraint(equalTo: self.topAnchor,
-                                               constant: 16),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                              constant: -16),
-            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                               constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor,
-                                                constant: -16)
+            stackView.topAnchor.constraint(equalTo: self.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(stackConstraints)
@@ -80,12 +75,17 @@ final class CategoryView: UIView {
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.layer.cornerRadius = 8
+        let buttonConfiguration = buttonConfiguration()
 
+        button.configuration = buttonConfiguration
+    
+        button.configuration?.baseBackgroundColor = .viewBackground
         button.setTitle(category.rawValue,
                         for: .normal)
         button.setTitleColor(.black,
                              for: .normal)
+        button.setImage(category.image,
+                        for: .normal)
         
         button.addTarget(self,
                          action: #selector(tapButton),
@@ -100,9 +100,22 @@ final class CategoryView: UIView {
         delegate?.updateViewModelCategory(category: category)
         
         buttons.forEach { button in
-            button.backgroundColor = .baseOfCell
+            button.configuration?.baseBackgroundColor = .viewBackground
         }
         
-        sender.backgroundColor = category.color
+        sender.configuration?.baseBackgroundColor = .white
+        
     }
+    
+    private func buttonConfiguration() -> UIButton.Configuration {
+        
+        var configuration = UIButton.Configuration.bordered()
+        configuration.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 12)
+        configuration.imagePlacement = .leading
+        configuration.imagePadding = 4
+        configuration.cornerStyle = .capsule
+        
+        return configuration
+    }
+    
 }

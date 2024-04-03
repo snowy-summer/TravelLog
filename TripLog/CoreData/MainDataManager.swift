@@ -13,8 +13,8 @@ final class MainDataManager {
     
     private let coreDataManager = CoreDataManager.shared
     
-    func saveContext() {
-        coreDataManager.saveContext()
+    func saveContext() throws {
+        try coreDataManager.saveContext()
     }
     
     //MARK: - MainCard
@@ -25,7 +25,7 @@ final class MainDataManager {
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
         
         guard let mainCards = try? context.fetch(request) else {
-            throw CoreDataError.failToreadMainCard
+            throw CoreDataError.failToReadMainCard
         }
         
         return mainCards.compactMap { mainCard -> MainCardModel? in
@@ -57,7 +57,7 @@ final class MainDataManager {
     }
     
     
-    func writeMainCard(mainModel: MainCardModel) {
+    func writeMainCard(mainModel: MainCardModel) throws{
         let context = coreDataManager.context
         let entity = MainCard.entity()
         let mainCard = MainCard(entity: entity,
@@ -67,65 +67,58 @@ final class MainDataManager {
         request.predicate = NSPredicate(format: "id == %@",
                                         mainModel.id as CVarArg )
         
-        do {
-            let result = try context.fetch(request)
+        
+        let result = try context.fetch(request)
+        
+        if let mainCardEntityToUpdate = result.first {
+            mainCardEntityToUpdate.id = mainModel.id
+            mainCardEntityToUpdate.title = mainModel.title
+            mainCardEntityToUpdate.isBookMarked = mainModel.isBookMarked
+            mainCardEntityToUpdate.date = mainModel.date
+            mainCardEntityToUpdate.image = mainModel.image?.pngData()
             
-            if let mainCardEntityToUpdate = result.first {
-                mainCardEntityToUpdate.id = mainModel.id
-                mainCardEntityToUpdate.title = mainModel.title
-                mainCardEntityToUpdate.isBookMarked = mainModel.isBookMarked
-                mainCardEntityToUpdate.date = mainModel.date
-                mainCardEntityToUpdate.image = mainModel.image?.pngData()
-                
-                let subCards = writeSubCard(where: mainCard,
-                                            what: mainModel)
-                mainCardEntityToUpdate.subCards = NSSet(array: subCards)
-                
-            } else {
-                
-                mainCard.id = mainModel.id
-                mainCard.title = mainModel.title
-                mainCard.isBookMarked = mainModel.isBookMarked
-                mainCard.date = mainModel.date
-                mainCard.image = mainModel.image?.pngData()
-                  
-                let subCards = writeSubCard(where: mainCard,
-                                            what: mainModel)
-                
-                mainCard.subCards = NSSet(array: subCards)
-            }
+            let subCards = writeSubCard(where: mainCard,
+                                        what: mainModel)
+            mainCardEntityToUpdate.subCards = NSSet(array: subCards)
             
-        } catch {
-            print(error.localizedDescription)
+        } else {
+            
+            mainCard.id = mainModel.id
+            mainCard.title = mainModel.title
+            mainCard.isBookMarked = mainModel.isBookMarked
+            mainCard.date = mainModel.date
+            mainCard.image = mainModel.image?.pngData()
+            
+            let subCards = writeSubCard(where: mainCard,
+                                        what: mainModel)
+            
+            mainCard.subCards = NSSet(array: subCards)
         }
+        
         
     }
     
-    func deleteMainCard(id: UUID) {
+    func deleteMainCard(id: UUID) throws{
         let context = coreDataManager.context
         
         let request = MainCard.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@",
                                         id as CVarArg)
-        do {
-            let mainCards = try context.fetch(request)
-            
-            if let mainCard = mainCards.first {
-                context.delete(mainCard)
-            }
-            
-            saveContext()
-            
-        } catch {
-            print(error.localizedDescription)
+        let mainCards = try context.fetch(request)
+        
+        if let mainCard = mainCards.first {
+            context.delete(mainCard)
         }
+        
+        try saveContext()
+        
         
     }
     
     //MARK: - SubCard
     
     private func writeSubCard(where mainCard: MainCard,
-                      what mainCardModel: MainCardModel) -> [SubCard] {
+                              what mainCardModel: MainCardModel) -> [SubCard] {
         let context = coreDataManager.context
         let subCards = mainCardModel.subCards.map { subCardmodel -> SubCard in
             
@@ -222,10 +215,10 @@ final class MainDataManager {
             let mapItem = MKMapItem(placemark: placemark)
             mapItem.name = location.title
             
-           locationModel = LocationModel(id: id,
-                                              mapItem: mapItem)
+            locationModel = LocationModel(id: id,
+                                          mapItem: mapItem)
             
-           return locationModel
+            return locationModel
         }
         
         return locationModel

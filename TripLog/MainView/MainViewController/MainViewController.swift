@@ -19,25 +19,16 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .basic
         
-        mainCollectionView.collectionViewDelegate = self
-        mainCollectionView.delegate = self
-        mainCollectionView.dataSource = self
-        mainCollectionView.configureAutoLayout(superView: view)
-        
-        do {
-            mainViewModel.list.value = try mainViewModel.mainDataManager.readMainCards()
-        } catch {
-            failAlert(message: error.localizedDescription)
-        }
-        
+        configureCollectionView()
+        loadData()
         configureAddButton()
         bind()
     }
     
-    deinit {
-        mainViewModel.mainDataManager.saveContext()
-    }
-
+    //    deinit {
+    //        mainViewModel.mainDataManager.saveContext()
+    //    }
+    
 }
 
 extension MainViewController {
@@ -47,9 +38,42 @@ extension MainViewController {
             guard let self = self else { return }
             mainCollectionView.reloadData()
             
-            for mainCard in mainCards {
-                mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
+            do {
+                for mainCard in mainCards {
+                    try mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
+                }
+                
+                try mainViewModel.mainDataManager.saveContext()
+                
+            } catch let error as CoreDataError {
+                failAlert(message: error.description)
+                
+            } catch {
+                print(error.localizedDescription)
+                
             }
+            
+        }
+    }
+    
+    private func configureCollectionView() {
+        mainCollectionView.collectionViewDelegate = self
+        mainCollectionView.delegate = self
+        mainCollectionView.dataSource = self
+        
+        mainCollectionView.configureAutoLayout(superView: view)
+    }
+    
+    private func loadData() {
+        do {
+            mainViewModel.list.value = try mainViewModel.mainDataManager.readMainCards()
+            
+        } catch let error as CoreDataError {
+            failAlert(message: error.description)
+            
+        } catch {
+            print(error.localizedDescription)
+            
         }
     }
     
@@ -86,8 +110,8 @@ extension MainViewController {
     
     private func failAlert(message: String) {
         let failAlert = UIAlertController(title: "알림",
-                                      message: message,
-                                      preferredStyle: .alert)
+                                          message: message,
+                                          preferredStyle: .alert)
         
         let confirmAction = UIAlertAction(title: "확인",
                                           style: .default) { _ in
@@ -108,7 +132,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-    
+        
         let count = mainViewModel.list.value.count
         return count
     }
@@ -127,7 +151,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                            image: content.image,
                            date: content.date,
                            id: content.id)
-
+        
         return cell
     }
     
@@ -151,10 +175,6 @@ extension MainViewController: CellDelegate {
     func editCard(id: UUID) {
         let modalNavigationController = UINavigationController(rootViewController: MainCardEditViewController(mainViewModel: mainViewModel, id: id))
         self.present(modalNavigationController, animated: true)
-    }
-    
-    func shareCard(id: UUID) {
-        
     }
     
     func bookmarkCard(id: UUID) {

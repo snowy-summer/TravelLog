@@ -263,7 +263,6 @@ extension SubCardScrollView {
         
         categoryView.translatesAutoresizingMaskIntoConstraints = false
         
-        categoryView.backgroundColor = .viewBackground
         categoryView.layer.cornerRadius = 8
         categoryView.delegate = self
         
@@ -274,8 +273,7 @@ extension SubCardScrollView {
                                                   constant: 16),
             categoryView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                    constant: -16),
-            categoryView.heightAnchor.constraint(greaterThanOrEqualTo: self.heightAnchor,
-                                                 multiplier: 0.1)
+            categoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 24)
         ]
         
         NSLayoutConstraint.activate(categoryViewConstraints)
