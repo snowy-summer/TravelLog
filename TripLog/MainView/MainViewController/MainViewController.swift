@@ -202,7 +202,7 @@ extension MainViewController: MainCollectionViewDelegate {
 extension MainViewController: SubCardsViewControllerDelegate {
     
     func changeSubCards(mainCardId: UUID,
-                        card: [SubCardModel]) {
+                        card: [SubCardModelDTO]) {
         mainViewModel.changeSubCards(id: mainCardId, cards: card)
     }
     

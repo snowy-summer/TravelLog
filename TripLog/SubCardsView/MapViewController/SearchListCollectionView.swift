@@ -55,7 +55,7 @@ extension SearchListCollectionView {
             guard let self = self else { return }
             
             let tupleArray = self.locationViewModel.list.value.map {($0.id, $0)}
-            let subCardDictionary: [UUID: LocationModel] = Dictionary(uniqueKeysWithValues: tupleArray)
+            let subCardDictionary: [UUID: LocationDTO] = Dictionary(uniqueKeysWithValues: tupleArray)
             
             guard let location = subCardDictionary[itemIdentifier],
                   let mapitem = location.mapItem else { return }

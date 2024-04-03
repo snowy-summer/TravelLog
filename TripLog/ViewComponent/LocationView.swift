@@ -13,7 +13,7 @@ final class LocationView: UIView {
     private lazy var locationLabel = UILabel()
     private lazy var locationText = UILabel()
     private lazy var locationImage = UIImageView()
-    private(set) var locationModel: LocationModel?
+    private(set) var locationModel: LocationDTO?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -92,7 +92,7 @@ extension LocationView {
         NSLayoutConstraint.activate(textFieldConstraints)
     }
     
-    func updateLocationView(with location: LocationModel?) {
+    func updateLocationView(with location: LocationDTO?) {
         locationModel = location
 
         guard let mapitem = locationModel?.mapItem,

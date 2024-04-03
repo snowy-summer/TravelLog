@@ -8,14 +8,14 @@ import UIKit
 
 final class SubCardsViewModel {
     
-    var list: Observable<[SubCardModel]> = Observable([])
-    var editingSubCard: Observable<SubCardModel> = Observable(SubCardModel())
+    var list: Observable<[SubCardModelDTO]> = Observable([])
+    var editingSubCard: Observable<SubCardModelDTO> = Observable(SubCardModelDTO())
     
 }
 
 extension SubCardsViewModel {
     
-    func selectCard(id: UUID) -> SubCardModel? {
+    func selectCard(id: UUID) -> SubCardModelDTO? {
         let index = list.value.firstIndex { subCard in
             subCard.id == id
         }
@@ -27,7 +27,7 @@ extension SubCardsViewModel {
     }
     
     func updateSubCard(id: UUID,
-                       card: SubCardModel ) {
+                       card: SubCardModelDTO ) {
         let index = list.value.firstIndex { subCard in
             subCard.id == id
         }
@@ -67,7 +67,7 @@ extension SubCardsViewModel {
         }
     }
     
-    func updateEditingCardLocation(location: LocationModel?) {
+    func updateEditingCardLocation(location: LocationDTO?) {
         editingSubCard.value.location = location
         
     }

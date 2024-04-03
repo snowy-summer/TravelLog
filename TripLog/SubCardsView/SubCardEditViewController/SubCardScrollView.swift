@@ -45,7 +45,7 @@ final class SubCardScrollView: UIScrollView {
 
 extension SubCardScrollView {
     
-    func updateContent(card: SubCardModel) {
+    func updateContent(card: SubCardModelDTO) {
         titleView.updateText(card.title)
         starRateView.starState = card.starsState
         starRateView.updateButton()
@@ -97,7 +97,9 @@ extension SubCardScrollView: TitleViewDelegate,
         CurrencyList.allCases.forEach { currency in
             let action = UIAlertAction(title: currency.rawValue,
                                        style: .default) { action in
-                // 통화 변경하고, 버튼 이름 변경, 기존의 통화 환전해서 변경
+//TODO: - 통화 변경하고, 버튼 이름 변경, 기존의 통화 환전해서 변경
+                
+
             }
             currencyList.addAction(action)
         }

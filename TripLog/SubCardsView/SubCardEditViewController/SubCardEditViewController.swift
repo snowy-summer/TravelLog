@@ -99,7 +99,7 @@ extension SubCardEditViewController: SubscrollViewDelegate {
 
 extension SubCardEditViewController: MapViewControllerDelegate {
    
-    func updateLocation(location: LocationModel) {
+    func updateLocation(location: LocationDTO) {
         viewModel.updateEditingCardLocation(location: location)
     }
     

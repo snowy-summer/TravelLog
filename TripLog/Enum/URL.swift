@@ -12,7 +12,7 @@ enum URLList {
     
     var scheme: String {
         switch self {
-        default:
+        case .currency:
             return "https"
 
         }
@@ -36,27 +36,9 @@ enum URLList {
         switch self {
         case .currency:
             var parameters = [String: String]()
-            let apiKey = Bundle.main.apiKey
-            parameters.updateValue(apiKey,
-                                   forKey: "authkey")
             parameters.updateValue("AP01",
                                    forKey: "data")
             return parameters
-        }
-    }
-    
-    var url: URL? {
-        switch self {
-        case .currency:
-            var components = URLComponents()
-            components.scheme = scheme
-            components.host = host
-            components.path = path
-            components.queryItems = parameter.map {
-                URLQueryItem(name: $0.key, value: $0.value)
-            }
-            
-            return components.url
         }
     }
 }

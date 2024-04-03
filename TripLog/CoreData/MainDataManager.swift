@@ -19,7 +19,7 @@ final class MainDataManager {
     
     //MARK: - MainCard
     
-    func readMainCards() throws -> [MainCardModel] {
+    func readMainCards() throws -> [MainCardDTO] {
         let context = coreDataManager.context
         let request: NSFetchRequest<MainCard> = MainCard.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
@@ -28,12 +28,12 @@ final class MainDataManager {
             throw CoreDataError.failToReadMainCard
         }
         
-        return mainCards.compactMap { mainCard -> MainCardModel? in
+        return mainCards.compactMap { mainCard -> MainCardDTO? in
             
             guard let id = mainCard.id,
                   let date = mainCard.date else { return nil }
             
-            var mainCardModel = MainCardModel(id: id,
+            var mainCardModel = MainCardDTO(id: id,
                                               title: mainCard.title,
                                               image: nil,
                                               isBookMarked: mainCard.isBookMarked,
@@ -56,8 +56,7 @@ final class MainDataManager {
         
     }
     
-    
-    func writeMainCard(mainModel: MainCardModel) throws{
+    func writeMainCard(mainModel: MainCardDTO) throws{
         let context = coreDataManager.context
         let entity = MainCard.entity()
         let mainCard = MainCard(entity: entity,
@@ -66,7 +65,6 @@ final class MainDataManager {
         let request: NSFetchRequest<MainCard> = MainCard.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@",
                                         mainModel.id as CVarArg )
-        
         
         let result = try context.fetch(request)
         
@@ -95,7 +93,6 @@ final class MainDataManager {
             mainCard.subCards = NSSet(array: subCards)
         }
         
-        
     }
     
     func deleteMainCard(id: UUID) throws{
@@ -112,13 +109,12 @@ final class MainDataManager {
         
         try saveContext()
         
-        
     }
     
     //MARK: - SubCard
     
     private func writeSubCard(where mainCard: MainCard,
-                              what mainCardModel: MainCardModel) -> [SubCard] {
+                              what mainCardModel: MainCardDTO) -> [SubCard] {
         let context = coreDataManager.context
         let subCards = mainCardModel.subCards.map { subCardmodel -> SubCard in
             
@@ -149,14 +145,14 @@ final class MainDataManager {
         return subCards
     }
     
-    private func readSubCard(who subCards: Set<SubCard>) -> [SubCardModel?] {
+    private func readSubCard(who subCards: Set<SubCard>) -> [SubCardModelDTO?] {
         
-        let subCards = subCards.map { subCard -> SubCardModel? in
+        let subCards = subCards.map { subCard -> SubCardModelDTO? in
             
             guard let id = subCard.id,
                   let starsState = subCard.starsState else { return nil }
             
-            var subCardModel = SubCardModel(id: id,
+            var subCardModel = SubCardModelDTO(id: id,
                                             title: subCard.title,
                                             starsState: starsState,
                                             price: Int(subCard.price),
@@ -183,7 +179,7 @@ final class MainDataManager {
     
     //MARK: - Location
     
-    private func writeLocation(subCardModel: SubCardModel) -> Location? {
+    private func writeLocation(subCardModel: SubCardModelDTO) -> Location? {
         let context = coreDataManager.context
         
         guard let locationModel = subCardModel.location else { return nil }
@@ -203,8 +199,8 @@ final class MainDataManager {
         return location
     }
     
-    private func readLocation(who subCard: SubCard) -> LocationModel {
-        var locationModel = LocationModel()
+    private func readLocation(who subCard: SubCard) -> LocationDTO {
+        var locationModel = LocationDTO()
         
         if let location = subCard.location,
            let id = location.id {
@@ -215,7 +211,7 @@ final class MainDataManager {
             let mapItem = MKMapItem(placemark: placemark)
             mapItem.name = location.title
             
-            locationModel = LocationModel(id: id,
+            locationModel = LocationDTO(id: id,
                                           mapItem: mapItem)
             
             return locationModel

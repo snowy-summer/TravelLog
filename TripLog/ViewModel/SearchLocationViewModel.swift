@@ -9,8 +9,8 @@ import MapKit
 
 final class SearchLocationViewModel {
     
-    var list: Observable<[LocationModel]> = Observable([])
-    var savedLocation: Observable<LocationModel> = Observable<LocationModel>(LocationModel())
+    var list: Observable<[LocationDTO]> = Observable([])
+    var savedLocation: Observable<LocationDTO> = Observable<LocationDTO>(LocationDTO())
     
     var savedLocationMapItem: MKMapItem? {
         savedLocation.value.mapItem
@@ -20,11 +20,11 @@ final class SearchLocationViewModel {
 
 extension SearchLocationViewModel {
     
-    func selectedLocation(id: UUID) -> LocationModel {
+    func selectedLocation(id: UUID) -> LocationDTO {
         let index = list.value.firstIndex { locationModel in
             locationModel.id == id
         }
-        guard let index = index else { return LocationModel() }
+        guard let index = index else { return LocationDTO() }
         
         return list.value[index]
         
@@ -39,7 +39,7 @@ extension SearchLocationViewModel {
 
 extension SearchLocationViewModel {
     
-    func updateSavedLocation(location: LocationModel) {
+    func updateSavedLocation(location: LocationDTO) {
         savedLocation.value = location
     }
     
@@ -56,7 +56,7 @@ extension SearchLocationViewModel {
 extension SearchLocationViewModel: MapSearchSeviceDelegate {
     
     func appendLocationModel(mapitem: MKMapItem?) {
-        let locationModel = LocationModel(mapItem: mapitem)
+        let locationModel = LocationDTO(mapItem: mapitem)
         list.value.append(locationModel)
     }
     

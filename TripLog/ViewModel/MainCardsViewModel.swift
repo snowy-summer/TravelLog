@@ -11,7 +11,7 @@ import UIKit
 
 final class MainCardsViewModel {
     
-    var list: Observable<[MainCardModel]> = Observable([])
+    var list: Observable<[MainCardDTO]> = Observable([])
     
     let mainDataManager = MainDataManager()
 
@@ -20,10 +20,10 @@ final class MainCardsViewModel {
 extension MainCardsViewModel: MainViewModelProtocol {
   
     func appendMainCard(title: String, image: UIImage?) {
-        list.value.append(MainCardModel(title: title,image: image, subCards: []))
+        list.value.append(MainCardDTO(title: title,image: image, subCards: []))
     }
     
-    func changeSubCards(id: UUID, cards: [SubCardModel]) {
+    func changeSubCards(id: UUID, cards: [SubCardModelDTO]) {
         let index = list.value.firstIndex { mainCard in
             mainCard.id == id
         }

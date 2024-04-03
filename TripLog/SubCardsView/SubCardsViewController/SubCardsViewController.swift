@@ -27,7 +27,7 @@ final class SubCardsViewController: UIViewController {
     
     init(mainCardId: UUID,
          delegate: SubCardsViewControllerDelegate? = nil,
-         subcards: [SubCardModel]) {
+         subcards: [SubCardModelDTO]) {
         
         self.mainCardId = mainCardId
         self.delegate = delegate
@@ -87,7 +87,7 @@ extension SubCardsViewController {
     }
     
     @objc private func tapAddButton() {
-        viewModel.editingSubCard.value = SubCardModel()
+        viewModel.editingSubCard.value = SubCardModelDTO()
         navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
                                                  animated: true)
     }

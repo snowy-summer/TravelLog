@@ -22,7 +22,7 @@ final class MapViewController: UIViewController {
     
  
     
-    init(delegate: MapViewControllerDelegate? = nil, location: LocationModel?) {
+    init(delegate: MapViewControllerDelegate? = nil, location: LocationDTO?) {
         self.delegate = delegate
         self.searchView = SearchLocationView(locationViewModel: locationViewModel)
         super.init(nibName: nil, bundle: nil)
