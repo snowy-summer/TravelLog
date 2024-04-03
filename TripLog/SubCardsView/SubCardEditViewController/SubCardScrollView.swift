@@ -234,7 +234,6 @@ extension SubCardScrollView {
         priceView.translatesAutoresizingMaskIntoConstraints = false
         
         priceView.delegate = self
-//        priceView.backgroundColor = UIColor(resource: .viewBackground)
         priceView.layer.cornerRadius = 8
         
         let viewConstraints = [
