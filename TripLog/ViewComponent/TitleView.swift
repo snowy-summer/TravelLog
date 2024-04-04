@@ -41,7 +41,6 @@ final class TitleView: UIView {
 extension TitleView {
     
     func updateText(_ text: String?) {
-        titleTextField.placeholder = nil
         titleTextField.text = text
     }
     

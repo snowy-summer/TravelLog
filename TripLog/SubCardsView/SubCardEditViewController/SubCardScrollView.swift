@@ -20,6 +20,7 @@ final class SubCardScrollView: UIScrollView {
     private(set) var priceView = PriceView()
     private(set) var locationView = LocationView()
     private(set) var categoryView = CategoryView()
+    private let scriptTextViewTitleLabel = UILabel()
     private(set) var scriptTextView = UITextView()
     
     init(viewModel: SubCardsViewModel, selctedCardId: UUID?) {
@@ -34,6 +35,7 @@ final class SubCardScrollView: UIScrollView {
         configurePriceView()
         configureLocationView()
         configureCategoryView()
+        configureScriptTitleLabel()
         configureScriptView()
     }
     
@@ -101,7 +103,7 @@ extension SubCardScrollView: TitleViewDelegate,
                   let currentCurrency = UserDefaults.standard.object(forKey: "currentCurrency") as? String,
                   var rate = Double(currencyRate.split(separator: ",").joined()),
                   currentCurrency != currencyName else { return }
-
+            
             var title = "\(currencyName) = \(currencyRate) 원"
             
             if currencyName == "KRW" {
@@ -266,7 +268,7 @@ extension SubCardScrollView {
         
         let viewConstraints = [
             priceView.topAnchor.constraint(equalTo: starRateView.bottomAnchor,
-                                           constant: 8),
+                                           constant: 16),
             priceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
             priceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -283,14 +285,12 @@ extension SubCardScrollView {
         
         locationView.translatesAutoresizingMaskIntoConstraints = false
         
-        locationView.layer.cornerRadius = 8
-        locationView.backgroundColor = .viewBackground
         locationView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                  action: #selector(pushMapViewController)))
         
         let viewConstraints = [
             locationView.topAnchor.constraint(equalTo: priceView.bottomAnchor,
-                                              constant: 8),
+                                              constant: 16),
             locationView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                   constant: 16),
             locationView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -312,7 +312,7 @@ extension SubCardScrollView {
         
         let categoryViewConstraints = [
             categoryView.topAnchor.constraint(equalTo: locationView.bottomAnchor,
-                                              constant: 8),
+                                              constant: 16),
             categoryView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                   constant: 16),
             categoryView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -321,6 +321,28 @@ extension SubCardScrollView {
         ]
         
         NSLayoutConstraint.activate(categoryViewConstraints)
+    }
+    
+    private func configureScriptTitleLabel() {
+        
+        
+        contentView.addSubview(scriptTextViewTitleLabel)
+        
+        scriptTextViewTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        scriptTextViewTitleLabel.text = "내용"
+        scriptTextViewTitleLabel.font = .preferredFont(forTextStyle: .callout)
+        
+        let labelConstraints = [
+            scriptTextViewTitleLabel.topAnchor.constraint(equalTo: categoryView.bottomAnchor,
+                                                          constant: 8),
+            scriptTextViewTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                              constant: 16),
+            scriptTextViewTitleLabel.widthAnchor.constraint(equalTo: categoryView.widthAnchor,
+                                                            multiplier: 0.1)
+        ]
+        
+        NSLayoutConstraint.activate(labelConstraints)
     }
     
     private func configureScriptView() {
@@ -335,7 +357,7 @@ extension SubCardScrollView {
         scriptTextView.backgroundColor = .viewBackground
         
         let viewConstraints = [
-            scriptTextView.topAnchor.constraint(equalTo: categoryView.bottomAnchor,
+            scriptTextView.topAnchor.constraint(equalTo: scriptTextViewTitleLabel.bottomAnchor,
                                                 constant: 8),
             scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                     constant: 16),

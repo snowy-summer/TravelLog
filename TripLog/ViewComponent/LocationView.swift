@@ -11,7 +11,7 @@ import MapKit
 final class LocationView: UIView {
     
     private lazy var locationLabel = UILabel()
-    private lazy var locationText = UILabel()
+    private lazy var locationText = UITextField()
     private lazy var locationImage = UIImageView()
     private(set) var locationModel: LocationDTO?
     
@@ -21,6 +21,11 @@ final class LocationView: UIView {
         configureLocationLabel()
         configureLocationImage()
         configureLocationText()
+        
+        DispatchQueue.main.async {
+            self.configureUnderLine(size: 2,
+                               color: UIColor.lightGray.cgColor)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -31,20 +36,27 @@ final class LocationView: UIView {
 
 extension LocationView {
     
+    func updateLocationView(with location: LocationDTO?) {
+        locationModel = location
+
+        guard let mapitem = locationModel?.mapItem,
+              let name = mapitem.name else { return }
+        
+        locationText.text = name
+    }
+    
     private func configureLocationLabel() {
         self.addSubview(locationLabel)
         
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         
         locationLabel.text = "위치"
+        locationLabel.font = .preferredFont(forTextStyle: .callout)
         
         let labelConstraints = [
             locationLabel.topAnchor.constraint(equalTo: self.topAnchor,
                                             constant: 4),
-            locationLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                               constant: -4),
-            locationLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                constant: 8),
+            locationLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             locationLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
                                               multiplier: 0.1)
         ]
@@ -58,12 +70,11 @@ extension LocationView {
         locationImage.image = UIImage(systemName: "location")
         
         let imageConstraints = [
-            locationImage.topAnchor.constraint(equalTo: self.topAnchor,
+            locationImage.topAnchor.constraint(equalTo: locationLabel.bottomAnchor,
                                             constant: 4),
             locationImage.bottomAnchor.constraint(equalTo: self.bottomAnchor,
                                                constant: -4),
-            locationImage.trailingAnchor.constraint(equalTo: self.trailingAnchor,
-                                                constant: -4),
+            locationImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             locationImage.widthAnchor.constraint(equalTo: locationImage.heightAnchor,
                                               multiplier: 1.0)
         ]
@@ -77,14 +88,16 @@ extension LocationView {
         locationText.translatesAutoresizingMaskIntoConstraints = false
         
         locationText.textAlignment = .left
+        locationText.placeholder = "위치를 선택하세요"
+        locationText.font = .preferredFont(forTextStyle: .title3)
+        locationText.isUserInteractionEnabled = false
         
         let textFieldConstraints = [
-            locationText.topAnchor.constraint(equalTo: self.topAnchor,
+            locationText.topAnchor.constraint(equalTo: locationLabel.bottomAnchor,
                                                 constant: 4),
             locationText.bottomAnchor.constraint(equalTo: self.bottomAnchor,
                                                    constant: -4),
-            locationText.leadingAnchor.constraint(equalTo: locationLabel.trailingAnchor,
-                                                    constant: 8),
+            locationText.leadingAnchor.constraint(equalTo: locationLabel.leadingAnchor),
             locationText.trailingAnchor.constraint(equalTo: locationImage.leadingAnchor,
                                                      constant: -8)
         ]
@@ -92,13 +105,16 @@ extension LocationView {
         NSLayoutConstraint.activate(textFieldConstraints)
     }
     
-    func updateLocationView(with location: LocationDTO?) {
-        locationModel = location
-
-        guard let mapitem = locationModel?.mapItem,
-              let name = mapitem.name else { return }
+    private func configureUnderLine(size: CGFloat, color: CGColor?) {
+        let underLine = CALayer()
+        self.layer.addSublayer(underLine)
+        underLine.backgroundColor = color
         
-        locationText.text = name
+        underLine.frame = CGRect(origin: CGPoint(x: locationText.frame.origin.x,
+                                                 y: self.frame.height),
+                                 size: CGSize(width: locationText.frame.width,
+                                              height: size))
+        
     }
     
 }

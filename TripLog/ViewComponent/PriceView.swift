@@ -101,8 +101,7 @@ extension PriceView {
         let labelConstraints = [
             priceLabel.topAnchor.constraint(equalTo: self.topAnchor,
                                             constant: 4),
-            priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                constant: 8),
+            priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             priceLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
                                               multiplier: 0.1)
         ]
@@ -137,8 +136,7 @@ extension PriceView {
                                                constant: -4),
             swapCurrencyButton.heightAnchor.constraint(equalTo: self.widthAnchor,
                                                        multiplier: 0.1),
-            swapCurrencyButton.trailingAnchor.constraint(equalTo: self.trailingAnchor,
-                                                constant: -4),
+            swapCurrencyButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             swapCurrencyButton.widthAnchor.constraint(equalTo: self.widthAnchor,
                                                       multiplier: 0.3)
         ]
@@ -153,6 +151,7 @@ extension PriceView {
         configuration.imagePlacement = .trailing
         configuration.imagePadding = 4
         configuration.cornerStyle = .medium
+        configuration.baseBackgroundColor = .clear
         
         return configuration
     }
@@ -175,8 +174,7 @@ extension PriceView {
                                                 constant: 4),
             priceTextField.bottomAnchor.constraint(equalTo: self.bottomAnchor,
                                                    constant: -4),
-            priceTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                    constant: 8),
+            priceTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             priceTextField.trailingAnchor.constraint(equalTo: swapCurrencyButton.leadingAnchor,
                                                      constant: -8)
         ]

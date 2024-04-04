@@ -15,6 +15,7 @@ protocol CardCategoryViewDelegate: AnyObject {
 
 final class CategoryView: UIView {
     
+    private let categoryTitleLabel = UILabel()
     private let stackView = UIStackView()
     
     private var buttons = [UIButton]()
@@ -23,7 +24,7 @@ final class CategoryView: UIView {
         
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        configureCategoryLabel()
         configureStackView()
     }
     
@@ -41,6 +42,24 @@ final class CategoryView: UIView {
         }
     }
     
+    private func configureCategoryLabel() {
+        self.addSubview(categoryTitleLabel)
+        
+        categoryTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        categoryTitleLabel.text = "테마"
+        
+        let titleConstraints = [
+            categoryTitleLabel.topAnchor.constraint(equalTo: self.topAnchor,
+                                                    constant: 4),
+            categoryTitleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            categoryTitleLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
+                                                      multiplier: 0.1)
+        ]
+        
+        NSLayoutConstraint.activate(titleConstraints)
+    }
+    
     private func configureStackView() {
         self.addSubview(stackView)
         
@@ -48,11 +67,13 @@ final class CategoryView: UIView {
         
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
-        stackView.spacing = 4
+        stackView.spacing = 8
         
         let stackConstraints = [
-            stackView.topAnchor.constraint(equalTo: self.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: categoryTitleLabel.bottomAnchor,
+                                           constant: 8),
+            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
+                                              constant: -4),
             stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ]
@@ -61,7 +82,11 @@ final class CategoryView: UIView {
         
         CardCategory.allCases.forEach { category in
             let button = UIButton()
-            
+
+            let attribute = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]
+            let attributedTitle = NSAttributedString(string: category.rawValue,
+                                                     attributes: attribute)
+            button.setAttributedTitle(attributedTitle, for: .normal)
             configureButton(button: button,
                             category: category)
             buttons.append(button)
@@ -78,10 +103,6 @@ final class CategoryView: UIView {
         let buttonConfiguration = buttonConfiguration()
 
         button.configuration = buttonConfiguration
-    
-        button.configuration?.baseBackgroundColor = .viewBackground
-        button.setTitle(category.rawValue,
-                        for: .normal)
         button.setTitleColor(.black,
                              for: .normal)
         button.setImage(category.image,
@@ -111,7 +132,7 @@ final class CategoryView: UIView {
         
         var configuration = UIButton.Configuration.bordered()
         configuration.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 12)
-        configuration.imagePlacement = .leading
+        configuration.imagePlacement = .top
         configuration.imagePadding = 4
         configuration.cornerStyle = .capsule
         
