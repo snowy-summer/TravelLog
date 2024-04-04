@@ -9,7 +9,7 @@ import UIKit
 
 protocol SubscrollViewDelegate: AnyObject {
     
-    func presentViewController(where viewController: UIViewController)
+    func presentViewController(who viewController: UIViewController)
     func pushMapViewController()
     
 }

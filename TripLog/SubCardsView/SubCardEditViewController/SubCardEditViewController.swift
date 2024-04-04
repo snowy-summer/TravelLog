@@ -89,7 +89,7 @@ extension SubCardEditViewController: SubscrollViewDelegate {
     }
     
     
-    func presentViewController(where viewController: UIViewController) {
+    func presentViewController(who viewController: UIViewController) {
         self.present(viewController, animated: true)
     }
     

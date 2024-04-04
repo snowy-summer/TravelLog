@@ -130,7 +130,7 @@ final class MainDataManager {
             subCard.mainCard = mainCard
             
             if let price = subCardmodel.price {
-                subCard.price = Int64(price)
+                subCard.price = price
             }
             
             if let images = subCardmodel.images {
@@ -155,7 +155,7 @@ final class MainDataManager {
             var subCardModel = SubCardModelDTO(id: id,
                                             title: subCard.title,
                                             starsState: starsState,
-                                            price: Int(subCard.price),
+                                            price: Double(subCard.price),
                                             images: [],
                                             script: subCard.script,
                                             location: nil)

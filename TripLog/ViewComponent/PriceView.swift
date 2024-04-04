@@ -22,8 +22,10 @@ final class PriceView: UIView {
     
     weak var delegate: PriceViewDelegate?
     
-    var price: Int {
-        guard let price = Int(priceTextField.text!) else { return 0 }
+    var price: Double {
+        guard let priceText = priceTextField.text?.split(separator: ",").joined(),
+              let price = Double(priceText) else { return 0}
+        
         return price
     }
     
@@ -31,7 +33,7 @@ final class PriceView: UIView {
         super.init(frame: frame)
         
         configurePriceLabel()
-        configurePriceImage()
+        configureCurrencyButton()
         configurePriceTextField()
         DispatchQueue.main.async {
             self.configureUnderLine(size: 2,
@@ -49,7 +51,7 @@ final class PriceView: UIView {
 
 extension PriceView {
     
-    func updatePrice(price: Int?) {
+    func updatePrice(price: Double?) {
         guard let price = price else { return }
         
         let numberFormmater = NumberFormatter()
@@ -59,12 +61,27 @@ extension PriceView {
         priceTextField.text = formattedNumber
     }
     
+    func updatePriceView(rate: Double,
+                         price: Double?,
+                         buttonTitle: String) {
+        
+        guard var price = price else { return }
+        price /= rate
+        let numberFormmater = NumberFormatter()
+        numberFormmater.numberStyle = .decimal
+        let formattedNumber = numberFormmater.string(from: NSNumber(value: price))
+        
+        priceTextField.text = formattedNumber
+        swapCurrencyButton.setTitle(buttonTitle,
+                                    for: .normal)
+    }
+    
     @objc func didTextFieldChange() {
         let text = priceTextField.text?.split(separator: ",").joined()
         delegate?.updateViewModelValue(price: text)
     }
     
-    @objc func swapCurrency() {
+    @objc func presentCurrencyRateList() {
         delegate?.presentCurrencyList()
     }
 }
@@ -93,20 +110,24 @@ extension PriceView {
         NSLayoutConstraint.activate(labelConstraints)
     }
     
-    private func configurePriceImage() {
+    private func configureCurrencyButton() {
         self.addSubview(swapCurrencyButton)
         
         swapCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
         swapCurrencyButton.configuration = buttonConfiguration()
-        
-        swapCurrencyButton.setTitle("KRW(원)",
+        var currentCurrency = UserDefaults.standard.object(forKey: "currentCurrency") as? String
+        if currentCurrency == nil {
+            UserDefaults.standard.set("KRW", forKey: "currentCurrency")
+            currentCurrency = UserDefaults.standard.object(forKey: "currentCurrency") as? String
+        }
+        swapCurrencyButton.setTitle(currentCurrency,
                                     for: .normal)
         swapCurrencyButton.setTitleColor(.black,
                                          for: .normal)
         swapCurrencyButton.setImage(UIImage(systemName: "chevron.down"),
                                     for: .normal)
         swapCurrencyButton.addTarget(self,
-                                     action: #selector(swapCurrency),
+                                     action: #selector(presentCurrencyRateList),
                                      for: .touchUpInside)
         
         let imageConstraints = [
@@ -119,7 +140,7 @@ extension PriceView {
             swapCurrencyButton.trailingAnchor.constraint(equalTo: self.trailingAnchor,
                                                 constant: -4),
             swapCurrencyButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                      multiplier: 0.35)
+                                                      multiplier: 0.3)
         ]
         
         NSLayoutConstraint.activate(imageConstraints)
@@ -144,7 +165,7 @@ extension PriceView {
         priceTextField.textAlignment = .left
         priceTextField.font = .preferredFont(forTextStyle: .title3)
         priceTextField.placeholder = "금액을 입력하세요"
-        priceTextField.keyboardType = .numberPad
+        priceTextField.keyboardType = .decimalPad
         priceTextField.addTarget(self,
                                  action: #selector(didTextFieldChange),
                                  for: .editingChanged)

@@ -8,7 +8,11 @@
 import Foundation
 
 enum CurrencyList: String, CaseIterable {
-    case KRW = "KRW(원)"
-    case USD = "USD(달러)"
+    case KRW = "KRW"
+    case USD = "USD"
+    case JPY = "JPY(100)"
+    case CNH = "CNH"
+    case EUR = "EUR"
+    case THB = "THB"
     
 }

@@ -61,9 +61,12 @@ extension SubCardsViewModel {
     }
     
     func updateEditingCardPrice(price: String?) {
+        if price?.suffix(1) == "." {
+            if price?.suffix(2) != ".." { return }
+        }
         
         if let price = price {
-            editingSubCard.value.price = (Int(price) != nil) ? Int(price)! : nil
+            editingSubCard.value.price = (Double(price) != nil) ? Double(price)! : nil
         }
     }
     

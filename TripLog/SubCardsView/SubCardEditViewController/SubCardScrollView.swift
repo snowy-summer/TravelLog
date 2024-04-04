@@ -8,7 +8,7 @@
 import UIKit
 
 final class SubCardScrollView: UIScrollView {
-
+    
     private let viewModel: SubCardsViewModel
     private let selctedCardId: UUID?
     weak var subCardScrollViewDelegate: SubscrollViewDelegate?
@@ -55,7 +55,7 @@ extension SubCardScrollView {
         scriptTextView.text = card.script
         
         if let cardImages = card.images,
-            !cardImages.isEmpty {
+           !cardImages.isEmpty {
             imageView.images = cardImages
             imageView.updateNumberOfPages(num: cardImages.count)
             imageView.updateImage(image: cardImages[0])
@@ -95,17 +95,43 @@ extension SubCardScrollView: TitleViewDelegate,
                                              preferredStyle: .actionSheet)
         
         CurrencyList.allCases.forEach { currency in
-            let action = UIAlertAction(title: currency.rawValue,
-                                       style: .default) { action in
-//TODO: - 통화 변경하고, 버튼 이름 변경, 기존의 통화 환전해서 변경
-                
+            let currencyName = currency.rawValue
+            
+            guard let currencyRate = UserDefaults.standard.object(forKey: currencyName) as? String,
+                  let currentCurrency = UserDefaults.standard.object(forKey: "currentCurrency") as? String,
+                  var rate = Double(currencyRate.split(separator: ",").joined()),
+                  currentCurrency != currencyName else { return }
 
+            var title = "\(currencyName) = \(currencyRate) 원"
+            
+            if currencyName == "KRW" {
+                guard let rateString = UserDefaults.standard.object(forKey: currentCurrency) as? String,
+                      let rateDouble = Double(rateString.split(separator: ",").joined()) else { return }
+                
+                rate = 1 / rateDouble
+                title = "KRW"
             }
-            currencyList.addAction(action)
+            
+            let list = UIAlertAction(title: title,
+                                     style: .default) { action in
+                
+                UserDefaults.standard.set(currencyName,
+                                          forKey: "currentCurrency")
+                self.priceView.updatePriceView(rate: rate,
+                                               price: self.priceView.price,
+                                               buttonTitle: currencyName)
+                
+            }
+            
+            currencyList.addAction(list)
+            
         }
         
+        let cancelAction = UIAlertAction(title: "취소",
+                                         style: .cancel)
+        currencyList.addAction(cancelAction)
         
-        subCardScrollViewDelegate?.presentViewController(where: currencyList)
+        subCardScrollViewDelegate?.presentViewController(who: currencyList)
     }
     
     //MARK: - SelectedImageViewDelegate
@@ -116,7 +142,7 @@ extension SubCardScrollView: TitleViewDelegate,
     
     
     func presentPicker(where viewController: UIViewController) {
-        subCardScrollViewDelegate?.presentViewController(where: viewController)
+        subCardScrollViewDelegate?.presentViewController(who: viewController)
     }
     
     //MARK: - StarRateViewDelegate

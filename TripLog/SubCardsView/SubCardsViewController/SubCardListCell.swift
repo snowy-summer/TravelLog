@@ -47,7 +47,7 @@ extension SubCardListCell {
     
     func updateCotent(images: [UIImage]?,
                       title: String?,
-                      price: Int?,
+                      price: Double?,
                       starState: [Bool]) {
         let numberFormmater = NumberFormatter()
         numberFormmater.numberStyle = .decimal

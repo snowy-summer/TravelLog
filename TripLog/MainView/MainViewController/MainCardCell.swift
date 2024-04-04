@@ -52,7 +52,7 @@ extension MainCardCell {
         }
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY / MM / dd"
+        formatter.dateFormat = "yyyy / MM / dd"
         dateLabel.text = formatter.string(from: date)
     }
     
