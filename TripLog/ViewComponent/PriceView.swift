@@ -67,8 +67,10 @@ extension PriceView {
         
         guard var price = price else { return }
         price /= rate
+        
         let numberFormmater = NumberFormatter()
         numberFormmater.numberStyle = .decimal
+        
         let formattedNumber = numberFormmater.string(from: NSNumber(value: price))
         
         priceTextField.text = formattedNumber

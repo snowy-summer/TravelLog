@@ -25,10 +25,6 @@ final class MainViewController: UIViewController {
         bind()
     }
     
-    //    deinit {
-    //        mainViewModel.mainDataManager.saveContext()
-    //    }
-    
 }
 
 extension MainViewController {
@@ -68,10 +64,10 @@ extension MainViewController {
         do {
             mainViewModel.list.value = try mainViewModel.mainDataManager.readMainCards()
             
-        } catch let error as CoreDataError {
-            failAlert(message: error.description)
-            
         } catch {
+            if let error = error as? CoreDataError {
+                failAlert(message: error.description)
+            }
             print(error.localizedDescription)
             
         }

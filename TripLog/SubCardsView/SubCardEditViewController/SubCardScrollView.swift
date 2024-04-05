@@ -95,30 +95,45 @@ extension SubCardScrollView: TitleViewDelegate,
         let currencyList = UIAlertController(title: "통화 목록",
                                              message: nil,
                                              preferredStyle: .actionSheet)
+        let userDefaults = UserDefaults.standard
         
         CurrencyList.allCases.forEach { currency in
             let currencyName = currency.rawValue
             
-            guard let currencyRate = UserDefaults.standard.object(forKey: currencyName) as? String,
-                  let currentCurrency = UserDefaults.standard.object(forKey: "currentCurrency") as? String,
+            guard let currencyRate = userDefaults.object(forKey: currencyName) as? String,
+                  let currentCurrency = userDefaults.object(forKey: "currentCurrency") as? String,
                   var rate = Double(currencyRate.split(separator: ",").joined()),
                   currentCurrency != currencyName else { return }
             
-            var title = "\(currencyName) = \(currencyRate) 원"
+            var title = "\(currencyName):  \(currencyRate) 원"
             
             if currencyName == "KRW" {
-                guard let rateString = UserDefaults.standard.object(forKey: currentCurrency) as? String,
+                guard let rateString = userDefaults.object(forKey: currentCurrency) as? String,
                       let rateDouble = Double(rateString.split(separator: ",").joined()) else { return }
                 
                 rate = 1 / rateDouble
                 title = "KRW"
             }
-            
+           
             let list = UIAlertAction(title: title,
                                      style: .default) { action in
                 
-                UserDefaults.standard.set(currencyName,
-                                          forKey: "currentCurrency")
+                if currencyName != "KRW" && currentCurrency != "KRW" {
+                    guard let currentRateString = userDefaults.object(forKey: currentCurrency) as? String,
+                          let targetRateString = userDefaults.object(forKey: currencyName) as? String,
+                          let currentRate = Double(currentRateString.split(separator: ",").joined()),
+                          let targetRate = Double(targetRateString.split(separator: ",").joined()) else { return }
+                    
+                    
+                    let rateToKRW = 1 / currentRate
+                    let rateFromKRWToTarget = targetRate
+                    
+                    
+                    rate = rateToKRW * rateFromKRWToTarget
+                }
+                
+                userDefaults.set(currencyName,
+                                 forKey: "currentCurrency")
                 self.priceView.updatePriceView(rate: rate,
                                                price: self.priceView.price,
                                                buttonTitle: currencyName)

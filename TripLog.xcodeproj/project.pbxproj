@@ -340,6 +340,8 @@
 				6BCC92142B8F0D7700931D0C /* Observable.swift */,
 				6B2F94E42BB2975B0027CC35 /* Debouncer.swift */,
 				6B3EE4C82BBD71010003C6B6 /* JSONConverter.swift */,
+				6BE11AC92BB699BD00E30964 /* CoreDataManager.swift */,
+				6B18D3F22BBA4A7300CBE2C6 /* MainDataManager.swift */,
 				6B3EE4C42BBD64EE0003C6B6 /* NetworkManager.swift */,
 			);
 			path = Utils;
@@ -350,8 +352,6 @@
 			children = (
 				6BE11ACB2BB6DE4400E30964 /* DataClass */,
 				6BE11A992BB6840500E30964 /* MainData.xcdatamodeld */,
-				6BE11AC92BB699BD00E30964 /* CoreDataManager.swift */,
-				6B18D3F22BBA4A7300CBE2C6 /* MainDataManager.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";

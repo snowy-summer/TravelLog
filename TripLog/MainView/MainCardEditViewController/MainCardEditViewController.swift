@@ -190,8 +190,8 @@ extension MainCardEditViewController {
                                                constant: 16),
             imageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
                                                 constant: -16),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor,
-                                              multiplier: 0.3)
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: imageView.widthAnchor,
+                                              multiplier: 0.75)
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)
