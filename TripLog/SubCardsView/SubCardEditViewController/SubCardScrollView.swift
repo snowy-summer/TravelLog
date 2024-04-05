@@ -96,42 +96,15 @@ extension SubCardScrollView: TitleViewDelegate,
                                              message: nil,
                                              preferredStyle: .actionSheet)
         let userDefaults = UserDefaults.standard
+        let currencyConveter = CurrencyConverter()
         
         CurrencyList.allCases.forEach { currency in
             let currencyName = currency.rawValue
-            
-            guard let currencyRate = userDefaults.object(forKey: currencyName) as? String,
-                  let currentCurrency = userDefaults.object(forKey: "currentCurrency") as? String,
-                  var rate = Double(currencyRate.split(separator: ",").joined()),
-                  currentCurrency != currencyName else { return }
-            
-            var title = "\(currencyName):  \(currencyRate) 원"
-            
-            if currencyName == "KRW" {
-                guard let rateString = userDefaults.object(forKey: currentCurrency) as? String,
-                      let rateDouble = Double(rateString.split(separator: ",").joined()) else { return }
-                
-                rate = 1 / rateDouble
-                title = "KRW"
-            }
-           
-            let list = UIAlertAction(title: title,
+
+            let list = UIAlertAction(title: currencyName,
                                      style: .default) { action in
                 
-                if currencyName != "KRW" && currentCurrency != "KRW" {
-                    guard let currentRateString = userDefaults.object(forKey: currentCurrency) as? String,
-                          let targetRateString = userDefaults.object(forKey: currencyName) as? String,
-                          let currentRate = Double(currentRateString.split(separator: ",").joined()),
-                          let targetRate = Double(targetRateString.split(separator: ",").joined()) else { return }
-                    
-                    
-                    let rateToKRW = 1 / currentRate
-                    let rateFromKRWToTarget = targetRate
-                    
-                    
-                    rate = rateToKRW * rateFromKRWToTarget
-                }
-                
+                guard let rate = currencyConveter.calculateCurrencyRate(currency: currency) else { return }
                 userDefaults.set(currencyName,
                                  forKey: "currentCurrency")
                 self.priceView.updatePriceView(rate: rate,
