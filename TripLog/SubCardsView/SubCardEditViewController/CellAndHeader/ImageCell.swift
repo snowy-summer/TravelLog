@@ -33,7 +33,7 @@ final class ImageCell: UICollectionViewCell {
         
         if image.size == .zero{
             addButton.isHidden = false
-            backgroundColor = .lightGray
+            backgroundColor = .viewBackground
         } else {
             addButton.isHidden = true
             backgroundColor = .clear
