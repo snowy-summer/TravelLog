@@ -127,12 +127,10 @@ extension PriceCell {
                                      for: .touchUpInside)
         
         let imageConstraints = [
-            swapCurrencyButton.topAnchor.constraint(equalTo: contentView.bottomAnchor,
+            swapCurrencyButton.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                     constant: 4),
             swapCurrencyButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                        constant: -4),
-            swapCurrencyButton.heightAnchor.constraint(equalTo: self.widthAnchor,
-                                                       multiplier: 0.1),
             swapCurrencyButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             swapCurrencyButton.widthAnchor.constraint(equalTo: self.widthAnchor,
                                                       multiplier: 0.3)

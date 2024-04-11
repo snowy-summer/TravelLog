@@ -105,6 +105,7 @@ extension SubCardListCell {
         contentView.addSubview(thumbnailImageView)
         
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.contentMode = .scaleAspectFill
         
         let thumbnailImageViewConstraints = [
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor,
@@ -120,7 +121,7 @@ extension SubCardListCell {
         NSLayoutConstraint.activate(thumbnailImageViewConstraints)
         
         thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImageView.clipsToBounds = true
+        thumbnailImageView.layer.masksToBounds = true
     }
     private func configureScoreStackView() {
         contentView.addSubview(scoreImagesStackView)

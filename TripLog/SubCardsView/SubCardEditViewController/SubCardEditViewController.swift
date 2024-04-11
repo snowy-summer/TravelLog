@@ -127,6 +127,10 @@ extension SubCardEditViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func backAction() {
+        viewModel.clearToProperty()
+        navigationController?.popViewController(animated: true)
+    }
     
     @objc func pushMapViewController() {
         viewModel.updateEditingSubCard()
@@ -243,6 +247,15 @@ extension SubCardEditViewController {
                                          target: self,
                                          action: #selector(doneAction))
         navigationItem.rightBarButtonItem = doneButton
+        
+        
+        let backButton = UIBarButtonItem(title: "뒤로가기",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backAction))
+        
+        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.leftBarButtonItem = backButton
     }
     
     private func configureCollectionView() {

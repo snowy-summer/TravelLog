@@ -25,6 +25,23 @@ final class MainViewController: UIViewController {
         bind()
     }
     
+    deinit {
+        do {
+            for mainCard in mainViewModel.list.value {
+                try mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
+            }
+            
+            try mainViewModel.mainDataManager.saveContext()
+            
+        } catch let error as CoreDataError {
+            failAlert(message: error.description)
+            
+        } catch {
+            print(error.localizedDescription)
+            
+        }
+    }
+    
 }
 
 extension MainViewController {
@@ -33,21 +50,6 @@ extension MainViewController {
         mainViewModel.list.observe { [weak self] mainCards in
             guard let self = self else { return }
             mainCollectionView.reloadData()
-            
-            do {
-                for mainCard in mainCards {
-                    try mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
-                }
-                
-                try mainViewModel.mainDataManager.saveContext()
-                
-            } catch let error as CoreDataError {
-                failAlert(message: error.description)
-                
-            } catch {
-                print(error.localizedDescription)
-                
-            }
             
         }
     }

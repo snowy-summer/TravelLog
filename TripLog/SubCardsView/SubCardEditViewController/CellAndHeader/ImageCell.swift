@@ -51,6 +51,7 @@ final class ImageCell: UICollectionViewCell {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
+        imageView.contentMode = .scaleAspectFill
         
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                               action: #selector(addImage)))
