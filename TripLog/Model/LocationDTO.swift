@@ -1,5 +1,5 @@
 //
-//  MapModel.swift
+//  LocationDTO.swift
 //  TripLog
 //
 //  Created by 최승범 on 2024/03/18.
@@ -7,16 +7,15 @@
 
 import MapKit
 
-struct LocationModel: Identifiable {
+struct LocationDTO: Identifiable {
     var id = UUID()
-    var searchCompletion: MKLocalSearchCompletion?
     var mapItem: MKMapItem?
         
 }
 
-extension LocationModel: Hashable {
+extension LocationDTO: Hashable {
     
-    static func == (lhs: LocationModel, rhs: LocationModel) -> Bool {
+    static func == (lhs: LocationDTO, rhs: LocationDTO) -> Bool {
         lhs.id.hashValue == rhs.id.hashValue
     }
     

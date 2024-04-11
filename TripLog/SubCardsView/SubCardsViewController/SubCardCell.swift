@@ -12,21 +12,18 @@ final class SubCardCell: UICollectionViewCell {
     static let identifier = "SubCardCell"
     
     private lazy var titleView = TitleView()
-    private lazy var sumbnailImageView = UIImageView()
+    private lazy var thumbnailImageView = UIImageView()
     private lazy var starRateView = StarRateView()
-    private lazy var scriptTextView = UITextView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .defaultCell
-        self.layer.borderWidth = 1
-        self.layer.cornerRadius = 20
+        contentView.layer.cornerRadius = 20
+        contentView.backgroundColor = .defaultCell
         
         configureTitleView()
-        configureSumbnailImageView()
+        configureThumbnailImageView()
         configureStarsRateView()
-        configureScript()
     }
     
     required init?(coder: NSCoder) {
@@ -34,7 +31,8 @@ final class SubCardCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        self.backgroundColor = .defaultCell
+        contentView.layer.cornerRadius = 20
+        contentView.backgroundColor = .defaultCell
     }
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -53,19 +51,17 @@ extension SubCardCell {
     
     func updateContent(title: String?,
                        images: [UIImage]?,
-                       starState: [Bool],
-                       script: String?) {
+                       starState: [Bool]){
         
         titleView.updateText(title)
-        scriptTextView.text = script
         starRateView.starState = starState
         starRateView.updateButton()
         
         if let images = images, 
             !images.isEmpty {
-            sumbnailImageView.image = images[0]
+            thumbnailImageView.image = images[0]
         } else {
-            sumbnailImageView.backgroundColor = UIColor(resource: .viewBackground)
+            thumbnailImageView.backgroundColor = UIColor(resource: .viewBackground)
         }
     }
 }
@@ -99,23 +95,23 @@ extension SubCardCell {
         
     }
     
-    private func configureSumbnailImageView() {
-        contentView.addSubview(sumbnailImageView)
+    private func configureThumbnailImageView() {
+        contentView.addSubview(thumbnailImageView)
         
-        sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        sumbnailImageView.layer.cornerRadius = 8
-        sumbnailImageView.clipsToBounds = true
+        thumbnailImageView.layer.cornerRadius = 8
+        thumbnailImageView.clipsToBounds = true
         
         let imageViewConstraints = [
-            sumbnailImageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
+            thumbnailImageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
                                                    constant: 8),
-            sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                        constant: 16),
-            sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                    constant: -16),
-            sumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor,
-                                                      multiplier: 0.4)
+            thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
+                                                       multiplier: 0.75),
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)
@@ -131,7 +127,7 @@ extension SubCardCell {
         starRateView.isUserInteractionEnabled = false
         
        let viewConstraint = [
-        starRateView.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
+        starRateView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
                                           constant: 8),
         starRateView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                               constant: 16),
@@ -143,28 +139,5 @@ extension SubCardCell {
         NSLayoutConstraint.activate(viewConstraint)
     }
     
-    private func configureScript() {
-        contentView.addSubview(scriptTextView)
-        
-        scriptTextView.translatesAutoresizingMaskIntoConstraints = false
-        
-        scriptTextView.layer.cornerRadius = 8
-        
-        scriptTextView.font = .preferredFont(forTextStyle: .title1)
-        scriptTextView.backgroundColor = .viewBackground
-        scriptTextView.isUserInteractionEnabled = false
-        
-        let imageViewConstraints = [
-            scriptTextView.topAnchor.constraint(equalTo: starRateView.bottomAnchor,
-                                                constant: 8),
-            scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                    constant: 16),
-            scriptTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                     constant: -16),
-            scriptTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                   constant: -16)
-        ]
-        
-        NSLayoutConstraint.activate(imageViewConstraints)
-    }
+    
 }

@@ -19,21 +19,20 @@ final class SubCardsViewController: UIViewController {
     private lazy var deleteButton = UIButton()
     private lazy var cancelButton = UIButton()
     
-    private var isSelectingMode: Bool {
+    private var selectingModeState: Bool {
         didSet {
-                isSelectingModeOn(state: isSelectingMode)
+                isSelectingModeOn(state: selectingModeState)
         }
     }
     
-    
     init(mainCardId: UUID,
          delegate: SubCardsViewControllerDelegate? = nil,
-         subcards: [SubCardModel]) {
+         subcards: [SubCardModelDTO]) {
         
         self.mainCardId = mainCardId
         self.delegate = delegate
         self.viewModel.list.value = subcards
-        self.isSelectingMode = false
+        self.selectingModeState = false
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -52,9 +51,15 @@ final class SubCardsViewController: UIViewController {
         configureAddButton()
         configureDeleteButton()
         configureCancelButton()
-        isSelectingModeOn(state: isSelectingMode)
+        isSelectingModeOn(state: selectingModeState)
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadData()
+    }
+ 
 }
 
 extension SubCardsViewController {
@@ -76,13 +81,13 @@ extension SubCardsViewController {
             for indexPath in selectedItems {
                 collectionView.deselectItem(at: indexPath, animated: false)
                 let cell = collectionView.cellForItem(at: indexPath)
-                cell?.backgroundColor = .defaultCell
+                cell?.contentView.backgroundColor = .defaultCell
             }
         }
     }
     
     @objc private func tapAddButton() {
-        viewModel.editingSubCard.value = SubCardModel()
+        viewModel.editingSubCard.value = SubCardModelDTO()
         navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel),
                                                  animated: true)
     }
@@ -98,20 +103,20 @@ extension SubCardsViewController {
                 guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
             uuidsToDelete.insert(id)
                 
+                selectingModeState = false
             }
         }
         
         viewModel.deleteSubCard(uuidsToDelete: uuidsToDelete)
-        isSelectingMode = false
     }
     
     @objc private func tapCancelButton() {
-        isSelectingMode = false
+        selectingModeState = false
     }
     
 }
 
-//MARK: - UICollectionDelegate
+//MARK: - UICollectionViewDelegate
 
 extension SubCardsViewController: UICollectionViewDelegate {
     
@@ -121,22 +126,22 @@ extension SubCardsViewController: UICollectionViewDelegate {
         
         guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
         
-        if isSelectingMode, let cell = collectionView.cellForItem(at: indexPath)  {
-            cell.backgroundColor = .black
+        if selectingModeState, let cell = collectionView.cellForItem(at: indexPath)  {
+            cell.contentView.backgroundColor = .black
             
         } else {
-            
             navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
-                                                                               selectedCardId: id),
+                                                     selectedCardId: id),
                                                      animated: true)
         }
+        
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
-        
-        if isSelectingMode, let cell = collectionView.cellForItem(at: indexPath)  {
-            cell.backgroundColor = .defaultCell
+    func collectionView(_ collectionView: UICollectionView,
+                        didDeselectItemAt indexPath: IndexPath) {
+      
+        if selectingModeState, let cell = collectionView.cellForItem(at: indexPath)  {
+            cell.contentView.backgroundColor = .defaultCell
             
         }
     }
@@ -157,15 +162,19 @@ extension SubCardsViewController {
     
     private func configureBarButtonMenu(button: UIBarButtonItem) {
         
-        let changeLayout = UIAction(title: "갤러리로 보기",
-                                    image: UIImage(systemName: "square.grid.2x2.fill")) { action in
+        let changeLayout = UIAction(title: "보기 변경",
+                                    image: UIImage(systemName: "square.grid.2x2.fill")) { [weak self] action in
+            
+            guard let self = self else { return }
+            collectionView.changeLayout()
+            
         }
         
         let select = UIAction(title: "선택",
                               image: UIImage(systemName: "checkmark.circle")  ) { [weak self] action in
             
             guard let self = self else { return }
-            isSelectingMode = true
+            selectingModeState = true
             collectionView.allowsMultipleSelection = true
         }
         

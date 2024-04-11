@@ -72,12 +72,8 @@ extension SearchLocationView: UICollectionViewDelegate {
         guard let dataSource = collectionView.dataSource as?
                 UICollectionViewDiffableDataSource<Section, UUID>,
               let id = dataSource.itemIdentifier(for: indexPath) else { return }
-    
-        guard let coordinate = locationViewModel.mapCoordinate(id: id) else { return }
         
         delegate?.changeModalLowConstraint()
-        delegate?.updateMapView(where: coordinate,
-                                title: locationViewModel.savedLocationMapItem?.name)
         locationViewModel.updateSavedLocation(location: locationViewModel.selectedLocation(id: id))
         informationView.updateContent()
         

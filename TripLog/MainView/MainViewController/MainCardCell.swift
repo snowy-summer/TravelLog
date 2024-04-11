@@ -15,7 +15,7 @@ final class MainCardCell: UICollectionViewCell {
     weak var delegate: CellDelegate?
     
     private lazy var titleLabel = UILabel()
-    private lazy var sumbnailImageView = UIImageView()
+    private lazy var thumbnailImageView = UIImageView()
     private lazy var dateLabel = UILabel()
     private lazy var menuButton = UIButton()
     
@@ -23,7 +23,7 @@ final class MainCardCell: UICollectionViewCell {
         super.init(frame: frame)
         
         configureContentView()
-        configureSumbnailImageView()
+        configureThumbnailImageView()
         configureTitlLabel()
         configureDateLabel()
         configureMenuButton()
@@ -38,21 +38,21 @@ final class MainCardCell: UICollectionViewCell {
 
 extension MainCardCell {
     
-    func updateContent(title: String,
+    func updateContent(title: String?,
                        image: UIImage?,
                        date: Date,
                        id: UUID) {
         titleLabel.text = title
         self.id = id
         
-        if let sumbnailImage = image {
-            sumbnailImageView.image = sumbnailImage
+        if let thumbnailImage = image {
+            thumbnailImageView.image = thumbnailImage
         } else {
-            sumbnailImageView.image = UIImage(resource: .skyBlue)
+            thumbnailImageView.image = UIImage(resource: .skyBlue)
         }
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY / MM / dd"
+        formatter.dateFormat = "yyyy / MM / dd"
         dateLabel.text = formatter.string(from: date)
     }
     
@@ -65,9 +65,9 @@ extension MainCardCell {
     private func configureContentView() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.layer.borderWidth = 1
         contentView.layer.cornerRadius = 20
         contentView.clipsToBounds = true
+        contentView.backgroundColor = UIColor(resource: .baseOfCell)
         
         let contentViewConstraints = [
             contentView.topAnchor.constraint(equalTo: self.topAnchor,
@@ -84,19 +84,19 @@ extension MainCardCell {
         
     }
     
-    private func configureSumbnailImageView() {
-        contentView.addSubview(sumbnailImageView)
+    private func configureThumbnailImageView() {
+        contentView.addSubview(thumbnailImageView)
         
-        sumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        sumbnailImageView.contentMode = .scaleToFill
+        thumbnailImageView.contentMode = .scaleToFill
         
         let imageViewConstraints = [
-            sumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            sumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            sumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            sumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor,
-                                                      multiplier: 0.5)
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            thumbnailImageView.heightAnchor.constraint(lessThanOrEqualTo: thumbnailImageView.widthAnchor,
+                                                       multiplier: 0.75)
             
         ]
         
@@ -109,11 +109,10 @@ extension MainCardCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.font = .preferredFont(forTextStyle: .title1)
-        titleLabel.textColor = .basic
         
         let titleLabelConstraints = [
-            titleLabel.bottomAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor,
-                                               constant: -16),
+            titleLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
+                                               constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                 constant: 16),
             titleLabel.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor,
@@ -129,7 +128,7 @@ extension MainCardCell {
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let dateLabelConstraints = [
-            dateLabel.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
+            dateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: 16),
             dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
@@ -145,14 +144,15 @@ extension MainCardCell {
         menuButton.translatesAutoresizingMaskIntoConstraints = false
         
         menuButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        menuButton.tintColor = .black
         
         let moreButtonConstraints = [
-            menuButton.topAnchor.constraint(equalTo: sumbnailImageView.bottomAnchor),
             menuButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                  constant: -16),
-            menuButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                               constant: -8)
+            menuButton.centerYAnchor.constraint(equalTo: dateLabel.centerYAnchor),
+            menuButton.widthAnchor.constraint(equalTo: contentView.widthAnchor,
+                                              multiplier: 0.1),
+            menuButton.heightAnchor.constraint(equalTo: menuButton.widthAnchor,
+                                               multiplier: 1.0)
         ]
         
         NSLayoutConstraint.activate(moreButtonConstraints)
@@ -173,11 +173,6 @@ extension MainCardCell {
             
         }
         
-        let share = UIAction(title: "공유",
-                             image: UIImage(systemName: "square.and.arrow.up")) { _ in
-            
-        }
-        
         let delete = UIAction(title: "삭제",
                               image: UIImage(systemName: "trash"),
                               attributes: .destructive) { [weak self] _ in
@@ -188,9 +183,9 @@ extension MainCardCell {
         let items = [
             edit,
             bookMark,
-            share,
             delete
         ]
+        
         menuButton.menu = UIMenu(children: items)
         menuButton.showsMenuAsPrimaryAction = true
         

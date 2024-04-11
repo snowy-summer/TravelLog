@@ -9,6 +9,6 @@ import Foundation
 
 protocol MapViewControllerDelegate: AnyObject {
     
-    func updateLocation(location: LocationModel)
+    func updateLocation(location: LocationDTO)
     
 }

@@ -52,13 +52,14 @@ extension MainCardEditViewController {
         let index = mainViewModel.list.value.firstIndex { mainCard in
             mainCard.id == selectedCardID
         }
+        
         guard let index = index else { return }
         let card = mainViewModel.list.value[index]
         
         titleView.updateText(card.title)
         
-        if let sumbnailImage = card.image {
-            imageView.image = sumbnailImage
+        if let thumbnailImage = card.image {
+            imageView.image = thumbnailImage
             addButton.isHidden = true
         } else {
             addButton.isHidden = false
@@ -86,14 +87,14 @@ extension MainCardEditViewController{
             guard let self = self else { return }
             guard let title = self.titleView.text else { return }
             
-            let sumbnailImage = imageView.image
+            let thumbnailImage = imageView.image
             
             guard let cardId = self.selectedCardId else {
                 
-                if sumbnailImage == nil {
+                if thumbnailImage == nil {
                     self.mainViewModel.appendMainCard(title: title, image: nil)
                 } else {
-                    self.mainViewModel.appendMainCard(title: title, image: sumbnailImage)
+                    self.mainViewModel.appendMainCard(title: title, image: thumbnailImage)
                 }
                 
                 return
@@ -116,7 +117,8 @@ extension MainCardEditViewController{
 
 extension MainCardEditViewController: PHPickerViewControllerDelegate {
     
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    func picker(_ picker: PHPickerViewController,
+                didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         let itemProvider = results.first?.itemProvider
         
@@ -147,8 +149,8 @@ extension MainCardEditViewController {
         
         titleView.translatesAutoresizingMaskIntoConstraints = false
         
-        titleView.layer.borderWidth = 1
         titleView.layer.cornerRadius = 20
+        titleView.backgroundColor = UIColor(resource: .baseOfCell)
         
         let safeArea = view.safeAreaLayoutGuide
         let titleViewConstraints = [
@@ -172,7 +174,7 @@ extension MainCardEditViewController {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        imageView.layer.borderWidth = 1
+        imageView.backgroundColor = UIColor(resource: .baseOfCell)
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         
@@ -188,8 +190,8 @@ extension MainCardEditViewController {
                                                constant: 16),
             imageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
                                                 constant: -16),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor,
-                                              multiplier: 0.3)
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: imageView.widthAnchor,
+                                              multiplier: 0.75)
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)

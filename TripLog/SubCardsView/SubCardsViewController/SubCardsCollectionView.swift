@@ -12,12 +12,18 @@ final class SubCardsCollectionView: UICollectionView {
     private let viewModel: SubCardsViewModel
     private var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
     
-    init(viewModel: SubCardsViewModel, size: CGSize) {
+    override var collectionViewLayout: UICollectionViewLayout {
+        didSet {
+            configureDataSource()
+            saveSnapshot(id: viewModel.list.value.map{ $0.id })
+        }
+    }
+    
+    init(viewModel: SubCardsViewModel,
+         size: CGSize) {
         self.viewModel = viewModel
         super.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        self.collectionViewLayout = CircularLayout(itemSize: CGSize(width: size.width * 0.8,
-                                                                    height: size.height * 0.6),
-                                                   radius: size.height)
+        self.collectionViewLayout = createBasicCompositionalLayout()
         configureDataSource()
     }
     
@@ -32,6 +38,27 @@ final class SubCardsCollectionView: UICollectionView {
         snapshot.appendSections([.main])
         snapshot.appendItems(id,toSection: .main)
         diffableDataSource?.apply(snapshot, animatingDifferences: false)
+    }
+    
+    func createBasicCompositionalLayout() -> UICollectionViewCompositionalLayout{
+        var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .grouped)
+        
+        layoutConfiguration.backgroundColor = .basic
+        layoutConfiguration.showsSeparators = false
+        
+        let layout = UICollectionViewCompositionalLayout.list(using: layoutConfiguration)
+        
+        return layout
+    }
+    
+    func changeLayout() {
+        if collectionViewLayout is CircularLayout {
+            collectionViewLayout = createBasicCompositionalLayout()
+        } else {
+            collectionViewLayout = CircularLayout(itemSize: CGSize(width: self.bounds.width * 0.8,
+                                                                  height: self.bounds.height * 0.6),
+                                                 radius: self.bounds.height)
+        }
     }
     
 }
@@ -58,29 +85,52 @@ extension SubCardsCollectionView {
     }
     
     private func configureDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<SubCardCell, UUID>  { [weak self] cell, indexPath, itemIdentifier in
+        let cardCellRegistration = UICollectionView.CellRegistration<SubCardCell, UUID> { [weak self] cell, indexPath, itemIdentifier in
             guard let self = self else { return }
             let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
-            let subCardDictionary: [UUID: SubCardModel] = Dictionary(uniqueKeysWithValues: tupleArray)
-           
+            let subCardDictionary: [UUID: SubCardModelDTO] = Dictionary(uniqueKeysWithValues: tupleArray)
+            
             guard let subCard = subCardDictionary[itemIdentifier] else { return }
             
             cell.updateContent(title: subCard.title,
                                images: subCard.images,
-                               starState: subCard.starsState,
-                               script: subCard.script)
-           
+                               starState: subCard.starsState)
+            
+        }
+        
+        let listCellRegistration = UICollectionView.CellRegistration<SubCardListCell, UUID> { 
+            [weak self] cell, indexPath, itemIdentifier in
+            
+            guard let self = self else { return }
+            
+            let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
+            let subCardDictionary: [UUID: SubCardModelDTO] = Dictionary(uniqueKeysWithValues: tupleArray)
+            
+            guard let subCard = subCardDictionary[itemIdentifier] else { return }
+            
+            cell.updateCotent(images: subCard.images,
+                              title: subCard.title,
+                              price: subCard.price,
+                              starState: subCard.starsState)
+            
         }
         
         diffableDataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: self,
                                                                                cellProvider: { 
-            collectionView, indexPath, uuid in
+            [weak self] collectionView, indexPath, uuid in
             
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
-                                                                for: indexPath,
-                                                                item: uuid)
+            if self?.collectionViewLayout is CircularLayout {
+                
+                return collectionView.dequeueConfiguredReusableCell(using: cardCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: uuid)
+            } else {
+                
+                return collectionView.dequeueConfiguredReusableCell(using: listCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: uuid)
+            }
         })
-    
     }
     
 }

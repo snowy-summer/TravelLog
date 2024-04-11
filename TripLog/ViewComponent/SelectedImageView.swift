@@ -10,16 +10,16 @@ import PhotosUI
 
 protocol SelectedImageViewDelegate: AnyObject {
     
-    func presentPicker(where: UIViewController)
+    func presentPicker(who: UIViewController)
     func updateViewModelValue(images: [UIImage]?)
     
 }
 
 final class SelectedImageView: UIView {
     
-    private lazy var imageView = UIImageView()
+    private var imageView = UIImageView()
+    private var addButton = UIButton()
     private lazy var pageControl = UIPageControl()
-    private lazy var addButton = UIButton()
     private var mainQueue = DispatchQueue.main
     var images = [UIImage]()
     
@@ -85,7 +85,7 @@ extension SelectedImageView {
         
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = true
-        pageControl.currentPageIndicatorTintColor = .cyan
+        pageControl.currentPageIndicatorTintColor = .darkGray
         
         
         let pageControlConstraints = [
@@ -164,7 +164,7 @@ extension SelectedImageView {
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         
-        delegate?.presentPicker(where: picker)
+        delegate?.presentPicker(who: picker)
     }
     
 }
@@ -173,7 +173,8 @@ extension SelectedImageView {
 
 extension SelectedImageView: PHPickerViewControllerDelegate {
     
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    func picker(_ picker: PHPickerViewController,
+                didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         
         if results.count != 0 {
@@ -198,8 +199,6 @@ extension SelectedImageView: PHPickerViewControllerDelegate {
                 }
             }
         }
-        
-      
         
         if imageView.image == nil  && results.isEmpty {
             addButton.isHidden = false

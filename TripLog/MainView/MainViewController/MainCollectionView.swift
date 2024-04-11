@@ -12,7 +12,8 @@ final class MainCollectionView: UICollectionView {
     private var mainViewModel: MainViewModelProtocol
     weak var collectionViewDelegate: MainCollectionViewDelegate?
     
-    init(frame: CGRect, mainViewModel: MainViewModelProtocol) {
+    init(frame: CGRect,
+         mainViewModel: MainViewModelProtocol) {
         self.mainViewModel = mainViewModel
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         self.register(MainCardCell.self,
@@ -65,11 +66,7 @@ extension MainCollectionView {
                 return  UISwipeActionsConfiguration(actions: [bookmarkAction])
             }
             
-            if isBookmarked  {
-                bookmarkAction.image = UIImage(resource: .customBookmarkOn)
-            } else {
-                bookmarkAction.image = UIImage(resource: .customBookmarkOff)
-            }
+            bookmarkAction.image = isBookmarked ? .customBookmarkOn : .customBookmarkOff
             
             bookmarkAction.backgroundColor = .basic
             
@@ -117,3 +114,4 @@ extension MainCollectionView {
     }
     
 }
+
