@@ -154,11 +154,11 @@ final class MainDataManager {
             
             var subCardModel = SubCardModelDTO(id: id,
                                             title: subCard.title,
+                                            images: [],
                                             starsState: starsState,
                                             price: Double(subCard.price),
-                                            images: [],
-                                            script: subCard.script,
-                                            location: nil)
+                                            location: nil,
+                                            script: subCard.script)
             
             if let category = subCard.category {
                 subCardModel.category = CardCategory(rawValue: category)

@@ -130,9 +130,8 @@ extension SubCardsViewController: UICollectionViewDelegate {
             cell.contentView.backgroundColor = .black
             
         } else {
-            
             navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
-                                                                               selectedCardId: id),
+                                                     selectedCardId: id),
                                                      animated: true)
         }
         

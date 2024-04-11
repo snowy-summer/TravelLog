@@ -69,7 +69,7 @@ extension SubCardListCell {
         }
         
         for i in 0..<5 {
-            let imageView = scoreImagesStackView.arrangedSubviews[i] as! UIImageView
+            guard let imageView = scoreImagesStackView.arrangedSubviews[i] as? UIImageView else { return }
             imageView.image = starState[i] ? UIImage(systemName: "star.fill") :  UIImage(systemName: "star")
         }
         

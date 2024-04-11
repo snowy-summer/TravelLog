@@ -9,8 +9,35 @@ import UIKit
 final class SubCardsViewModel {
     
     var list: Observable<[SubCardModelDTO]> = Observable([])
+    
     var editingSubCard: Observable<SubCardModelDTO> = Observable(SubCardModelDTO())
     
+    var title: Observable<String?> = Observable(nil)
+    var starsState: Observable<[Bool]> = Observable([Bool](repeating: false, count: 5))
+    var price: Observable<Double?> = Observable(nil)
+    var location: Observable<LocationDTO?> = Observable(nil)
+    var category: Observable<CardCategory?> = Observable(nil)
+    var script: Observable<String?> = Observable(nil)
+    
+    func updateEditingSubCard() {
+        editingSubCard.value = SubCardModelDTO(title: title.value,
+                                               images: editingSubCard.value.images,
+                                               starsState: starsState.value,
+                                               price: price.value,
+                                               location: location.value,
+                                               category: category.value,
+                                               script: script.value)
+        
+    }
+    
+    func clearToProperty() {
+        title.value = nil
+        starsState.value = [Bool](repeating: false, count: 5)
+        price.value = nil
+        location.value = nil
+        category.value = nil
+        script.value = nil
+    }
 }
 
 extension SubCardsViewModel {
@@ -83,4 +110,17 @@ extension SubCardsViewModel {
         editingSubCard.value.script = text
     }
     
+}
+
+extension SubCardsViewModel {
+    
+    func updatePrice(value: String?) {
+        if value?.suffix(1) == "." {
+            if value?.suffix(2) != ".." { return }
+        }
+        
+        if let value = value {
+            price.value = (Double(value) != nil) ? Double(value)! : nil
+        }
+    }
 }

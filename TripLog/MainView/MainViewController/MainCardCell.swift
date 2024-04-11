@@ -148,8 +148,7 @@ extension MainCardCell {
         let moreButtonConstraints = [
             menuButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                  constant: -16),
-            menuButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                               constant: -16),
+            menuButton.centerYAnchor.constraint(equalTo: dateLabel.centerYAnchor),
             menuButton.widthAnchor.constraint(equalTo: contentView.widthAnchor,
                                               multiplier: 0.1),
             menuButton.heightAnchor.constraint(equalTo: menuButton.widthAnchor,

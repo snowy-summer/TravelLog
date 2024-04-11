@@ -11,7 +11,7 @@ final class SubCardEditViewController: UIViewController {
     
     private let viewModel: SubCardsViewModel
     private var selectedCardId: UUID?
-    private var diffableDataSource: UICollectionViewDiffableDataSource<testSection, ContentsOfCell>?
+    private var diffableDataSource: UICollectionViewDiffableDataSource<SubCardSection, ContentsOfCell>?
     private lazy var collectionView = UICollectionView(frame: .zero,
                                                        collectionViewLayout: createLayout())
     
@@ -40,7 +40,7 @@ final class SubCardEditViewController: UIViewController {
         
         bind()
         configureNavigationBar()
-        configureScrollView()
+        configureCollectionView()
     }
 }
 
@@ -64,7 +64,48 @@ extension SubCardEditViewController {
             guard let self = self else { return }
             saveSnapshot(card: subCard)
         }
+    }
     
+    private func saveSnapshot(card: SubCardModelDTO) {
+        var snapshot = NSDiffableDataSourceSnapshot<SubCardSection, ContentsOfCell>()
+        
+        snapshot.appendSections([SubCardSection.title,
+                                 SubCardSection.image,
+                                 SubCardSection.starRate,
+                                 SubCardSection.price,
+                                 SubCardSection.location,
+                                 SubCardSection.category,
+                                 SubCardSection.script])
+        
+        var titleItem: ContentsOfCell
+        var images: [ContentsOfCell]
+        var starsState: ContentsOfCell
+        var price: ContentsOfCell
+        var location: ContentsOfCell
+        var category: ContentsOfCell
+        var script: ContentsOfCell
+        
+        titleItem = card.title != nil ? .title(card.title) : .title("")
+        images = card.images != nil ? card.images!.map{ContentsOfCell.images($0)}: []
+        images.append(ContentsOfCell.images(UIImage()))
+        starsState = ContentsOfCell.starsState(card.starsState)
+        price = card.price != nil ? .price(card.price) : .price(0)
+        location = card.location != nil ? .location(card.location) : .location(LocationDTO())
+        category = card.category != nil ? .category(card.category) : .category(CardCategory.transportation)
+        script = card.script != nil ? .script(card.script) : .script("")
+        
+        snapshot.appendItems([titleItem],toSection: SubCardSection.title)
+        snapshot.appendItems(images,toSection: SubCardSection.image)
+        snapshot.appendItems([starsState], toSection: SubCardSection.starRate)
+        snapshot.appendItems([price], toSection: SubCardSection.price)
+        snapshot.appendItems([location], toSection: SubCardSection.location)
+        snapshot.appendItems([category], toSection: SubCardSection.category)
+        snapshot.appendItems([script], toSection: SubCardSection.script)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            diffableDataSource?.apply(snapshot, animatingDifferences: false)
+        }
     }
     
 }
@@ -75,7 +116,7 @@ extension SubCardEditViewController {
     
     @objc private func doneAction() {
         viewModel.updateEditingSubCard()
-        
+        viewModel.clearToProperty()
         if let cardId = selectedCardId {
             viewModel.updateSubCard(id: cardId,
                                     card: viewModel.editingSubCard.value)
@@ -102,17 +143,16 @@ extension SubCardEditViewController: MapViewControllerDelegate {
     func updateLocation(location: LocationDTO) {
         viewModel.location.value = location
         viewModel.updateEditingSubCard()
-        viewModel.updateEditingCardLocation(location: location)
     }
     
 }
 
 extension SubCardEditViewController: TitleViewDelegate,
-                              SelectedImageViewDelegate,
-                              StarRateViewDelegate,
-                              PriceViewDelegate,
-                              CardCategoryViewDelegate,
-                              ScriptCellDelegate {
+                                     SelectedImageViewDelegate,
+                                     StarRateViewDelegate,
+                                     PriceViewDelegate,
+                                     CardCategoryViewDelegate,
+                                     ScriptCellDelegate {
     
     //MARK: - TitleViewDelegate
     
@@ -165,6 +205,7 @@ extension SubCardEditViewController: TitleViewDelegate,
                 price /= rate
                 viewModel.price.value = price
                 viewModel.updateEditingSubCard()
+                
             }
             
             currencyList.addAction(list)
@@ -178,9 +219,6 @@ extension SubCardEditViewController: TitleViewDelegate,
         self.present(currencyList, animated: true)
     }
     
-    
-    
-   
     //MARK: - CardCategoryViewDelegate
     
     func updateViewModelValue(category: CardCategory) {
@@ -188,7 +226,7 @@ extension SubCardEditViewController: TitleViewDelegate,
     }
     
     //MARK: - ScriptCellDelegate
-
+    
     func updateViewModelValue(text: String?) {
         viewModel.script.value = text
     }
@@ -207,7 +245,7 @@ extension SubCardEditViewController {
         navigationItem.rightBarButtonItem = doneButton
     }
     
-    private func configureScrollView() {
+    private func configureCollectionView() {
         view.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -222,50 +260,9 @@ extension SubCardEditViewController {
         NSLayoutConstraint.activate(collectionViewConstraints)
     }
     
-    func saveSnapshot(card: SubCardModelDTO) {
-        var snapshot = NSDiffableDataSourceSnapshot<testSection, ContentsOfCell>()
-        snapshot.appendSections([testSection.title,
-                                 testSection.image,
-                                 testSection.starRate,
-                                 testSection.price,
-                                 testSection.location,
-                                 testSection.category,
-                                 testSection.script])
-        
-        var titleItem: ContentsOfCell
-        var images: [ContentsOfCell]
-        var starsState: ContentsOfCell
-        var price: ContentsOfCell
-        var location: ContentsOfCell
-        var category: ContentsOfCell
-        var script: ContentsOfCell
-        
-        titleItem = card.title != nil ? .title(card.title) : .title("")
-        images = card.images != nil ? card.images!.map{ContentsOfCell.images($0)}: []
-        images.append(ContentsOfCell.images(UIImage()))
-        starsState = ContentsOfCell.starsState(card.starsState)
-        price = card.price != nil ? .price(card.price) : .price(0)
-        location = card.location != nil ? .location(card.location) : .location(LocationDTO())
-        category = card.category != nil ? .category(card.category) : .category(CardCategory.transportation)
-        script = card.script != nil ? .script(card.script) : .script("")
-        
-        snapshot.appendItems([titleItem],toSection: testSection.title)
-        snapshot.appendItems(images,toSection: testSection.image)
-        snapshot.appendItems([starsState], toSection: testSection.starRate)
-        snapshot.appendItems([price], toSection: testSection.price)
-        snapshot.appendItems([location], toSection: testSection.location)
-        snapshot.appendItems([category], toSection: testSection.category)
-        snapshot.appendItems([script], toSection: testSection.script)
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            diffableDataSource?.apply(snapshot, animatingDifferences: false)
-        }
-    }
-    
     private func createLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            let sectionType = testSection(rawValue: sectionIndex)
+            let sectionType = SubCardSection(rawValue: sectionIndex)
             
             return sectionType?.layoutSection
         }
@@ -337,7 +334,7 @@ extension SubCardEditViewController {
         }
         
         
-        diffableDataSource = UICollectionViewDiffableDataSource<testSection, ContentsOfCell>(collectionView: collectionView) { collectionView, indexPath, item in
+        diffableDataSource = UICollectionViewDiffableDataSource<SubCardSection, ContentsOfCell>(collectionView: collectionView) { collectionView, indexPath, item in
             
             switch item {
             case .title(let text):
@@ -378,7 +375,7 @@ extension SubCardEditViewController {
         
         diffableDataSource?.supplementaryViewProvider = {collectionView, kind, indexPath in
             
-            let section = testSection(rawValue: indexPath.section)
+            let section = SubCardSection(rawValue: indexPath.section)
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: headerRegisteration,
                                                                                for: indexPath)
             switch section {

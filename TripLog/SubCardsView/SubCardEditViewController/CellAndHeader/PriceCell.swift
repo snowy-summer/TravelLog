@@ -7,13 +7,6 @@
 
 import UIKit
 
-//protocol PriceViewDelegate: AnyObject {
-//    
-//    func updateViewModelValue(price: String?)
-//    func presentCurrencyList()
-//    
-//}
-
 final class PriceCell: UICollectionViewCell {
     
     private let priceTextField = UITextField()

@@ -10,7 +10,7 @@ import PhotosUI
 
 protocol SelectedImageViewDelegate: AnyObject {
     
-    func presentPicker(where: UIViewController)
+    func presentPicker(who: UIViewController)
     func updateViewModelValue(images: [UIImage]?)
     
 }
@@ -164,7 +164,7 @@ extension SelectedImageView {
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         
-        delegate?.presentPicker(where: picker)
+        delegate?.presentPicker(who: picker)
     }
     
 }
@@ -199,8 +199,6 @@ extension SelectedImageView: PHPickerViewControllerDelegate {
                 }
             }
         }
-        
-      
         
         if imageView.image == nil  && results.isEmpty {
             addButton.isHidden = false

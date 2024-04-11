@@ -9,7 +9,7 @@ import UIKit
 
 protocol CardCategoryViewDelegate: AnyObject {
     
-    func updateViewModelCategory(category: CardCategory)
+    func updateViewModelValue(category: CardCategory)
     
 }
 
@@ -118,7 +118,7 @@ final class CategoryView: UIView {
         guard let text = sender.titleLabel?.text,
               let category = CardCategory(rawValue: text) else { return }
         
-        delegate?.updateViewModelCategory(category: category)
+        delegate?.updateViewModelValue(category: category)
         
         buttons.forEach { button in
             button.configuration?.baseBackgroundColor = .viewBackground

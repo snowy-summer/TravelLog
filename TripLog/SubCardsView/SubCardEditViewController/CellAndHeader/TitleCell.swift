@@ -30,15 +30,6 @@ extension TitleCell {
     
     func updateText(_ item: String?) {
         titleTextField.text = item
-//        switch item {
-//        case .title(let text):
-//            DispatchQueue.main.async { [weak self] in
-//                
-//                self?.titleTextField.text = text
-//            }
-//        default:
-//            break
-//        }
     }
     
     @objc func didTextFieldChange() {

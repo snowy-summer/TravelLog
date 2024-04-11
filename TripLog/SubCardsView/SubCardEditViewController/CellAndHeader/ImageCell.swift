@@ -40,16 +40,6 @@ final class ImageCell: UICollectionViewCell {
         }
         
         imageView.image = image
-       
-//        switch item {
-//        case .images(let image):
-//            mainQueue.async { [weak self] in
-//                
-//                self?.imageView.image = image
-//            }
-//        default:
-//            break
-//        }
     }
     
     func isButtonHidden(value: Bool) {

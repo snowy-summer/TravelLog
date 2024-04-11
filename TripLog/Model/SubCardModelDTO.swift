@@ -10,12 +10,12 @@ import UIKit
 struct SubCardModelDTO: Identifiable {
     var id: UUID = UUID()
     var title: String?
+    var images: [UIImage]?
     var starsState: [Bool] = [Bool](repeating: false, count: 5)
     var price: Double?
-    var images: [UIImage]?
-    var script: String?
-    var category: CardCategory?
     var location: LocationDTO?
+    var category: CardCategory?
+    var script: String?
 }
 
 extension SubCardModelDTO: Hashable {
