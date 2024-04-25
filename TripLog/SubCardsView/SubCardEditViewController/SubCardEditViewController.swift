@@ -55,6 +55,7 @@ extension SubCardEditViewController {
         viewModel.title.value = card.title
         viewModel.price.value = card.price
         viewModel.starsState.value = card.starsState
+        viewModel.script.value = card.script
         viewModel.location.value = card.location
         viewModel.category.value = card.category
     }
