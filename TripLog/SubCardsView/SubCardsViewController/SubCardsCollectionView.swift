@@ -111,6 +111,7 @@ extension SubCardsCollectionView {
             cell.updateCotent(images: subCard.images,
                               title: subCard.title,
                               price: subCard.price,
+                              currency: subCard.currency,
                               starState: subCard.starsState)
             
         }

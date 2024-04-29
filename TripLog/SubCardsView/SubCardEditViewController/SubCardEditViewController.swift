@@ -117,14 +117,14 @@ extension SubCardEditViewController {
     
     @objc private func doneAction() {
         viewModel.updateEditingSubCard()
-        viewModel.clearToProperty()
+        
         if let cardId = selectedCardId {
             viewModel.updateSubCard(id: cardId,
                                     card: viewModel.editingSubCard.value)
         } else {
             viewModel.list.value.append(viewModel.editingSubCard.value)
         }
-        
+        viewModel.clearToProperty()
         navigationController?.popViewController(animated: true)
     }
     
@@ -208,6 +208,7 @@ extension SubCardEditViewController: TitleViewDelegate,
                                  forKey: "currentCurrency")
                 
                 price /= rate
+                viewModel.currency.value = currency
                 viewModel.price.value = price
                 viewModel.updateEditingSubCard()
                 
@@ -284,7 +285,9 @@ extension SubCardEditViewController {
     
     private func configureDataSource() {
         
-        let titleCellRegistration = UICollectionView.CellRegistration<TitleCell, String?> { cell, indexPath, item in
+        let titleCellRegistration = UICollectionView.CellRegistration<TitleCell, String?> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.layer.borderWidth = 1
@@ -292,7 +295,9 @@ extension SubCardEditViewController {
             cell.updateText(item)
         }
         
-        let imageCellRegistration = UICollectionView.CellRegistration<ImageCell, UIImage> { cell, indexPath, item in
+        let imageCellRegistration = UICollectionView.CellRegistration<ImageCell, UIImage> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.layer.cornerRadius = 20
@@ -301,7 +306,9 @@ extension SubCardEditViewController {
             cell.updateImage(item)
         }
         
-        let starRateCellRegistration = UICollectionView.CellRegistration<StarRateCell, [Bool]> {  cell, indexPath, item in
+        let starRateCellRegistration = UICollectionView.CellRegistration<StarRateCell, [Bool]> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.isUserInteractionEnabled = true
@@ -309,7 +316,9 @@ extension SubCardEditViewController {
             cell.updateButton()
         }
         
-        let priceCellRegistration = UICollectionView.CellRegistration<PriceCell, Double?> {  cell, indexPath, item in
+        let priceCellRegistration = UICollectionView.CellRegistration<PriceCell, Double?> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.updatePrice(price: item)
@@ -326,14 +335,18 @@ extension SubCardEditViewController {
             cell.updateLocationView(with: item)
         }
         
-        let categoryCellRegistration = UICollectionView.CellRegistration<CategoryCell, CardCategory> { cell, indexPath, item in
+        let categoryCellRegistration = UICollectionView.CellRegistration<CategoryCell, CardCategory> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.isUserInteractionEnabled = true
             cell.updateButton(category: item)
         }
         
-        let scriptCellRegistration = UICollectionView.CellRegistration<ScriptCell, String?> {  cell, indexPath, item in
+        let scriptCellRegistration = UICollectionView.CellRegistration<ScriptCell, String?> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.isUserInteractionEnabled = true

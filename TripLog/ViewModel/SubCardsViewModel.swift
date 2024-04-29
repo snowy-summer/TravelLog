@@ -15,6 +15,7 @@ final class SubCardsViewModel {
     var title: Observable<String?> = Observable(nil)
     var starsState: Observable<[Bool]> = Observable([Bool](repeating: false, count: 5))
     var price: Observable<Double?> = Observable(nil)
+    var currency: Observable<CurrencyList> = Observable(CurrencyList.KRW)
     var location: Observable<LocationDTO?> = Observable(nil)
     var category: Observable<CardCategory?> = Observable(nil)
     var script: Observable<String?> = Observable(nil)
@@ -24,6 +25,7 @@ final class SubCardsViewModel {
                                                images: editingSubCard.value.images,
                                                starsState: starsState.value,
                                                price: price.value,
+                                               currency: currency.value,
                                                location: location.value,
                                                category: category.value,
                                                script: script.value)
@@ -95,6 +97,10 @@ extension SubCardsViewModel {
         if let price = price {
             editingSubCard.value.price = (Double(price) != nil) ? Double(price)! : nil
         }
+    }
+    
+    func updateEditingCardCurrency(currency: CurrencyList) {
+        editingSubCard.value.currency = currency
     }
     
     func updateEditingCardLocation(location: LocationDTO?) {

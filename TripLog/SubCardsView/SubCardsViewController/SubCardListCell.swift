@@ -48,6 +48,7 @@ extension SubCardListCell {
     func updateCotent(images: [UIImage]?,
                       title: String?,
                       price: Double?,
+                      currency: CurrencyList?,
                       starState: [Bool]) {
         let numberFormmater = NumberFormatter()
         numberFormmater.numberStyle = .decimal
@@ -55,8 +56,9 @@ extension SubCardListCell {
         titleLabel.text = title ?? ""
         
         if let price = price,
-           let formattedNumber = numberFormmater.string(from: NSNumber(value: price)) {
-            priceLabel.text = "₩ " + formattedNumber
+           let formattedNumber = numberFormmater.string(from: NSNumber(value: price)),
+           let currency = currency {
+            priceLabel.text = "\(currency.symbol)" + formattedNumber
         } else {
             priceLabel.text = ""
         }

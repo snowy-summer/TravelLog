@@ -13,6 +13,7 @@ struct SubCardModelDTO: Identifiable {
     var images: [UIImage]?
     var starsState: [Bool] = [Bool](repeating: false, count: 5)
     var price: Double?
+    var currency: CurrencyList?
     var location: LocationDTO?
     var category: CardCategory?
     var script: String?
