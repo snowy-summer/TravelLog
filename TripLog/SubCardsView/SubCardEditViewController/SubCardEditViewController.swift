@@ -54,6 +54,7 @@ extension SubCardEditViewController {
         viewModel.editingSubCard.value = card
         viewModel.title.value = card.title
         viewModel.price.value = card.price
+        viewModel.currency.value = card.currency
         viewModel.starsState.value = card.starsState
         viewModel.script.value = card.script
         viewModel.location.value = card.location
@@ -208,8 +209,14 @@ extension SubCardEditViewController: TitleViewDelegate,
                                  forKey: "currentCurrency")
                 
                 price /= rate
+                
+                if price == 0 {
+                    viewModel.price.value = 0.00000001
+                } else {
+                    viewModel.price.value = price
+                }
                 viewModel.currency.value = currency
-                viewModel.price.value = price
+
                 viewModel.updateEditingSubCard()
                 
             }

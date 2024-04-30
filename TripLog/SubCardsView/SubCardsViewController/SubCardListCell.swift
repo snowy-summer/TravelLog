@@ -177,7 +177,7 @@ extension SubCardListCell {
         
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        priceLabel.font = .preferredFont(forTextStyle: .caption1)
+        priceLabel.font = .preferredFont(forTextStyle: .body)
     
         let priceLabelConstraints = [
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,

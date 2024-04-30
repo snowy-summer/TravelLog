@@ -40,6 +40,7 @@ final class SubCardsCollectionView: UICollectionView {
         diffableDataSource?.apply(snapshot, animatingDifferences: false)
     }
     
+    //자기가 layout을 생산하고 자기가 layout을 배치하는게 이상하긴 함
     func createBasicCompositionalLayout() -> UICollectionViewCompositionalLayout{
         var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .grouped)
         

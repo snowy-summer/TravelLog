@@ -14,8 +14,8 @@ final class SubCardsViewModel {
     
     var title: Observable<String?> = Observable(nil)
     var starsState: Observable<[Bool]> = Observable([Bool](repeating: false, count: 5))
-    var price: Observable<Double?> = Observable(nil)
-    var currency: Observable<CurrencyList> = Observable(CurrencyList.KRW)
+    var price: Observable<Double?> = Observable(0.000000001)
+    var currency: Observable<CurrencyList?> = Observable(CurrencyList.KRW)
     var location: Observable<LocationDTO?> = Observable(nil)
     var category: Observable<CardCategory?> = Observable(nil)
     var script: Observable<String?> = Observable(nil)
