@@ -40,8 +40,18 @@ final class MainDataManager {
                                               date: date,
                                               subCards: [])
             
-            if let imageData = mainCard.image {
-                mainCardModel.image = UIImage(data: imageData)
+            if let imagePath = mainCard.imagePath {
+                let fileURL = URL(filePath: imagePath)
+                
+                do {
+                    let imageData = try Data(contentsOf: fileURL)
+                    
+                    mainCardModel.image = UIImage(data: imageData)
+                } catch {
+                    print(CoreDataError.failToConvertImage.description)
+                    print("\(error)")
+                }
+               
             }
             
             
@@ -73,7 +83,10 @@ final class MainDataManager {
             mainCardEntityToUpdate.title = mainModel.title
             mainCardEntityToUpdate.isBookMarked = mainModel.isBookMarked
             mainCardEntityToUpdate.date = mainModel.date
-            mainCardEntityToUpdate.image = mainModel.image?.pngData()
+            
+            ImageFileManager.shared.deleteFile(path: mainCard.imagePath)
+            
+            mainCardEntityToUpdate.imagePath = ImageFileManager.shared.saveImage(image: mainModel.image)
             
             let subCards = writeSubCard(where: mainCard,
                                         what: mainModel)
@@ -85,7 +98,7 @@ final class MainDataManager {
             mainCard.title = mainModel.title
             mainCard.isBookMarked = mainModel.isBookMarked
             mainCard.date = mainModel.date
-            mainCard.image = mainModel.image?.pngData()
+            mainCard.imagePath = ImageFileManager.shared.saveImage(image: mainModel.image)
             
             let subCards = writeSubCard(where: mainCard,
                                         what: mainModel)

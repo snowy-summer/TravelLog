@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B07B9242BE37ADB0051D2C8 /* DataBaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B07B9232BE37ADB0051D2C8 /* DataBaseError.swift */; };
 		6B07DD032BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B07DD022BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift */; };
 		6B18D3F32BBA4A7300CBE2C6 /* MainDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B18D3F22BBA4A7300CBE2C6 /* MainDataManager.swift */; };
 		6B18D4062BBA80A200CBE2C6 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B18D4042BBA80A200CBE2C6 /* Location+CoreDataClass.swift */; };
@@ -65,6 +66,7 @@
 		6BCC920C2B8F034600931D0C /* MainCardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC920B2B8F034600931D0C /* MainCardDTO.swift */; };
 		6BCC92102B8F05AA00931D0C /* MainCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC920F2B8F05AA00931D0C /* MainCardsViewModel.swift */; };
 		6BCC92152B8F0D7700931D0C /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC92142B8F0D7700931D0C /* Observable.swift */; };
+		6BDBE3962BE3653200066051 /* ImageFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDBE3952BE3653200066051 /* ImageFileManager.swift */; };
 		6BE11A942BB3D3F000E30964 /* SearchLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE11A932BB3D3F000E30964 /* SearchLocationView.swift */; };
 		6BE11A962BB3F90800E30964 /* ModalHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE11A952BB3F90800E30964 /* ModalHeight.swift */; };
 		6BE11A982BB54FC200E30964 /* SubCardListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE11A972BB54FC200E30964 /* SubCardListCell.swift */; };
@@ -85,6 +87,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6B07B9232BE37ADB0051D2C8 /* DataBaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseError.swift; sourceTree = "<group>"; };
 		6B07DD022BA6BC8F00EEB271 /* MKPointOfInterestCategory+Extenstion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPointOfInterestCategory+Extenstion.swift"; sourceTree = "<group>"; };
 		6B18D3F22BBA4A7300CBE2C6 /* MainDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDataManager.swift; sourceTree = "<group>"; };
 		6B18D4042BBA80A200CBE2C6 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -143,6 +146,7 @@
 		6BCC920B2B8F034600931D0C /* MainCardDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardDTO.swift; sourceTree = "<group>"; };
 		6BCC920F2B8F05AA00931D0C /* MainCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardsViewModel.swift; sourceTree = "<group>"; };
 		6BCC92142B8F0D7700931D0C /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		6BDBE3952BE3653200066051 /* ImageFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileManager.swift; sourceTree = "<group>"; };
 		6BE11A932BB3D3F000E30964 /* SearchLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationView.swift; sourceTree = "<group>"; };
 		6BE11A952BB3F90800E30964 /* ModalHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalHeight.swift; sourceTree = "<group>"; };
 		6BE11A972BB54FC200E30964 /* SubCardListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubCardListCell.swift; sourceTree = "<group>"; };
@@ -199,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				6BACF0052BBD5A5100215307 /* ErrorCase.swift */,
+				6B07B9232BE37ADB0051D2C8 /* DataBaseError.swift */,
 			);
 			path = Error;
 			sourceTree = "<group>";
@@ -359,6 +364,7 @@
 			isa = PBXGroup;
 			children = (
 				6B1E78832BA9796F00008CAF /* MapSearchSevice.swift */,
+				6BDBE3952BE3653200066051 /* ImageFileManager.swift */,
 				6BCC92142B8F0D7700931D0C /* Observable.swift */,
 				6B2F94E42BB2975B0027CC35 /* Debouncer.swift */,
 				6B3EE4C82BBD71010003C6B6 /* JSONConverter.swift */,
@@ -556,6 +562,7 @@
 				6B3EE4BF2BBD5B3D0003C6B6 /* URLList.swift in Sources */,
 				6BE11A982BB54FC200E30964 /* SubCardListCell.swift in Sources */,
 				6B1E787A2BA80ED400008CAF /* LocationDTO.swift in Sources */,
+				6B07B9242BE37ADB0051D2C8 /* DataBaseError.swift in Sources */,
 				6BCC2A982BC3D32B00933028 /* CategoryCell.swift in Sources */,
 				6B18D40B2BBACC1500CBE2C6 /* CategoryView.swift in Sources */,
 				6B8A45F22BAB216C00D14118 /* MapViewControllerDelegate.swift in Sources */,
@@ -587,6 +594,7 @@
 				6BCC2A922BC3BB0000933028 /* HeaderView.swift in Sources */,
 				6BACF0012BBD561300215307 /* CurrencyDTO.swift in Sources */,
 				6B1E78842BA9796F00008CAF /* MapSearchSevice.swift in Sources */,
+				6BDBE3962BE3653200066051 /* ImageFileManager.swift in Sources */,
 				6B9BD8FE2BA185010050F02A /* MainViewModelProtocol.swift in Sources */,
 				6BACF0062BBD5A5100215307 /* ErrorCase.swift in Sources */,
 				6BFAEB602BAAC9810088CBA3 /* CustomDetent.swift in Sources */,

@@ -11,7 +11,7 @@
     <entity name="MainCard" representedClassName="MainCard" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="image" optional="YES" attributeType="Binary"/>
+        <attribute name="imagePath" optional="YES" attributeType="String"/>
         <attribute name="isBookMarked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="subCards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SubCard" inverseName="mainCard" inverseEntity="SubCard"/>
