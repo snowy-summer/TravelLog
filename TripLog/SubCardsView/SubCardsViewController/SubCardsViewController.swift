@@ -15,15 +15,13 @@ final class SubCardsViewController: UIViewController {
     
     private lazy var collectionView = SubCardsCollectionView(viewModel: viewModel,
                                                              size: view.bounds.size)
-    private var diffableDataSource: UICollectionViewDiffableDataSource<Section, UUID>?
-    
-    private var addButton = UIButton()
-    private var deleteButton = UIButton()
-    private var cancelButton = UIButton()
+    private lazy var addButton = UIButton()
+    private lazy var deleteButton = UIButton()
+    private lazy var cancelButton = UIButton()
     
     private var selectingModeState: Bool {
         didSet {
-            isSelectingModeOn(state: selectingModeState)
+                isSelectingModeOn(state: selectingModeState)
         }
     }
     
@@ -47,9 +45,8 @@ final class SubCardsViewController: UIViewController {
         view.backgroundColor = .basic
         
         collectionView.delegate = self
+        collectionView.configureAutoLayout(superView: view)
         configureNavigationBar()
-        configureCollectionView()
-        configureDataSource()
         bind()
         configureAddButton()
         configureDeleteButton()
@@ -62,7 +59,7 @@ final class SubCardsViewController: UIViewController {
         super.viewWillAppear(animated)
         collectionView.reloadData()
     }
-    
+ 
 }
 
 extension SubCardsViewController {
@@ -70,41 +67,16 @@ extension SubCardsViewController {
     private func bind() {
         viewModel.list.observe { [weak self] subCards in
             guard let self = self else { return }
-            saveSnapshot(id: subCards.map { $0.id } )
-            delegate?.changeSubCards(mainCardId: mainCardId, card: subCards)
+            self.collectionView.saveSnapshot(id: subCards.map { $0.id } )
+            self.delegate?.changeSubCards(mainCardId: mainCardId, card: subCards)
         }
-    }
-    
-    private func changeCollectionViewLayout() {
-        if collectionView.collectionViewLayout is CircularLayout {
-            collectionView.collectionViewLayout = createBasicCompositionalLayout()
-        } else {
-            let bound = collectionView.bounds
-            print(bound)
-            
-            collectionView.collectionViewLayout = CircularLayout(itemSize: CGSize(width: bound.width * 0.8,
-                                                                                  height: bound.height * 0.6),
-                                                                 
-                                                                 radius: bound.height)
-        }
-    }
-    
-    private func createBasicCompositionalLayout() -> UICollectionViewCompositionalLayout{
-        var layoutConfiguration = UICollectionLayoutListConfiguration(appearance: .grouped)
-        
-        layoutConfiguration.backgroundColor = .basic
-        layoutConfiguration.showsSeparators = false
-        
-        let layout = UICollectionViewCompositionalLayout.list(using: layoutConfiguration)
-        
-        return layout
     }
     
     private func isSelectingModeOn(state: Bool) {
         addButton.isHidden = state
         deleteButton.isHidden = !state
         cancelButton.isHidden = !state
-        
+    
         if let selectedItems = collectionView.indexPathsForSelectedItems {
             for indexPath in selectedItems {
                 collectionView.deselectItem(at: indexPath, animated: false)
@@ -124,12 +96,12 @@ extension SubCardsViewController {
         var uuidsToDelete = Set<UUID>()
         guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
         
-        
+       
         if let selectedItems = collectionView.indexPathsForSelectedItems {
-            
+         
             for indexPath in selectedItems {
                 guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
-                uuidsToDelete.insert(id)
+            uuidsToDelete.insert(id)
                 
                 selectingModeState = false
             }
@@ -159,7 +131,7 @@ extension SubCardsViewController: UICollectionViewDelegate {
             
         } else {
             navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
-                                                                               selectedCardId: id),
+                                                     selectedCardId: id),
                                                      animated: true)
         }
         
@@ -167,74 +139,12 @@ extension SubCardsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         didDeselectItemAt indexPath: IndexPath) {
-        
+      
         if selectingModeState, let cell = collectionView.cellForItem(at: indexPath)  {
             cell.contentView.backgroundColor = .defaultCell
             
         }
     }
-}
-
-extension SubCardsViewController: SubCardsCollectionViewDelegate {
-    
-    func saveSnapshot(id: [UUID]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(id,toSection: .main)
-        diffableDataSource?.apply(snapshot, animatingDifferences: false)
-    }
-    
-    func configureDataSource() {
-        let cardCellRegistration = UICollectionView.CellRegistration<SubCardCell, UUID> { [weak self] cell, indexPath, itemIdentifier in
-            guard let self = self else { return }
-            let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
-            let subCardDictionary: [UUID: SubCardModelDTO] = Dictionary(uniqueKeysWithValues: tupleArray)
-            
-            guard let subCard = subCardDictionary[itemIdentifier] else { return }
-            
-            cell.updateContent(title: subCard.title,
-                               images: subCard.images,
-                               starState: subCard.starsState)
-            
-        }
-        
-        let listCellRegistration = UICollectionView.CellRegistration<SubCardListCell, UUID> {
-            [weak self] cell, indexPath, itemIdentifier in
-            
-            guard let self = self else { return }
-            
-            let tupleArray = self.viewModel.list.value.map {($0.id, $0)}
-            let subCardDictionary: [UUID: SubCardModelDTO] = Dictionary(uniqueKeysWithValues: tupleArray)
-            
-            guard let subCard = subCardDictionary[itemIdentifier] else { return }
-            
-            cell.updateCotent(images: subCard.images,
-                              title: subCard.title,
-                              price: subCard.price,
-                              currency: subCard.currency,
-                              starState: subCard.starsState)
-            
-        }
-        
-        diffableDataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: collectionView,
-                                                                               cellProvider: {
-            collectionView, indexPath, uuid in
-            
-            if collectionView.collectionViewLayout is CircularLayout {
-                
-                return collectionView.dequeueConfiguredReusableCell(using: cardCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: uuid)
-            } else {
-                
-                return collectionView.dequeueConfiguredReusableCell(using: listCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: uuid)
-            }
-        })
-    }
-    
-    
 }
 
 //MARK: - Configuration
@@ -250,30 +160,13 @@ extension SubCardsViewController {
         configureBarButtonMenu(button: menuButton)
     }
     
-    private func configureCollectionView() {
-        view.addSubview(collectionView)
-        
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.collectionViewLayout = createBasicCompositionalLayout()
-        
-        let safeArea = view.safeAreaLayoutGuide
-        let constraints = [
-            collectionView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
-    }
-    
     private func configureBarButtonMenu(button: UIBarButtonItem) {
         
         let changeLayout = UIAction(title: "보기 변경",
                                     image: UIImage(systemName: "square.grid.2x2.fill")) { [weak self] action in
             
             guard let self = self else { return }
-            changeCollectionViewLayout()
+            collectionView.changeLayout()
             
         }
         
