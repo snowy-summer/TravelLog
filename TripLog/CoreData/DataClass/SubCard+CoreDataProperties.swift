@@ -18,7 +18,7 @@ extension SubCard {
     }
 
     @NSManaged public var id: UUID?
-    @NSManaged public var imagesData: NSObject?
+    @NSManaged public var imagesData: [String]?
     @NSManaged public var price: Double
     @NSManaged public var script: String?
     @NSManaged public var starsState: [Bool]?
