@@ -34,14 +34,24 @@ final class MainDataManager {
                   let date = mainCard.date else { return nil }
             
             var mainCardModel = MainCardDTO(id: id,
-                                              title: mainCard.title,
-                                              image: nil,
-                                              isBookMarked: mainCard.isBookMarked,
-                                              date: date,
-                                              subCards: [])
+                                            title: mainCard.title,
+                                            image: nil,
+                                            isBookMarked: mainCard.isBookMarked,
+                                            date: date,
+                                            subCards: [])
             
-            if let imageData = mainCard.image {
-                mainCardModel.image = UIImage(data: imageData)
+            if let imagePath = mainCard.imagePath {
+                let fileURL = URL(filePath: imagePath)
+                
+                do {
+                    let imageData = try Data(contentsOf: fileURL)
+                    
+                    mainCardModel.image = UIImage(data: imageData)
+                } catch {
+                    print(CoreDataError.failToConvertImage.description)
+                    print("\(error)")
+                }
+                
             }
             
             
@@ -73,7 +83,10 @@ final class MainDataManager {
             mainCardEntityToUpdate.title = mainModel.title
             mainCardEntityToUpdate.isBookMarked = mainModel.isBookMarked
             mainCardEntityToUpdate.date = mainModel.date
-            mainCardEntityToUpdate.image = mainModel.image?.pngData()
+            
+            ImageFileManager.shared.deleteFile(path: mainCard.imagePath)
+            
+            mainCardEntityToUpdate.imagePath = ImageFileManager.shared.saveImage(image: mainModel.image)
             
             let subCards = writeSubCard(where: mainCard,
                                         what: mainModel)
@@ -85,7 +98,7 @@ final class MainDataManager {
             mainCard.title = mainModel.title
             mainCard.isBookMarked = mainModel.isBookMarked
             mainCard.date = mainModel.date
-            mainCard.image = mainModel.image?.pngData()
+            mainCard.imagePath = ImageFileManager.shared.saveImage(image: mainModel.image)
             
             let subCards = writeSubCard(where: mainCard,
                                         what: mainModel)
@@ -134,7 +147,9 @@ final class MainDataManager {
             }
             
             if let images = subCardmodel.images {
-                subCard.imagesData = images.map{ $0.pngData() } as NSObject
+                let imageFileManager = ImageFileManager.shared
+                
+                subCard.imagesData = images.map{ imageFileManager.saveImage(image: $0)}
             }
             
             subCard.location = writeLocation(subCardModel: subCardmodel)
@@ -153,19 +168,29 @@ final class MainDataManager {
                   let starsState = subCard.starsState else { return nil }
             
             var subCardModel = SubCardModelDTO(id: id,
-                                            title: subCard.title,
-                                            images: [],
-                                            starsState: starsState,
-                                            price: Double(subCard.price),
-                                            location: nil,
-                                            script: subCard.script)
+                                               title: subCard.title,
+                                               images: [],
+                                               starsState: starsState,
+                                               price: Double(subCard.price),
+                                               location: nil,
+                                               script: subCard.script)
             
             if let category = subCard.category {
                 subCardModel.category = CardCategory(rawValue: category)
             }
             
-            if let imagesData = subCard.imagesData as? [Data] {
-                subCardModel.images = imagesData.compactMap { UIImage(data: $0) }
+            if let imagesPaths: [String] = subCard.imagesData {
+                
+                subCardModel.images = imagesPaths.compactMap { path in
+                    
+                    let fileURL = URL(filePath: path)
+                    guard let imageData = try? Data(contentsOf: fileURL),
+                          let image = UIImage(data: imageData) else {
+                        print(CoreDataError.failToConvertImage.description)
+                        return nil
+                    }
+                    return image
+                }
             }
             
             let location = readLocation(who: subCard)
@@ -212,7 +237,7 @@ final class MainDataManager {
             mapItem.name = location.title
             
             locationModel = LocationDTO(id: id,
-                                          mapItem: mapItem)
+                                        mapItem: mapItem)
             
             return locationModel
         }

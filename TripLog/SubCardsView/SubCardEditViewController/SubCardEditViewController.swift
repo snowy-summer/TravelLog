@@ -54,7 +54,9 @@ extension SubCardEditViewController {
         viewModel.editingSubCard.value = card
         viewModel.title.value = card.title
         viewModel.price.value = card.price
+        viewModel.currency.value = card.currency
         viewModel.starsState.value = card.starsState
+        viewModel.script.value = card.script
         viewModel.location.value = card.location
         viewModel.category.value = card.category
     }
@@ -116,17 +118,21 @@ extension SubCardEditViewController {
     
     @objc private func doneAction() {
         viewModel.updateEditingSubCard()
-        viewModel.clearToProperty()
+        
         if let cardId = selectedCardId {
             viewModel.updateSubCard(id: cardId,
                                     card: viewModel.editingSubCard.value)
         } else {
             viewModel.list.value.append(viewModel.editingSubCard.value)
         }
-        
+        viewModel.clearToProperty()
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func backAction() {
+        viewModel.clearToProperty()
+        navigationController?.popViewController(animated: true)
+    }
     
     @objc func pushMapViewController() {
         viewModel.updateEditingSubCard()
@@ -203,7 +209,14 @@ extension SubCardEditViewController: TitleViewDelegate,
                                  forKey: "currentCurrency")
                 
                 price /= rate
-                viewModel.price.value = price
+                
+                if price == 0 {
+                    viewModel.price.value = 0.00000001
+                } else {
+                    viewModel.price.value = price
+                }
+                viewModel.currency.value = currency
+
                 viewModel.updateEditingSubCard()
                 
             }
@@ -243,6 +256,15 @@ extension SubCardEditViewController {
                                          target: self,
                                          action: #selector(doneAction))
         navigationItem.rightBarButtonItem = doneButton
+        
+        
+        let backButton = UIBarButtonItem(title: "뒤로가기",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backAction))
+        
+        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.leftBarButtonItem = backButton
     }
     
     private func configureCollectionView() {
@@ -270,7 +292,9 @@ extension SubCardEditViewController {
     
     private func configureDataSource() {
         
-        let titleCellRegistration = UICollectionView.CellRegistration<TitleCell, String?> { cell, indexPath, item in
+        let titleCellRegistration = UICollectionView.CellRegistration<TitleCell, String?> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.layer.borderWidth = 1
@@ -278,7 +302,9 @@ extension SubCardEditViewController {
             cell.updateText(item)
         }
         
-        let imageCellRegistration = UICollectionView.CellRegistration<ImageCell, UIImage> { cell, indexPath, item in
+        let imageCellRegistration = UICollectionView.CellRegistration<ImageCell, UIImage> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.layer.cornerRadius = 20
@@ -287,7 +313,9 @@ extension SubCardEditViewController {
             cell.updateImage(item)
         }
         
-        let starRateCellRegistration = UICollectionView.CellRegistration<StarRateCell, [Bool]> {  cell, indexPath, item in
+        let starRateCellRegistration = UICollectionView.CellRegistration<StarRateCell, [Bool]> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.isUserInteractionEnabled = true
@@ -295,7 +323,9 @@ extension SubCardEditViewController {
             cell.updateButton()
         }
         
-        let priceCellRegistration = UICollectionView.CellRegistration<PriceCell, Double?> {  cell, indexPath, item in
+        let priceCellRegistration = UICollectionView.CellRegistration<PriceCell, Double?> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.updatePrice(price: item)
@@ -312,14 +342,18 @@ extension SubCardEditViewController {
             cell.updateLocationView(with: item)
         }
         
-        let categoryCellRegistration = UICollectionView.CellRegistration<CategoryCell, CardCategory> { cell, indexPath, item in
+        let categoryCellRegistration = UICollectionView.CellRegistration<CategoryCell, CardCategory> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.isUserInteractionEnabled = true
             cell.updateButton(category: item)
         }
         
-        let scriptCellRegistration = UICollectionView.CellRegistration<ScriptCell, String?> {  cell, indexPath, item in
+        let scriptCellRegistration = UICollectionView.CellRegistration<ScriptCell, String?> { [weak self] cell, indexPath, item in
+            
+            guard let self = self else { return }
             
             cell.delegate = self
             cell.isUserInteractionEnabled = true

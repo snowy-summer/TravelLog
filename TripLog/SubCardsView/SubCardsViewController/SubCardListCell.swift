@@ -48,6 +48,7 @@ extension SubCardListCell {
     func updateCotent(images: [UIImage]?,
                       title: String?,
                       price: Double?,
+                      currency: CurrencyList?,
                       starState: [Bool]) {
         let numberFormmater = NumberFormatter()
         numberFormmater.numberStyle = .decimal
@@ -55,8 +56,9 @@ extension SubCardListCell {
         titleLabel.text = title ?? ""
         
         if let price = price,
-           let formattedNumber = numberFormmater.string(from: NSNumber(value: price)) {
-            priceLabel.text = "₩ " + formattedNumber
+           let formattedNumber = numberFormmater.string(from: NSNumber(value: price)),
+           let currency = currency {
+            priceLabel.text = "\(currency.symbol)" + formattedNumber
         } else {
             priceLabel.text = ""
         }
@@ -105,6 +107,7 @@ extension SubCardListCell {
         contentView.addSubview(thumbnailImageView)
         
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.contentMode = .scaleAspectFill
         
         let thumbnailImageViewConstraints = [
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor,
@@ -120,7 +123,7 @@ extension SubCardListCell {
         NSLayoutConstraint.activate(thumbnailImageViewConstraints)
         
         thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImageView.clipsToBounds = true
+        thumbnailImageView.layer.masksToBounds = true
     }
     private func configureScoreStackView() {
         contentView.addSubview(scoreImagesStackView)
@@ -174,7 +177,7 @@ extension SubCardListCell {
         
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        priceLabel.font = .preferredFont(forTextStyle: .caption1)
+        priceLabel.font = .preferredFont(forTextStyle: .body)
     
         let priceLabelConstraints = [
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,

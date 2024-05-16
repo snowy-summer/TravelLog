@@ -26,10 +26,11 @@ final class CategoryCell: UICollectionViewCell {
     
     func updateButton(category: CardCategory?) {
         guard let category = category else { return }
-        buttons.forEach { button in
-            if let title = button.title(for: .normal),
-               let buttonCategory = CardCategory(rawValue: title) {
-                button.configuration?.baseBackgroundColor = buttonCategory == category ? .white : .viewBackground
+        
+        for button in buttons {
+            if let title = button.attributedTitle(for: .normal),
+               let buttonCategory = CardCategory(rawValue: title.string) {
+                button.configuration?.baseBackgroundColor = buttonCategory == category ? .lightGray : .viewBackground
             }
         }
     }
@@ -64,6 +65,7 @@ final class CategoryCell: UICollectionViewCell {
             configureButton(button: button,
                             category: category)
             buttons.append(button)
+            
             stackView.addArrangedSubview(button)
         }
     }
@@ -96,7 +98,7 @@ final class CategoryCell: UICollectionViewCell {
         
         for button in buttons {
             if sender == button {
-                sender.configuration?.baseBackgroundColor = .darkGray
+                sender.configuration?.baseBackgroundColor = .lightGray
                 continue
             }
             button.configuration?.baseBackgroundColor = .viewBackground

@@ -20,7 +20,7 @@ extension MainCard {
     @NSManaged public var id: UUID?
     @NSManaged public var isBookMarked: Bool
     @NSManaged public var date: Date?
-    @NSManaged public var image: Data?
+    @NSManaged public var imagePath: String?
     @NSManaged public var subCards: NSSet?
 
 }

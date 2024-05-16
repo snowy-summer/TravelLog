@@ -98,7 +98,7 @@ extension SubCardsCollectionView {
             
         }
         
-        let listCellRegistration = UICollectionView.CellRegistration<SubCardListCell, UUID> { 
+        let listCellRegistration = UICollectionView.CellRegistration<SubCardListCell, UUID> {
             [weak self] cell, indexPath, itemIdentifier in
             
             guard let self = self else { return }
@@ -111,12 +111,13 @@ extension SubCardsCollectionView {
             cell.updateCotent(images: subCard.images,
                               title: subCard.title,
                               price: subCard.price,
+                              currency: subCard.currency,
                               starState: subCard.starsState)
             
         }
         
         diffableDataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: self,
-                                                                               cellProvider: { 
+                                                                               cellProvider: {
             [weak self] collectionView, indexPath, uuid in
             
             if self?.collectionViewLayout is CircularLayout {

@@ -15,13 +15,6 @@ final class PriceCell: UICollectionViewCell {
     
     weak var delegate: PriceViewDelegate?
     
-    var price: Double {
-        guard let priceText = priceTextField.text?.split(separator: ",").joined(),
-              let price = Double(priceText) else { return 0}
-        
-        return price
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -60,17 +53,49 @@ extension PriceCell {
     }
     
     @objc func didTextFieldChange() {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
         
-        let numberFormmater = NumberFormatter()
-        numberFormmater.numberStyle = .decimal
-        let formattedNumber = numberFormmater.string(from: NSNumber(value: price))
+        guard let priceText = priceTextField.text else { return }
+        
+        var numWithoutComma = priceText.split(separator: ",").joined()
+        let components = numWithoutComma.split(separator: ".",
+                                               maxSplits: 2,
+                                               omittingEmptySubsequences: false)
+        
+        if components.count > 2 {
+            numWithoutComma.removeLast()
+        } else if components.count == 2 && components[1].isEmpty {
+            priceTextField.text = formatNumberString(numWithoutComma)
+            return
+        }
+        
+        guard let price = Double(numWithoutComma) else { return }
+        let formattedNumber = numberFormatter.string(from: NSNumber(value: price))
         
         priceTextField.text = formattedNumber
-        let text = priceTextField.text?.split(separator: ",").joined()
-        delegate?.updateViewModelValue(price: text)
-        
-        
+        let textWithoutComma = formattedNumber?.split(separator: ",").joined()
+        delegate?.updateViewModelValue(price: textWithoutComma)
     }
+
+    func formatNumberString(_ text: String) -> String? {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        
+        let components = text.split(separator: ".",
+                                    maxSplits: 2,
+                                    omittingEmptySubsequences: false)
+        
+        guard let firstPart = Double(components[0].split(separator: ",").joined()),
+              let formattedFirstPart = numberFormatter.string(from: NSNumber(value: firstPart)) else { return nil }
+        
+        if components.count > 1 {
+            return formattedFirstPart + "." + components[1]
+        } else {
+            return formattedFirstPart
+        }
+    }
+
     
     @objc func presentCurrencyRateList() {
         delegate?.presentCurrencyList()
@@ -102,12 +127,10 @@ extension PriceCell {
                                      for: .touchUpInside)
         
         let imageConstraints = [
-            swapCurrencyButton.topAnchor.constraint(equalTo: contentView.bottomAnchor,
+            swapCurrencyButton.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                     constant: 4),
             swapCurrencyButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                        constant: -4),
-            swapCurrencyButton.heightAnchor.constraint(equalTo: self.widthAnchor,
-                                                       multiplier: 0.1),
             swapCurrencyButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             swapCurrencyButton.widthAnchor.constraint(equalTo: self.widthAnchor,
                                                       multiplier: 0.3)

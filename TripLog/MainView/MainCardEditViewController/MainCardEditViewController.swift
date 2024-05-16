@@ -125,8 +125,10 @@ extension MainCardEditViewController: PHPickerViewControllerDelegate {
         if let itemProvider = itemProvider,
            itemProvider.canLoadObject(ofClass: UIImage.self) {
             itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard let image = image as? UIImage else { return }
+                
                 self?.mainQueue.async {
-                    self?.imageView.image = image as? UIImage
+                    self?.imageView.image = image
                 }
             }
         }

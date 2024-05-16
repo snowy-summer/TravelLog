@@ -100,8 +100,9 @@ extension SubCardCell {
         
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
+        thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.layer.cornerRadius = 8
-        thumbnailImageView.clipsToBounds = true
+        thumbnailImageView.layer.masksToBounds = true
         
         let imageViewConstraints = [
             thumbnailImageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
@@ -111,7 +112,7 @@ extension SubCardCell {
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                    constant: -16),
             thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
-                                                       multiplier: 0.75),
+                                                       multiplier: 1.0),
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)

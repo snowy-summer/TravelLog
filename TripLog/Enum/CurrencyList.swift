@@ -15,4 +15,21 @@ enum CurrencyList: String, CaseIterable {
     case EUR = "EUR"
     case THB = "THB"
     
+    
+    var symbol: String {
+        switch self {
+        case .KRW:
+            "₩ "
+        case .USD:
+            "$ "
+        case .JPY:
+            "￥ "
+        case .CNH:
+            "CNH ￥ "
+        case .EUR:
+            "€ "
+        case .THB:
+            "฿ "
+        }
+    }
 }
