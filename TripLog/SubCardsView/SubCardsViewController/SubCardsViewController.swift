@@ -127,7 +127,7 @@ extension SubCardsViewController: UICollectionViewDelegate {
         guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
         
         if selectingModeState, let cell = collectionView.cellForItem(at: indexPath)  {
-            cell.contentView.backgroundColor = .black
+            cell.contentView.backgroundColor = #colorLiteral(red: 0.7607458234, green: 0.6978967786, blue: 1, alpha: 1)
             
         } else {
             navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,

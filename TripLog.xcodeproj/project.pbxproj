@@ -51,6 +51,7 @@
 		6BACEFFF2BBD4E1300215307 /* CurrencyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACEFFE2BBD4E1300215307 /* CurrencyList.swift */; };
 		6BACF0012BBD561300215307 /* CurrencyDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACF0002BBD561300215307 /* CurrencyDTO.swift */; };
 		6BACF0062BBD5A5100215307 /* ErrorCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACF0052BBD5A5100215307 /* ErrorCase.swift */; };
+		6BB1AFAF2BF31F5C0059713E /* testMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB1AFAE2BF31F5C0059713E /* testMainViewController.swift */; };
 		6BB8D16F2BA43EFF00F96229 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB8D16E2BA43EFF00F96229 /* LocationListCell.swift */; };
 		6BBB9F8C2BA2B92F0013A82B /* SelectedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBB9F8B2BA2B92F0013A82B /* SelectedImageView.swift */; };
 		6BCC2A832BBFDE0400933028 /* CurrencyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC2A822BBFDE0400933028 /* CurrencyConverter.swift */; };
@@ -131,6 +132,7 @@
 		6BACEFFE2BBD4E1300215307 /* CurrencyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyList.swift; sourceTree = "<group>"; };
 		6BACF0002BBD561300215307 /* CurrencyDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDTO.swift; sourceTree = "<group>"; };
 		6BACF0052BBD5A5100215307 /* ErrorCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCase.swift; sourceTree = "<group>"; };
+		6BB1AFAE2BF31F5C0059713E /* testMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testMainViewController.swift; sourceTree = "<group>"; };
 		6BB8D16E2BA43EFF00F96229 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		6BBB9F8B2BA2B92F0013A82B /* SelectedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedImageView.swift; sourceTree = "<group>"; };
 		6BCC2A822BBFDE0400933028 /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 		6BEAA2332B8E17AE0017318C = {
 			isa = PBXGroup;
 			children = (
+				6BB1AFAE2BF31F5C0059713E /* testMainViewController.swift */,
 				6BEAA23E2B8E17AE0017318C /* TripLog */,
 				6BEAA23D2B8E17AE0017318C /* Products */,
 			);
@@ -589,6 +592,7 @@
 				6B87F0F72B8F458F0036A53B /* MainCardCell.swift in Sources */,
 				6BCC2A962BC3CD8100933028 /* ScriptCell.swift in Sources */,
 				6BE523C02BA0356300A551DB /* TitleView.swift in Sources */,
+				6BB1AFAF2BF31F5C0059713E /* testMainViewController.swift in Sources */,
 				6B1E78822BA95E7200008CAF /* InformationViewDelegate.swift in Sources */,
 				6BE11AC52BB697AC00E30964 /* MainCard+CoreDataClass.swift in Sources */,
 				6BCC2A922BC3BB0000933028 /* HeaderView.swift in Sources */,
@@ -747,8 +751,8 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 추가하기 위해서 앨범의 사진권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -758,9 +762,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = beom.TripLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -777,8 +785,8 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 추가하기 위해서 앨범의 사진권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -788,9 +796,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = beom.TripLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
