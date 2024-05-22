@@ -112,7 +112,7 @@ extension SubCardCell {
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                    constant: -16),
             thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
-                                                       multiplier: 1.0),
+                                                       multiplier: 0.75),
         ]
         
         NSLayoutConstraint.activate(imageViewConstraints)

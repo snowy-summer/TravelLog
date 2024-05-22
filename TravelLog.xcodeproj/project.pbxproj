@@ -51,7 +51,6 @@
 		6BACEFFF2BBD4E1300215307 /* CurrencyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACEFFE2BBD4E1300215307 /* CurrencyList.swift */; };
 		6BACF0012BBD561300215307 /* CurrencyDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACF0002BBD561300215307 /* CurrencyDTO.swift */; };
 		6BACF0062BBD5A5100215307 /* ErrorCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACF0052BBD5A5100215307 /* ErrorCase.swift */; };
-		6BB1AFAF2BF31F5C0059713E /* testMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB1AFAE2BF31F5C0059713E /* testMainViewController.swift */; };
 		6BB8D16F2BA43EFF00F96229 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB8D16E2BA43EFF00F96229 /* LocationListCell.swift */; };
 		6BBB9F8C2BA2B92F0013A82B /* SelectedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBB9F8B2BA2B92F0013A82B /* SelectedImageView.swift */; };
 		6BCC2A832BBFDE0400933028 /* CurrencyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC2A822BBFDE0400933028 /* CurrencyConverter.swift */; };
@@ -132,7 +131,6 @@
 		6BACEFFE2BBD4E1300215307 /* CurrencyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyList.swift; sourceTree = "<group>"; };
 		6BACF0002BBD561300215307 /* CurrencyDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDTO.swift; sourceTree = "<group>"; };
 		6BACF0052BBD5A5100215307 /* ErrorCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCase.swift; sourceTree = "<group>"; };
-		6BB1AFAE2BF31F5C0059713E /* testMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testMainViewController.swift; sourceTree = "<group>"; };
 		6BB8D16E2BA43EFF00F96229 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		6BBB9F8B2BA2B92F0013A82B /* SelectedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedImageView.swift; sourceTree = "<group>"; };
 		6BCC2A822BBFDE0400933028 /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
@@ -160,7 +158,7 @@
 		6BE523BB2BA02DC900A551DB /* PriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceView.swift; sourceTree = "<group>"; };
 		6BE523BD2BA0343200A551DB /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		6BE523BF2BA0356300A551DB /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
-		6BEAA23C2B8E17AE0017318C /* TripLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BEAA23C2B8E17AE0017318C /* TravelLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BEAA23F2B8E17AE0017318C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6BEAA2412B8E17AE0017318C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6BEAA2432B8E17AE0017318C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -418,8 +416,7 @@
 		6BEAA2332B8E17AE0017318C = {
 			isa = PBXGroup;
 			children = (
-				6BB1AFAE2BF31F5C0059713E /* testMainViewController.swift */,
-				6BEAA23E2B8E17AE0017318C /* TripLog */,
+				6BEAA23E2B8E17AE0017318C /* TravelLog */,
 				6BEAA23D2B8E17AE0017318C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -427,12 +424,12 @@
 		6BEAA23D2B8E17AE0017318C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6BEAA23C2B8E17AE0017318C /* TripLog.app */,
+				6BEAA23C2B8E17AE0017318C /* TravelLog.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6BEAA23E2B8E17AE0017318C /* TripLog */ = {
+		6BEAA23E2B8E17AE0017318C /* TravelLog */ = {
 			isa = PBXGroup;
 			children = (
 				6BE11AA02BB68BAD00E30964 /* CoreData */,
@@ -449,7 +446,7 @@
 				6BEAA24D2B8E17AF0017318C /* Info.plist */,
 				6B3EE4C02BBD5EEA0003C6B6 /* APIKeys.plist */,
 			);
-			path = TripLog;
+			path = TravelLog;
 			sourceTree = "<group>";
 		};
 		6BFAEB612BAACF310088CBA3 /* Enum */ = {
@@ -470,9 +467,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6BEAA23B2B8E17AE0017318C /* TripLog */ = {
+		6BEAA23B2B8E17AE0017318C /* TravelLog */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6BEAA2502B8E17AF0017318C /* Build configuration list for PBXNativeTarget "TripLog" */;
+			buildConfigurationList = 6BEAA2502B8E17AF0017318C /* Build configuration list for PBXNativeTarget "TravelLog" */;
 			buildPhases = (
 				6BEAA2382B8E17AE0017318C /* Sources */,
 				6BEAA2392B8E17AE0017318C /* Frameworks */,
@@ -482,9 +479,9 @@
 			);
 			dependencies = (
 			);
-			name = TripLog;
+			name = TravelLog;
 			productName = TripLog;
-			productReference = 6BEAA23C2B8E17AE0017318C /* TripLog.app */;
+			productReference = 6BEAA23C2B8E17AE0017318C /* TravelLog.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -502,7 +499,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6BEAA2372B8E17AE0017318C /* Build configuration list for PBXProject "TripLog" */;
+			buildConfigurationList = 6BEAA2372B8E17AE0017318C /* Build configuration list for PBXProject "TravelLog" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -515,7 +512,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6BEAA23B2B8E17AE0017318C /* TripLog */,
+				6BEAA23B2B8E17AE0017318C /* TravelLog */,
 			);
 		};
 /* End PBXProject section */
@@ -592,7 +589,6 @@
 				6B87F0F72B8F458F0036A53B /* MainCardCell.swift in Sources */,
 				6BCC2A962BC3CD8100933028 /* ScriptCell.swift in Sources */,
 				6BE523C02BA0356300A551DB /* TitleView.swift in Sources */,
-				6BB1AFAF2BF31F5C0059713E /* testMainViewController.swift in Sources */,
 				6B1E78822BA95E7200008CAF /* InformationViewDelegate.swift in Sources */,
 				6BE11AC52BB697AC00E30964 /* MainCard+CoreDataClass.swift in Sources */,
 				6BCC2A922BC3BB0000933028 /* HeaderView.swift in Sources */,
@@ -747,7 +743,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8Q3Y446GH;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TripLog/Info.plist;
+				INFOPLIST_FILE = TravelLog/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 추가하기 위해서 앨범의 사진권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -759,8 +756,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = beom.TripLog;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = beom.TravelLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -781,7 +778,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8Q3Y446GH;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TripLog/Info.plist;
+				INFOPLIST_FILE = TravelLog/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 추가하기 위해서 앨범의 사진권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -793,8 +791,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = beom.TripLog;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = beom.TravelLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -809,7 +807,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6BEAA2372B8E17AE0017318C /* Build configuration list for PBXProject "TripLog" */ = {
+		6BEAA2372B8E17AE0017318C /* Build configuration list for PBXProject "TravelLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6BEAA24E2B8E17AF0017318C /* Debug */,
@@ -818,7 +816,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6BEAA2502B8E17AF0017318C /* Build configuration list for PBXNativeTarget "TripLog" */ = {
+		6BEAA2502B8E17AF0017318C /* Build configuration list for PBXNativeTarget "TravelLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6BEAA2512B8E17AF0017318C /* Debug */,
