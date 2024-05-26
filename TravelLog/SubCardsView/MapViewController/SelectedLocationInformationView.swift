@@ -213,6 +213,7 @@ extension SelectedLocationInformationView {
         
         noNameButton.layer.cornerRadius = 20
         noNameButton.backgroundColor = .lightGray
+        noNameButton.isHidden = true
         
         noNameButton.addTarget(self,
                                action: #selector(noNameAction),

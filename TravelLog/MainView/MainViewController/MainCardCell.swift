@@ -89,7 +89,7 @@ extension MainCardCell {
         
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        thumbnailImageView.contentMode = .scaleToFill
+        thumbnailImageView.contentMode = .scaleAspectFill
         
         let imageViewConstraints = [
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),

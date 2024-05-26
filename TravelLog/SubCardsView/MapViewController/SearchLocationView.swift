@@ -139,6 +139,7 @@ extension SearchLocationView {
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
       
         let collectionViewConstraints = [
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),

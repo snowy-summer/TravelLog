@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -500,7 +500,7 @@
 				};
 			};
 			buildConfigurationList = 6BEAA2372B8E17AE0017318C /* Build configuration list for PBXProject "TravelLog" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -744,6 +744,7 @@
 				DEVELOPMENT_TEAM = F8Q3Y446GH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TravelLog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TravelLog;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 추가하기 위해서 앨범의 사진권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -779,6 +780,7 @@
 				DEVELOPMENT_TEAM = F8Q3Y446GH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TravelLog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TravelLog;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 추가하기 위해서 앨범의 사진권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

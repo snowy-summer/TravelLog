@@ -48,6 +48,10 @@ extension TitleView {
         delegate?.updateViewModelValue(title: titleTextField.text)
     }
     
+    @objc func dismissKeyboard() {
+        self.endEditing(true)
+    }
+    
 }
 
 //MARK: - Configuration
@@ -68,6 +72,9 @@ extension TitleView {
         titleTextField.addTarget(self,
                                  action: #selector(didTextFieldChange),
                                  for: .editingChanged)
+        titleTextField.addTarget(self,
+                                 action: #selector(dismissKeyboard),
+                                 for: .editingDidEndOnExit)
         
         let titleTextFieldConstraints = [
             titleTextField.topAnchor.constraint(equalTo: self.topAnchor,
