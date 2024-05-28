@@ -21,6 +21,11 @@ https://apps.apple.com/us/app/travellog/id6503001417
 | --- | --- | --- | --- |
 | <img src="https://github.com/snowy-summer/TripLog/assets/118453865/09a6d84f-0f49-4c4a-af51-29f7791a89f6" width="300" height="400"> | <img src="https://github.com/snowy-summer/TripLog/assets/118453865/872adc03-b023-47b2-87e2-49b5df1a27c1" width="300" height="400"> | <img src="https://github.com/snowy-summer/TripLog/assets/118453865/a895393f-afe5-4758-87ee-e56e9282bce2" width="300" height="400"> | <img src="https://github.com/snowy-summer/TripLog/assets/118453865/6272ab0e-3642-4772-815a-a8526c77f90d" width="300" height="400"> |
 
+### PR
+- [MainView] https://github.com/snowy-summer/TripLog/pull/7
+- [SubCard] https://github.com/snowy-summer/TripLog/pull/14
+- [ScrollView -> CollectionView] https://github.com/snowy-summer/TripLog/pull/18
+
 ## 회전하는 collectionView를 위한 공부
 
 - collection View를 만들 때 layout 객체를 설정한다. 하지만 collection view의 layout은 변경이 가능하다.
