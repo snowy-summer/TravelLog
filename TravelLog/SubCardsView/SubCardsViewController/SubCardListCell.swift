@@ -6,13 +6,12 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SubCardListCell: UICollectionViewCell {
     
-    static let identifier = "SubCardListCell"
-    
     private var scoreImagesStackView = UIStackView()
-   
+    
     private let firstStarImageView = UIImageView()
     private let secondStarImageView = UIImageView()
     private let thirdStarImageView = UIImageView()
@@ -64,7 +63,7 @@ extension SubCardListCell {
         }
         
         if let images = images,
-            !images.isEmpty {
+           !images.isEmpty {
             thumbnailImageView.image = images[0]
         } else {
             thumbnailImageView.image = nil
@@ -83,52 +82,36 @@ extension SubCardListCell {
 extension SubCardListCell {
     
     private func configureContentView() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.layer.cornerRadius = 8
         contentView.clipsToBounds = true
         
-        let contentViewConstraints = [
-            contentView.topAnchor.constraint(equalTo: self.topAnchor,
-                                             constant: 8),
-            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                                constant: -8),
-            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                 constant: 16),
-            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor,
-                                                  constant: -16)
-        ]
-        
-        NSLayoutConstraint.activate(contentViewConstraints)
+        contentView.snp.makeConstraints { make in
+            make.verticalEdges.equalTo(self.snp.verticalEdges).inset(8)
+            make.directionalHorizontalEdges.equalTo(self.snp.directionalHorizontalEdges).inset(16)
+        }
         
     }
     
     private func configureThumbnailImageView() {
         contentView.addSubview(thumbnailImageView)
         
-        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         thumbnailImageView.contentMode = .scaleAspectFill
-        
-        let thumbnailImageViewConstraints = [
-            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                    constant: 12),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                         constant: -8),
-            thumbnailImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor,
-                                                      multiplier: 0.5),
-            thumbnailImageView.heightAnchor.constraint(equalTo: contentView.widthAnchor,
-                                                       multiplier: 0.5)
-        ]
-        
-        NSLayoutConstraint.activate(thumbnailImageViewConstraints)
-        
         thumbnailImageView.layer.cornerRadius = 8
         thumbnailImageView.layer.masksToBounds = true
+        
+        thumbnailImageView.snp.makeConstraints { make in
+            make.verticalEdges.equalTo(contentView.snp.verticalEdges).inset(8)
+            make.trailing.equalTo(contentView.snp.trailing).offset(-8)
+            make.width.equalTo(contentView.snp.width).multipliedBy(0.5)
+            make.height.equalTo(contentView.snp.width).multipliedBy(0.5)
+            
+        }
+        
+        
     }
     private func configureScoreStackView() {
         contentView.addSubview(scoreImagesStackView)
-        
-        scoreImagesStackView.translatesAutoresizingMaskIntoConstraints = false
         
         scoreImagesStackView.addArrangedSubview(firstStarImageView)
         scoreImagesStackView.addArrangedSubview(secondStarImageView)
@@ -140,55 +123,36 @@ extension SubCardListCell {
         scoreImagesStackView.axis = .horizontal
         scoreImagesStackView.distribution = .fillEqually
         
-        let stackViewConstraints = [
-            scoreImagesStackView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor),
-            scoreImagesStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                    constant: 8),
-            scoreImagesStackView.heightAnchor.constraint(equalTo: contentView.heightAnchor,
-                                                         multiplier: 0.1)
-        ]
-        
-        NSLayoutConstraint.activate(stackViewConstraints)
+        scoreImagesStackView.snp.makeConstraints { make in
+            make.top.equalTo(thumbnailImageView.snp.top)
+            make.leading.equalTo(contentView.snp.leading).offset(8)
+            make.height.equalTo(contentView.snp.height).multipliedBy(0.1)
+        }
     }
     
     private func configureTitleLabel() {
         contentView.addSubview(titleLabel)
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         titleLabel.font = .preferredFont(forTextStyle: .title1)
         
-        let titleLabelConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: scoreImagesStackView.bottomAnchor,
-                                            constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor,
-                                                 constant: 16)
-        ]
-        
-        NSLayoutConstraint.activate(titleLabelConstraints)
-        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(scoreImagesStackView.snp.bottom).offset(8)
+            make.leading.equalTo(contentView.snp.leading).offset(16)
+            make.trailing.equalTo(thumbnailImageView.snp.leading).offset(16)
+        }
         
     }
     
     private func configurePriceLabel() {
         contentView.addSubview(priceLabel)
         
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         priceLabel.font = .preferredFont(forTextStyle: .body)
-    
-        let priceLabelConstraints = [
-            priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                            constant: 8),
-            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: 16),
-            priceLabel.trailingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor,
-                                                 constant: 16)
-        ]
         
-        NSLayoutConstraint.activate(priceLabelConstraints)
+        priceLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.leading.equalTo(contentView.snp.leading).offset(16)
+            make.trailing.equalTo(thumbnailImageView.snp.leading).offset(16)
+        }
     }
-
+    
 }

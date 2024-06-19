@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import SnapKit
 
 final class LocationCell: UICollectionViewCell {
     
@@ -21,7 +22,7 @@ final class LocationCell: UICollectionViewCell {
         
         DispatchQueue.main.async {
             self.configureUnderLine(size: 2,
-                               color: UIColor.lightGray.cgColor)
+                                    color: UIColor.lightGray.cgColor)
         }
     }
     
@@ -34,7 +35,7 @@ final class LocationCell: UICollectionViewCell {
 extension LocationCell {
     
     func updateLocationView(with location: LocationDTO?) {
-
+        
         guard let mapitem = location?.mapItem,
               let name = mapitem.name else { return }
         
@@ -43,43 +44,29 @@ extension LocationCell {
     
     private func configureLocationImage() {
         contentView.addSubview(locationImage)
-        locationImage.translatesAutoresizingMaskIntoConstraints = false
+        
         locationImage.image = UIImage(systemName: "map")
         
-        let imageConstraints = [
-            locationImage.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                            constant: 8),
-            locationImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                               constant: -8),
-            locationImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            locationImage.widthAnchor.constraint(equalTo: locationImage.heightAnchor,
-                                              multiplier: 1.0)
-        ]
-        
-        NSLayoutConstraint.activate(imageConstraints)
+        locationImage.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(8)
+            make.trailing.equalToSuperview()
+            make.width.equalTo(locationImage.snp.height)
+        }
     }
     
     private func configureLocationText() {
         contentView.addSubview(locationText)
-        
-        locationText.translatesAutoresizingMaskIntoConstraints = false
         
         locationText.textAlignment = .left
         locationText.placeholder = "위치를 선택하세요"
         locationText.font = .preferredFont(forTextStyle: .title3)
         locationText.isUserInteractionEnabled = false
         
-        let textFieldConstraints = [
-            locationText.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                constant: 4),
-            locationText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                   constant: -4),
-            locationText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            locationText.trailingAnchor.constraint(equalTo: locationImage.leadingAnchor,
-                                                     constant: -8)
-        ]
-        
-        NSLayoutConstraint.activate(textFieldConstraints)
+        locationText.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(4)
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(locationImage.snp.leading).inset(8)
+        }
     }
     
     private func configureUnderLine(size: CGFloat, color: CGColor?) {

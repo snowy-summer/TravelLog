@@ -7,6 +7,7 @@
 
 import UIKit
 import PhotosUI
+import SnapKit
 
 final class ImageCell: UICollectionViewCell {
     
@@ -49,27 +50,20 @@ final class ImageCell: UICollectionViewCell {
     private func configureImageView() {
         contentView.addSubview(imageView)
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
         imageView.contentMode = .scaleAspectFill
         
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                               action: #selector(addImage)))
         
-        let titleConstraints = [
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ]
-        
-        NSLayoutConstraint.activate(titleConstraints)
+        imageView.snp.makeConstraints { make in
+            make.directionalEdges.equalToSuperview()
+        }
     }
     
     private func configureAddButton() {
         imageView.addSubview(addButton)
         
-        addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.isUserInteractionEnabled = true
         
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
@@ -78,16 +72,11 @@ final class ImageCell: UICollectionViewCell {
         addButton.addTarget(self,
                             action: #selector(addImage),
                             for: .touchUpInside)
-       
-        let addButtonConstraints = [
-            addButton.widthAnchor.constraint(equalTo: imageView.widthAnchor,
-                                             multiplier: 0.2),
-            addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
-            addButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-            addButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
-        ]
         
-        NSLayoutConstraint.activate(addButtonConstraints)
+        addButton.snp.makeConstraints { make in
+            make.width.height.equalTo(imageView.snp.width).multipliedBy(0.2)
+            make.center.equalToSuperview()
+        }
     }
     
     @objc private func addImage() {
@@ -125,9 +114,9 @@ extension ImageCell: PHPickerViewControllerDelegate {
                     
                     images[index] = image
                     group.leave()
-                        
                     
-                   
+                    
+                    
                 }
             }
         }

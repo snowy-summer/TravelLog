@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SearchLocationView: UIView {
     
@@ -14,7 +15,7 @@ final class SearchLocationView: UIView {
     private let searchBar = UISearchBar()
     
     weak var delegate: SearchLocationViewDelegate?
-
+    
     private lazy var collectionView = SearchListCollectionView(locationViewModel: locationViewModel)
     private lazy var informationView = SelectedLocationInformationView(locationViewModel: locationViewModel)
     
@@ -38,7 +39,7 @@ final class SearchLocationView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
- 
+    
     func saveSnapshot(id: [UUID]) {
         collectionView.saveSnapshot(id: id)
     }
@@ -78,7 +79,7 @@ extension SearchLocationView: UICollectionViewDelegate {
         informationView.updateContent()
         
         endEditing(true)
-
+        
     }
     
 }
@@ -95,75 +96,49 @@ extension SearchLocationView {
     private func configureGrabber() {
         self.addSubview(grabberView)
         
-        grabberView.translatesAutoresizingMaskIntoConstraints = false
-        
         grabberView.layer.cornerRadius = 4
         grabberView.backgroundColor = .lightGray
         
-        let grabberConstraints = [
-            grabberView.topAnchor.constraint(equalTo: self.topAnchor,
-                                             constant: 8),
-            grabberView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            grabberView.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                               multiplier: 0.2),
-            grabberView.heightAnchor.constraint(equalToConstant: 8)
-        ]
-        
-        NSLayoutConstraint.activate(grabberConstraints)
+        grabberView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(8)
+        }
     }
     
     private func configureSearchBar() {
         self.addSubview(searchBar)
         
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        
         searchBar.searchBarStyle = .minimal
         searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.9697164893, green: 0.9697164893, blue: 0.9697164893, alpha: 1)
         
         let safeArea = self.safeAreaLayoutGuide
-        let searchBarConstraints = [
-            searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor,
-                                           constant: 16),
-            searchBar.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
-                                           constant: 16),
-            searchBar.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                           constant: -16),
-          
-        ]
-
-        NSLayoutConstraint.activate(searchBarConstraints)
+        searchBar.snp.makeConstraints { make in
+            make.top.directionalHorizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(16)
+        }
     }
     
     private func configureCollectionView() {
         self.addSubview(collectionView)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.keyboardDismissMode = .onDrag
-      
-        let collectionViewConstraints = [
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ]
         
-        NSLayoutConstraint.activate(collectionViewConstraints)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom)
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
     }
     
     private func configureInformationView() {
         self.addSubview(informationView)
         
-        informationView.translatesAutoresizingMaskIntoConstraints = false
-      
-        let informationViewConstraints = [
-            informationView.topAnchor.constraint(equalTo: self.topAnchor),
-            informationView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            informationView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            informationView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(informationViewConstraints)
+        informationView.snp.makeConstraints { make in
+            make.directionalEdges.equalToSuperview()
+        }
         
         informationView.isHidden = true
     }

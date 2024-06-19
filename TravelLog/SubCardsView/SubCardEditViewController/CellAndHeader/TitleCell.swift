@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SnapKit
 
 final class TitleCell: UICollectionViewCell {
     
     weak var delegate: TitleViewDelegate?
     private var titleTextField = UITextField()
-   
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
@@ -33,7 +34,7 @@ extension TitleCell {
     }
     
     @objc func didTextFieldChange() {
-            delegate?.updateViewModelValue(title: titleTextField.text)
+        delegate?.updateViewModelValue(title: titleTextField.text)
     }
     
 }
@@ -45,8 +46,6 @@ extension TitleCell {
     private func configureTitleTextField() {
         contentView.addSubview(titleTextField)
         
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        
         titleTextField.placeholder = "제목"
         titleTextField.font = .preferredFont(forTextStyle: .title1)
         titleTextField.textColor = .black
@@ -57,18 +56,10 @@ extension TitleCell {
                                  action: #selector(didTextFieldChange),
                                  for: .editingChanged)
         
-        let titleTextFieldConstraints = [
-            titleTextField.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                constant: 4),
-            titleTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                   constant: -4),
-            titleTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                    constant: 8),
-            titleTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                     constant: -8),
-        ]
-        
-        NSLayoutConstraint.activate(titleTextFieldConstraints)
+        titleTextField.snp.makeConstraints { make in
+            make.verticalEdges.equalTo(contentView.snp.verticalEdges).inset(4)
+            make.directionalHorizontalEdges.equalTo(contentView.snp.directionalHorizontalEdges).inset(8)
+        }
         
     }
     

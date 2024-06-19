@@ -32,18 +32,12 @@ extension MainCollectionView {
     func configureAutoLayout(superView: UIView) {
         superView.addSubview(self)
         
-        self.translatesAutoresizingMaskIntoConstraints = false
-        
-        let safeArea = superView.safeAreaLayoutGuide
-        let constraints = [
-            self.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            self.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            self.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            self.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
-        
+        self.snp.makeConstraints { make in
+            make.top.equalTo(superView.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(superView.safeAreaLayoutGuide.snp.bottom)
+            make.leading.equalTo(superView.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(superView.safeAreaLayoutGuide.snp.trailing)
+        }
     }
     
     private func createBasicCompositionalLayout() -> UICollectionViewCompositionalLayout{

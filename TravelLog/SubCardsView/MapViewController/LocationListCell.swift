@@ -6,11 +6,9 @@
 //
 
 import UIKit
-
+import SnapKit
 
 final class LocationListCell: UICollectionViewCell {
-    
-    static let identifier = "LocationListCell"
     
     private var titleLabel = UILabel()
     private var subTitleLabel = UILabel()
@@ -44,59 +42,37 @@ extension LocationListCell {
     private func configureIcon() {
         contentView.addSubview(icon)
         
-        icon.translatesAutoresizingMaskIntoConstraints = false
-
-        let iconConstraints = [
-            icon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            icon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                          constant: 8),
-            icon.heightAnchor.constraint(lessThanOrEqualToConstant: 40),
-            icon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                         constant: -8),
-            icon.widthAnchor.constraint(equalTo: icon.heightAnchor,
-                                        multiplier: 1.0),
-        ]
-        
-        NSLayoutConstraint.activate(iconConstraints)
+        icon.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(8)
+            make.leading.equalToSuperview().offset(8)
+            make.height.lessThanOrEqualTo(40)
+            make.width.equalTo(icon.snp.height)
+        }
     }
     
     private func configureTitle() {
         contentView.addSubview(titleLabel)
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        let titleConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                       constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor,
-                                           constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            titleLabel.heightAnchor.constraint(equalTo: icon.heightAnchor,
-                                               multiplier: 0.4)
-        ]
-        
-        NSLayoutConstraint.activate(titleConstraints)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.leading.equalTo(icon.snp.trailing).offset(16)
+            make.trailing.equalToSuperview()
+            make.height.equalTo(icon.snp.height).multipliedBy(0.4)
+        }
     }
     
     private func configureSubTitle() {
         contentView.addSubview(subTitleLabel)
         
-        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         subTitleLabel.font = .systemFont(ofSize: 12)
         subTitleLabel.textColor = .lightGray
         
-        let titleConstraints = [
-            subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                          constant: 8),
-            subTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                             constant: -8),
-            subTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            subTitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            subTitleLabel.heightAnchor.constraint(lessThanOrEqualTo: titleLabel.heightAnchor)
-           
-        ]
-        
-        NSLayoutConstraint.activate(titleConstraints)
+        subTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.bottom.equalToSuperview().offset(-8)
+            make.directionalHorizontalEdges.equalTo(titleLabel.snp.directionalHorizontalEdges)
+            make.height.lessThanOrEqualTo(titleLabel.snp.height)
+        }
     }
     
     func updateContent(title: String?,

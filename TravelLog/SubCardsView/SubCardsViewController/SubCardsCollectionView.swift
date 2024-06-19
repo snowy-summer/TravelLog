@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SubCardsCollectionView: UICollectionView {
     
@@ -30,7 +31,7 @@ final class SubCardsCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     //MARK: - Method
     
     func saveSnapshot(id: [UUID]) {
@@ -56,8 +57,8 @@ final class SubCardsCollectionView: UICollectionView {
             collectionViewLayout = createBasicCompositionalLayout()
         } else {
             collectionViewLayout = CircularLayout(itemSize: CGSize(width: self.bounds.width * 0.8,
-                                                                  height: self.bounds.height * 0.6),
-                                                 radius: self.bounds.height)
+                                                                   height: self.bounds.height * 0.6),
+                                                  radius: self.bounds.height)
         }
     }
     
@@ -70,17 +71,10 @@ extension SubCardsCollectionView {
     func configureAutoLayout(superView: UIView) {
         superView.addSubview(self)
         
-        self.translatesAutoresizingMaskIntoConstraints = false
-        
         let safeArea = superView.safeAreaLayoutGuide
-        let constraints = [
-            self.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            self.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            self.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            self.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
+        self.snp.makeConstraints { make in
+            make.directionalEdges.equalTo(safeArea)
+        }
         
     }
     

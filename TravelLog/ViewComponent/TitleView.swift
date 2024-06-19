@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol TitleViewDelegate: AnyObject {
     
@@ -61,8 +62,6 @@ extension TitleView {
     private func configureTitleTextField() {
         self.addSubview(titleTextField)
         
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        
         titleTextField.placeholder = "제목"
         titleTextField.font = .preferredFont(forTextStyle: .title1)
         titleTextField.textColor = .black
@@ -76,18 +75,10 @@ extension TitleView {
                                  action: #selector(dismissKeyboard),
                                  for: .editingDidEndOnExit)
         
-        let titleTextFieldConstraints = [
-            titleTextField.topAnchor.constraint(equalTo: self.topAnchor,
-                                                constant: 4),
-            titleTextField.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                                constant: -4),
-            titleTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                constant: 8),
-            titleTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor,
-                                                     constant: -8),
-        ]
-        
-        NSLayoutConstraint.activate(titleTextFieldConstraints)
+        titleTextField.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(4)
+            make.directionalHorizontalEdges.equalToSuperview().inset(8)
+        }
         
     }
     

@@ -7,6 +7,7 @@
 
 import UIKit
 import PhotosUI
+import SnapKit
 
 protocol SelectedImageViewDelegate: AnyObject {
     
@@ -24,7 +25,7 @@ final class SelectedImageView: UIView {
     var images = [UIImage]()
     
     weak var delegate: SelectedImageViewDelegate?
- 
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -63,57 +64,46 @@ extension SelectedImageView {
     private func configureImageView() {
         self.addSubview(imageView)
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
         
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                               action: #selector(addImage)))
-        let imageViewConstraints = [
-            imageView.topAnchor.constraint(equalTo: self.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(imageViewConstraints)
+        imageView.snp.makeConstraints { make in
+            make.directionalEdges.equalToSuperview()
+        }
     }
     
     private func configurePageControl() {
         self.addSubview(pageControl)
-        
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
         
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = true
         pageControl.currentPageIndicatorTintColor = .darkGray
         
         
-        let pageControlConstraints = [
-            pageControl.heightAnchor.constraint(equalToConstant: 40),
-            pageControl.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            pageControl.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(pageControlConstraints)
+        pageControl.snp.makeConstraints { make in
+            make.height.equalTo(40)
+            make.directionalHorizontalEdges.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         
     }
     
     private func configureSwipeGesture() {
-         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture(_:)))
-         swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
-         self.addGestureRecognizer(swipeLeft)
-         
-         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture(_:)))
-         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
-         self.addGestureRecognizer(swipeRight)
-         
-     }
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture(_:)))
+        swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
+        self.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture(_:)))
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.addGestureRecognizer(swipeRight)
+        
+    }
     
     private func configureAddButton() {
         imageView.addSubview(addButton)
         
-        addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.isUserInteractionEnabled = true
         
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
@@ -122,16 +112,12 @@ extension SelectedImageView {
         addButton.addTarget(self,
                             action: #selector(addImage),
                             for: .touchUpInside)
-       
-        let addButtonConstraints = [
-            addButton.widthAnchor.constraint(equalTo: imageView.widthAnchor,
-                                             multiplier: 0.2),
-            addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
-            addButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-            addButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
-        ]
         
-        NSLayoutConstraint.activate(addButtonConstraints)
+        addButton.snp.makeConstraints { make in
+            make.width.equalTo(imageView.snp.width).multipliedBy(0.2)
+            make.height.equalTo(addButton.snp.width)
+            make.center.equalTo(imageView)
+        }
     }
     
     @objc func respondToSwipeGesture(_ sender: Any) {
@@ -195,7 +181,7 @@ extension SelectedImageView: PHPickerViewControllerDelegate {
                         self.pageControl.numberOfPages = self.images.count
                         self.delegate?.updateViewModelValue(images: self.images)
                     }
-                   
+                    
                 }
             }
         }

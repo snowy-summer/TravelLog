@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol ScriptCellDelegate: AnyObject {
     
@@ -34,7 +35,6 @@ final class ScriptCell: UICollectionViewCell {
     private func configureScriptView() {
         contentView.addSubview(scriptTextView)
         
-        scriptTextView.translatesAutoresizingMaskIntoConstraints = false
         scriptTextView.isUserInteractionEnabled = true
         
         scriptTextView.delegate = self
@@ -43,16 +43,10 @@ final class ScriptCell: UICollectionViewCell {
         scriptTextView.isUserInteractionEnabled = true
         scriptTextView.backgroundColor = .viewBackground
         
-        let viewConstraints = [
-            scriptTextView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            scriptTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            scriptTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            scriptTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            scriptTextView.heightAnchor.constraint(greaterThanOrEqualTo: contentView.heightAnchor,
-                                                   multiplier: 0.5)
-        ]
-        
-        NSLayoutConstraint.activate(viewConstraints)
+        scriptTextView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.height.greaterThanOrEqualTo(contentView.snp.height).multipliedBy(0.5)
+        }
     }
 }
 

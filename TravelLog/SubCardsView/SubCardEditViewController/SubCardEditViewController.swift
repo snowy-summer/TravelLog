@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SubCardEditViewController: UIViewController {
     
@@ -216,7 +217,7 @@ extension SubCardEditViewController: TitleViewDelegate,
                     viewModel.price.value = price
                 }
                 viewModel.currency.value = currency
-
+                
                 viewModel.updateEditingSubCard()
                 
             }
@@ -270,17 +271,11 @@ extension SubCardEditViewController {
     private func configureCollectionView() {
         view.addSubview(collectionView)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.keyboardDismissMode = .onDrag
         
-        let collectionViewConstraints = [
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(collectionViewConstraints)
+        collectionView.snp.makeConstraints { make in
+            make.directionalEdges.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {

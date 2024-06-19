@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol CardCategoryViewDelegate: AnyObject {
     
@@ -21,7 +22,7 @@ final class CategoryView: UIView {
     private var buttons = [UIButton]()
     
     weak var delegate: CardCategoryViewDelegate?
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCategoryLabel()
@@ -45,44 +46,32 @@ final class CategoryView: UIView {
     private func configureCategoryLabel() {
         self.addSubview(categoryTitleLabel)
         
-        categoryTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         categoryTitleLabel.text = "테마"
         
-        let titleConstraints = [
-            categoryTitleLabel.topAnchor.constraint(equalTo: self.topAnchor,
-                                                    constant: 4),
-            categoryTitleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            categoryTitleLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                      multiplier: 0.1)
-        ]
-        
-        NSLayoutConstraint.activate(titleConstraints)
+        categoryTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.leading.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.1)
+        }
     }
     
     private func configureStackView() {
         self.addSubview(stackView)
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 8
         
-        let stackConstraints = [
-            stackView.topAnchor.constraint(equalTo: categoryTitleLabel.bottomAnchor,
-                                           constant: 8),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                              constant: -4),
-            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(stackConstraints)
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(categoryTitleLabel.snp.bottom).offset(8)
+            make.bottom.equalToSuperview().offset(-4)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
         
         CardCategory.allCases.forEach { category in
             let button = UIButton()
-
+            
             let attribute = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]
             let attributedTitle = NSAttributedString(string: category.rawValue,
                                                      attributes: attribute)
@@ -98,10 +87,8 @@ final class CategoryView: UIView {
                                  category: CardCategory) {
         stackView.addArrangedSubview(button)
         
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
         let buttonConfiguration = buttonConfiguration()
-
+        
         button.configuration = buttonConfiguration
         button.setTitleColor(.black,
                              for: .normal)

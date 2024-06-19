@@ -5,7 +5,9 @@
 //  Created by 최승범 on 2024/03/13.
 //
 
+import UIKit
 import MapKit
+import SnapKit
 
 final class MapViewController: UIViewController {
     
@@ -20,7 +22,7 @@ final class MapViewController: UIViewController {
     private var modalHeightConstraint: NSLayoutConstraint?
     private lazy var currentModalHeight: CGFloat = ModalHeight.mideum.height(of: view)
     
- 
+    
     
     init(delegate: MapViewControllerDelegate? = nil, location: LocationDTO?) {
         self.delegate = delegate
@@ -131,8 +133,8 @@ extension MapViewController {
             annotation.title = title
             
             mapView.setRegion(MKCoordinateRegion(center: coordinate,
-                                                      span: span),
-                                   animated: true)
+                                                 span: span),
+                              animated: true)
             mapView.addAnnotation(annotation)
         }
     }
@@ -175,11 +177,11 @@ extension MapViewController: SearchLocationViewDelegate {
 extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
-       
+        
         guard let featureAnnotation = annotation as? MKMapFeatureAnnotation else { return }
         
         let request = MKMapItemRequest(mapFeatureAnnotation: featureAnnotation)
-    
+        
         request.getMapItem {[weak self] mapItem, error in
             
             if let mapItem {
@@ -197,7 +199,7 @@ extension MapViewController: MKMapViewDelegate {
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
         
         if annotation is MKPointAnnotation {
-           
+            
             if annotationView == nil {
                 annotationView = MKMarkerAnnotationView(annotation: annotation,
                                                         reuseIdentifier: identifier)
@@ -206,7 +208,7 @@ extension MapViewController: MKMapViewDelegate {
                 annotationView?.annotation = annotation
                 
             }
-        
+            
             annotationView?.setSelected(true, animated: true)
             annotationView?.titleVisibility = .visible
             annotationView?.markerTintColor = locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.annotationColor
@@ -226,7 +228,7 @@ extension MapViewController: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         changeModalMaxConstraint()
     }
-
+    
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String) {
         if searchText == "" {
@@ -257,8 +259,6 @@ extension MapViewController {
     private func configureMapView() {
         view.addSubview(mapView)
         
-        mapView.translatesAutoresizingMaskIntoConstraints = false
-        
         mapView.isZoomEnabled = true
         mapView.isScrollEnabled = true
         mapView.isPitchEnabled = false
@@ -267,18 +267,13 @@ extension MapViewController {
         let mapConfiguration = MKStandardMapConfiguration()
         mapView.preferredConfiguration = mapConfiguration
         
-        let mapViewConstraints = [
-            mapView.topAnchor.constraint(equalTo: view.topAnchor),
-            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ]
-        
-        NSLayoutConstraint.activate(mapViewConstraints)
+        mapView.snp.makeConstraints { make in
+            make.directionalEdges.equalToSuperview()
+        }
     }
     
     private func loadSearchView() {
-
+        
         if locationViewModel.savedLocation.value.mapItem != nil {
             currentModalHeight = ModalHeight.low.height(of: view)
             searchView.isCollectionViewHidden(value: true)
@@ -289,7 +284,7 @@ extension MapViewController {
         view.addSubview(searchView)
         
         searchView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         let panGesture = UIPanGestureRecognizer(target: self,
                                                 action: #selector(handlePanGesture(gesture:)))
         panGesture.delaysTouchesBegan = false

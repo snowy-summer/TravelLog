@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import SnapKit
 
 final class LocationView: UIView {
     
@@ -24,7 +25,7 @@ final class LocationView: UIView {
         
         DispatchQueue.main.async {
             self.configureUnderLine(size: 2,
-                               color: UIColor.lightGray.cgColor)
+                                    color: UIColor.lightGray.cgColor)
         }
     }
     
@@ -38,7 +39,7 @@ extension LocationView {
     
     func updateLocationView(with location: LocationDTO?) {
         locationModel = location
-
+        
         guard let mapitem = locationModel?.mapItem,
               let name = mapitem.name else { return }
         
@@ -48,61 +49,43 @@ extension LocationView {
     private func configureLocationLabel() {
         self.addSubview(locationLabel)
         
-        locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         locationLabel.text = "위치"
         locationLabel.font = .preferredFont(forTextStyle: .callout)
         
-        let labelConstraints = [
-            locationLabel.topAnchor.constraint(equalTo: self.topAnchor,
-                                            constant: 4),
-            locationLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            locationLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.1)
-        ]
-        
-        NSLayoutConstraint.activate(labelConstraints)
+        locationLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.leading.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.1)
+        }
     }
     
     private func configureLocationImage() {
         self.addSubview(locationImage)
-        locationImage.translatesAutoresizingMaskIntoConstraints = false
+        
         locationImage.image = UIImage(systemName: "location")
         
-        let imageConstraints = [
-            locationImage.topAnchor.constraint(equalTo: locationLabel.bottomAnchor,
-                                            constant: 4),
-            locationImage.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                               constant: -4),
-            locationImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            locationImage.widthAnchor.constraint(equalTo: locationImage.heightAnchor,
-                                              multiplier: 1.0)
-        ]
-        
-        NSLayoutConstraint.activate(imageConstraints)
+        locationImage.snp.makeConstraints { make in
+            make.top.equalTo(locationLabel.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+            make.trailing.equalToSuperview()
+            make.width.equalTo(locationImage.snp.height)
+        }
     }
     
     private func configureLocationText() {
         self.addSubview(locationText)
-        
-        locationText.translatesAutoresizingMaskIntoConstraints = false
         
         locationText.textAlignment = .left
         locationText.placeholder = "위치를 선택하세요"
         locationText.font = .preferredFont(forTextStyle: .title3)
         locationText.isUserInteractionEnabled = false
         
-        let textFieldConstraints = [
-            locationText.topAnchor.constraint(equalTo: locationLabel.bottomAnchor,
-                                                constant: 4),
-            locationText.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                                   constant: -4),
-            locationText.leadingAnchor.constraint(equalTo: locationLabel.leadingAnchor),
-            locationText.trailingAnchor.constraint(equalTo: locationImage.leadingAnchor,
-                                                     constant: -8)
-        ]
-        
-        NSLayoutConstraint.activate(textFieldConstraints)
+        locationText.snp.makeConstraints { make in
+            make.top.equalTo(locationLabel.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+            make.leading.equalTo(locationLabel.snp.leading)
+            make.trailing.equalTo(locationImage.snp.leading).offset(-8)
+        }
     }
     
     private func configureUnderLine(size: CGFloat, color: CGColor?) {

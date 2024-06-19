@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SelectedLocationInformationView: UIView {
     
@@ -47,7 +48,7 @@ extension SelectedLocationInformationView {
             self.titleLabel.text = self.locationViewModel.savedLocationMapItem?.name
             self.categoryLabel.text = self.locationViewModel.savedLocationMapItem?.pointOfInterestCategory?.categoryName
         }
-       
+        
         
     }
     
@@ -76,42 +77,30 @@ extension SelectedLocationInformationView {
     private func configureTitle() {
         self.addSubview(titleLabel)
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .preferredFont(forTextStyle: .title1)
         
-        let titleConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: self.topAnchor,
-                                            constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                constant: 16),
-            titleLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.8)
-        ]
-        
-        NSLayoutConstraint.activate(titleConstraints)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(16)
+            make.width.equalToSuperview().multipliedBy(0.8)
+        }
     }
     
     private func configureCategory() {
         self.addSubview(categoryLabel)
         
-        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.font = .preferredFont(forTextStyle: .body)
         
-        let categoryLabelConstraints = [
-            categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                               constant: 8),
-            categoryLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            categoryLabel.widthAnchor.constraint(equalTo: self.widthAnchor),
-            categoryLabel.heightAnchor.constraint(equalToConstant: 20)
-        ]
-        
-        NSLayoutConstraint.activate(categoryLabelConstraints)
+        categoryLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.leading.equalTo(titleLabel.snp.leading)
+            make.width.equalToSuperview()
+            make.height.equalTo(20)
+        }
     }
     
     private func configureSaveButton() {
         self.addSubview(saveButton)
-        
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
         
         let configuration = buttonConfiguration(title: "저장")
         
@@ -127,24 +116,16 @@ extension SelectedLocationInformationView {
                              action: #selector(saveAction),
                              for: .touchUpInside)
         
-        let saveButtonConstraints = [
-            saveButton.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor,
-                                            constant: 16),
-            saveButton.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                                constant: 16),
-            saveButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.2),
-            saveButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor,
-                                               multiplier: 1.0)
-        ]
-        
-        NSLayoutConstraint.activate(saveButtonConstraints)
+        saveButton.snp.makeConstraints { make in
+            make.top.equalTo(categoryLabel.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(16)
+            make.width.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(saveButton.snp.width)
+        }
     }
     
     private func configureOpenInMapButton() {
         self.addSubview(openInMapButton)
-        
-        openInMapButton.translatesAutoresizingMaskIntoConstraints = false
         
         let configuration = buttonConfiguration(title: "지도 앱")
         
@@ -159,24 +140,16 @@ extension SelectedLocationInformationView {
                                   action: #selector(openInMapAction),
                                   for: .touchUpInside)
         
-        let openInMapButtonConstraints = [
-            openInMapButton.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor,
-                                                 constant: 16),
-            openInMapButton.leadingAnchor.constraint(equalTo: saveButton.trailingAnchor,
-                                                     constant: 16),
-            openInMapButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                   multiplier: 0.2),
-            openInMapButton.heightAnchor.constraint(equalTo: openInMapButton.widthAnchor,
-                                                    multiplier: 1.0)
-        ]
-        
-        NSLayoutConstraint.activate(openInMapButtonConstraints)
+        openInMapButton.snp.makeConstraints { make in
+            make.top.equalTo(categoryLabel.snp.bottom).offset(16)
+            make.leading.equalTo(saveButton.snp.trailing).offset(16)
+            make.width.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(openInMapButton.snp.width)
+        }
     }
     
     private func configureSearchButton() {
         self.addSubview(searchButton)
-        
-        searchButton.translatesAutoresizingMaskIntoConstraints = false
         
         let configuration = buttonConfiguration(title: "재검색")
         
@@ -192,24 +165,16 @@ extension SelectedLocationInformationView {
                                action: #selector(searchAction),
                                for: .touchUpInside)
         
-        let searchButtonConstraints = [
-            searchButton.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor,
-                                              constant: 16),
-            searchButton.leadingAnchor.constraint(equalTo: openInMapButton.trailingAnchor,
-                                                  constant: 16),
-            searchButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                multiplier: 0.2),
-            searchButton.heightAnchor.constraint(equalTo: searchButton.widthAnchor,
-                                                 multiplier: 1.0)
-        ]
-        
-        NSLayoutConstraint.activate(searchButtonConstraints)
+        searchButton.snp.makeConstraints { make in
+            make.top.equalTo(categoryLabel.snp.bottom).offset(16)
+            make.leading.equalTo(openInMapButton.snp.trailing).offset(16)
+            make.width.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(searchButton.snp.width)
+        }
     }
     
     private func configureNoNameButton() {
         self.addSubview(noNameButton)
-        
-        noNameButton.translatesAutoresizingMaskIntoConstraints = false
         
         noNameButton.layer.cornerRadius = 20
         noNameButton.backgroundColor = .lightGray
@@ -219,18 +184,12 @@ extension SelectedLocationInformationView {
                                action: #selector(noNameAction),
                                for: .touchUpInside)
         
-        let noNameButtonConstraints = [
-            noNameButton.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor,
-                                              constant: 16),
-            noNameButton.leadingAnchor.constraint(equalTo: searchButton.trailingAnchor,
-                                                  constant: 16),
-            noNameButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                multiplier: 0.2),
-            noNameButton.heightAnchor.constraint(equalTo: noNameButton.widthAnchor,
-                                                 multiplier: 1.0)
-        ]
-        
-        NSLayoutConstraint.activate(noNameButtonConstraints)
+        noNameButton.snp.makeConstraints { make in
+            make.top.equalTo(categoryLabel.snp.bottom).offset(16)
+            make.leading.equalTo(searchButton.snp.trailing).offset(16)
+            make.width.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(noNameButton.snp.width)
+        }
     }
     
     private func buttonConfiguration(title: String) -> UIButton.Configuration {
@@ -245,4 +204,4 @@ extension SelectedLocationInformationView {
     }
     
 }
-    
+

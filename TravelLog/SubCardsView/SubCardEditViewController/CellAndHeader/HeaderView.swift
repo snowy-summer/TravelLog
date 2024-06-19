@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class HeaderView: UICollectionReusableView {
     
@@ -28,16 +29,9 @@ final class HeaderView: UICollectionReusableView {
     private func configureTitle() {
         self.addSubview(titleLabel)
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        let titleConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-        ]
-        
-        NSLayoutConstraint.activate(titleConstraints)
+        titleLabel.snp.makeConstraints { make in
+            make.directionalEdges.equalToSuperview()
+        }
     }
 }
 

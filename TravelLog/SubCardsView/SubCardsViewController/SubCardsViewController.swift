@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SubCardsViewController: UIViewController {
     
@@ -21,7 +22,7 @@ final class SubCardsViewController: UIViewController {
     
     private var selectingModeState: Bool {
         didSet {
-                isSelectingModeOn(state: selectingModeState)
+            isSelectingModeOn(state: selectingModeState)
         }
     }
     
@@ -59,7 +60,7 @@ final class SubCardsViewController: UIViewController {
         super.viewWillAppear(animated)
         collectionView.reloadData()
     }
- 
+    
 }
 
 extension SubCardsViewController {
@@ -76,7 +77,7 @@ extension SubCardsViewController {
         addButton.isHidden = state
         deleteButton.isHidden = !state
         cancelButton.isHidden = !state
-    
+        
         if let selectedItems = collectionView.indexPathsForSelectedItems {
             for indexPath in selectedItems {
                 collectionView.deselectItem(at: indexPath, animated: false)
@@ -96,12 +97,12 @@ extension SubCardsViewController {
         var uuidsToDelete = Set<UUID>()
         guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section,UUID> else { return }
         
-       
+        
         if let selectedItems = collectionView.indexPathsForSelectedItems {
-         
+            
             for indexPath in selectedItems {
                 guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
-            uuidsToDelete.insert(id)
+                uuidsToDelete.insert(id)
                 
                 selectingModeState = false
             }
@@ -131,7 +132,7 @@ extension SubCardsViewController: UICollectionViewDelegate {
             
         } else {
             navigationController?.pushViewController(SubCardEditViewController(viewModel: viewModel,
-                                                     selectedCardId: id),
+                                                                               selectedCardId: id),
                                                      animated: true)
         }
         
@@ -139,7 +140,7 @@ extension SubCardsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         didDeselectItemAt indexPath: IndexPath) {
-      
+        
         if selectingModeState, let cell = collectionView.cellForItem(at: indexPath)  {
             cell.contentView.backgroundColor = .defaultCell
             
@@ -189,8 +190,6 @@ extension SubCardsViewController {
     private func configureAddButton() {
         view.addSubview(addButton)
         
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
         addButton.contentVerticalAlignment = .fill
         addButton.contentHorizontalAlignment = .fill
@@ -199,23 +198,17 @@ extension SubCardsViewController {
                             for: .touchUpInside)
         
         let safeArea = view.safeAreaLayoutGuide
-        let addButtonConstraints = [
-            addButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor,
-                                              constant: -view.bounds.height * 0.01),
-            addButton.widthAnchor.constraint(equalTo: view.widthAnchor,
-                                             multiplier: 0.2),
-            addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
-            addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ]
         
-        NSLayoutConstraint.activate(addButtonConstraints)
-        
+        addButton.snp.makeConstraints { make in
+            make.bottom.equalTo(safeArea).offset(-view.bounds.height * 0.01)
+            make.width.equalTo(view.snp.width).multipliedBy(0.2)
+            make.height.equalTo(addButton.snp.width)
+            make.centerX.equalTo(view.snp.centerX)
+        }
     }
     
     private func configureDeleteButton() {
         view.addSubview(deleteButton)
-        
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
         
         deleteButton.setImage(UIImage(resource: .deleteButton),
                               for: .normal)
@@ -226,23 +219,17 @@ extension SubCardsViewController {
                                for: .touchUpInside)
         
         let safeArea = view.safeAreaLayoutGuide
-        let addButtonConstraints = [
-            deleteButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor,
-                                                 constant: -view.bounds.height * 0.01),
-            deleteButton.trailingAnchor.constraint(equalTo: addButton.leadingAnchor),
-            deleteButton.widthAnchor.constraint(equalTo: view.widthAnchor,
-                                                multiplier: 0.2),
-            deleteButton.heightAnchor.constraint(equalTo: deleteButton.widthAnchor)
-        ]
         
-        NSLayoutConstraint.activate(addButtonConstraints)
-        
+        deleteButton.snp.makeConstraints { make in
+            make.bottom.equalTo(safeArea).offset(-view.bounds.height * 0.01)
+            make.trailing.equalTo(addButton.snp.leading)
+            make.width.equalTo(view.snp.width).multipliedBy(0.2)
+            make.height.equalTo(deleteButton.snp.width)
+        }
     }
     
     private func configureCancelButton() {
         view.addSubview(cancelButton)
-        
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
         
         cancelButton.setImage(UIImage(resource: .cancelButton),
                               for: .normal)
@@ -253,17 +240,12 @@ extension SubCardsViewController {
                                for: .touchUpInside)
         
         let safeArea = view.safeAreaLayoutGuide
-        let addButtonConstraints = [
-            cancelButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor,
-                                                 constant: -view.bounds.height * 0.01),
-            cancelButton.leadingAnchor.constraint(equalTo: addButton.trailingAnchor),
-            cancelButton.widthAnchor.constraint(equalTo: view.widthAnchor,
-                                                multiplier: 0.2),
-            cancelButton.heightAnchor.constraint(equalTo: cancelButton.widthAnchor),
-            
-        ]
         
-        NSLayoutConstraint.activate(addButtonConstraints)
-        
+        cancelButton.snp.makeConstraints { make in
+            make.bottom.equalTo(safeArea).offset(-view.bounds.height * 0.01)
+            make.leading.equalTo(addButton.snp.trailing)
+            make.width.equalTo(view.snp.width).multipliedBy(0.2)
+            make.height.equalTo(cancelButton.snp.width)
+        }
     }
 }

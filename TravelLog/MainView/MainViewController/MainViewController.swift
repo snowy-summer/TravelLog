@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class MainViewController: UIViewController {
     
@@ -24,7 +25,7 @@ final class MainViewController: UIViewController {
         configureAddButton()
         bind()
     }
-   
+    
 }
 
 extension MainViewController {
@@ -33,21 +34,21 @@ extension MainViewController {
         mainViewModel.list.observe { [weak self] mainCards in
             guard let self = self else { return }
             mainCollectionView.reloadData()
-    
-               do {
-                   for mainCard in mainViewModel.list.value {
-                       try mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
-                   }
-                   
-                   try mainViewModel.mainDataManager.saveContext()
-                   
-               } catch let error as CoreDataError {
-                   failAlert(message: error.description)
-                   
-               } catch {
-                   print(error.localizedDescription)
-                   
-               }
+            
+            do {
+                for mainCard in mainViewModel.list.value {
+                    try mainViewModel.mainDataManager.writeMainCard(mainModel: mainCard)
+                }
+                
+                try mainViewModel.mainDataManager.saveContext()
+                
+            } catch let error as CoreDataError {
+                failAlert(message: error.description)
+                
+            } catch {
+                print(error.localizedDescription)
+                
+            }
         }
     }
     
@@ -75,27 +76,17 @@ extension MainViewController {
     private func configureAddButton() {
         view.addSubview(addButton)
         
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
         addButton.contentVerticalAlignment = .fill
         addButton.contentHorizontalAlignment = .fill
-        addButton.addTarget(self,
-                            action: #selector(tapAddButton),
-                            for: .touchUpInside)
+        addButton.addTarget(self, action: #selector(tapAddButton), for: .touchUpInside)
         
-        let safeArea = view.safeAreaLayoutGuide
-        let addButtonConstraints = [
-            addButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor,
-                                              constant: -view.bounds.height * 0.01),
-            addButton.widthAnchor.constraint(equalTo: view.widthAnchor,
-                                             multiplier: 0.2),
-            addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
-            addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(addButtonConstraints)
-        
+        addButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-view.bounds.height * 0.01)
+            make.width.equalTo(view.snp.width).multipliedBy(0.2)
+            make.height.equalTo(addButton.snp.width)
+            make.centerX.equalToSuperview()
+        }
     }
     
     @objc private func tapAddButton() {

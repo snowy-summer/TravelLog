@@ -6,10 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SubCardCell: UICollectionViewCell {
-    
-    static let identifier = "SubCardCell"
     
     private lazy var titleView = TitleView()
     private lazy var thumbnailImageView = UIImageView()
@@ -74,70 +73,45 @@ extension SubCardCell {
     private func configureTitleView() {
         contentView.addSubview(titleView)
         
-        titleView.translatesAutoresizingMaskIntoConstraints = false
-        
         titleView.isUserInteractionEnabled = false
         titleView.layer.cornerRadius = 8
         titleView.backgroundColor = UIColor(resource: .viewBackground)
         
-        let titleViewConstraints = [
-            titleView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                           constant: 16),
-            titleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                               constant: 16),
-            titleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                constant: -16),
-            titleView.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor,
-                                               multiplier: 0.25)
-        ]
-        
-        NSLayoutConstraint.activate(titleViewConstraints)
+        titleView.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top).offset(16)
+            make.directionalHorizontalEdges.equalTo(contentView.snp.directionalHorizontalEdges).inset(16)
+            make.height.lessThanOrEqualTo(contentView.snp.height).multipliedBy(0.25)
+        }
         
     }
     
     private func configureThumbnailImageView() {
         contentView.addSubview(thumbnailImageView)
         
-        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
-        
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.layer.cornerRadius = 8
         thumbnailImageView.layer.masksToBounds = true
         
-        let imageViewConstraints = [
-            thumbnailImageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
-                                                   constant: 8),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                       constant: 16),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                   constant: -16),
-            thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
-                                                       multiplier: 0.75),
-        ]
+        thumbnailImageView.snp.makeConstraints { make in
+            make.top.equalTo(titleView.snp.bottom).offset(8)
+            make.directionalHorizontalEdges.equalTo(contentView.snp.directionalHorizontalEdges).inset(16)
+            make.height.equalTo(thumbnailImageView.snp.width).multipliedBy(0.75)
+        }
         
-        NSLayoutConstraint.activate(imageViewConstraints)
     }
     
     private func configureStarsRateView() {
         contentView.addSubview(starRateView)
         
-        starRateView.translatesAutoresizingMaskIntoConstraints = false
-        
         starRateView.layer.cornerRadius = 8
         starRateView.backgroundColor = .viewBackground
         starRateView.isUserInteractionEnabled = false
         
-       let viewConstraint = [
-        starRateView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
-                                          constant: 8),
-        starRateView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                              constant: 16),
-        starRateView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                               constant: -16),
-        starRateView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.075)
-       ]
-        
-        NSLayoutConstraint.activate(viewConstraint)
+        starRateView.snp.makeConstraints { make in
+            make.top.equalTo(thumbnailImageView.snp.bottom).offset(8)
+            make.directionalHorizontalEdges.equalTo(contentView.snp.directionalHorizontalEdges).inset(16)
+            make.height.equalTo(self.snp.height).multipliedBy(0.075)
+        }
     }
     
     

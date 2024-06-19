@@ -26,7 +26,7 @@ final class SearchListCollectionView: UICollectionView {
 }
 
 extension SearchListCollectionView {
-  
+    
     func saveSnapshot(id: [UUID]) {
         var snaphot = NSDiffableDataSourceSnapshot<Section, UUID>()
         snaphot.appendSections([.main])
@@ -61,13 +61,13 @@ extension SearchListCollectionView {
                   let mapitem = location.mapItem else { return }
             
             let symbolIcon = location.mapItem?.pointOfInterestCategory?.symbolIcon
-                ?? UIImage(systemName: "mappin.and.ellipse")?.withTintColor(.red,
-                                                                            renderingMode: .alwaysOriginal)
+            ?? UIImage(systemName: "mappin.and.ellipse")?.withTintColor(.red,
+                                                                        renderingMode: .alwaysOriginal)
             
             cell.updateContent(title: mapitem.name,
                                subtitle: mapitem.placemark.title,
                                iconImage: symbolIcon)
-
+            
         }
         
         diffableDataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: self,
@@ -78,7 +78,7 @@ extension SearchListCollectionView {
                                                                 for: indexPath,
                                                                 item: uuid)
         })
-    
+        
     }
-
+    
 }

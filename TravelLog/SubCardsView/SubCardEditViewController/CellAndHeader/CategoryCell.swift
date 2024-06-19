@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class CategoryCell: UICollectionViewCell {
     
@@ -14,7 +15,7 @@ final class CategoryCell: UICollectionViewCell {
     private var buttons = [UIButton]()
     
     weak var delegate: CardCategoryViewDelegate?
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureStackView()
@@ -38,26 +39,18 @@ final class CategoryCell: UICollectionViewCell {
     private func configureStackView() {
         contentView.addSubview(stackView)
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 8
         
-        let stackConstraints = [
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                           constant: 8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                              constant: -4),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(stackConstraints)
+        stackView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(8)
+            make.directionalHorizontalEdges.equalToSuperview()
+        }
         
         CardCategory.allCases.forEach { category in
             let button = UIButton()
-
+            
             let attribute = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]
             let attributedTitle = NSAttributedString(string: category.rawValue,
                                                      attributes: attribute)
@@ -74,10 +67,8 @@ final class CategoryCell: UICollectionViewCell {
                                  category: CardCategory) {
         stackView.addArrangedSubview(button)
         
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
         let buttonConfiguration = buttonConfiguration()
-
+        
         button.configuration = buttonConfiguration
         button.configuration?.baseBackgroundColor = .viewBackground
         button.setTitleColor(.black,

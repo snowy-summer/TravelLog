@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol PriceViewDelegate: AnyObject {
     
@@ -37,7 +38,7 @@ final class PriceView: UIView {
         configurePriceTextField()
         DispatchQueue.main.async {
             self.configureUnderLine(size: 2,
-                               color: UIColor.lightGray.cgColor)
+                                    color: UIColor.lightGray.cgColor)
         }
     }
     
@@ -95,26 +96,19 @@ extension PriceView {
     private func configurePriceLabel() {
         self.addSubview(priceLabel)
         
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         priceLabel.text = "금액"
         priceLabel.font = .preferredFont(forTextStyle: .callout)
         
-        let labelConstraints = [
-            priceLabel.topAnchor.constraint(equalTo: self.topAnchor,
-                                            constant: 4),
-            priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            priceLabel.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                              multiplier: 0.1)
-        ]
-        
-        NSLayoutConstraint.activate(labelConstraints)
+        priceLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.leading.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.1)
+        }
     }
     
     private func configureCurrencyButton() {
         self.addSubview(swapCurrencyButton)
         
-        swapCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
         swapCurrencyButton.configuration = buttonConfiguration()
         var currentCurrency = UserDefaults.standard.object(forKey: "currentCurrency") as? String
         if currentCurrency == nil {
@@ -131,19 +125,13 @@ extension PriceView {
                                      action: #selector(presentCurrencyRateList),
                                      for: .touchUpInside)
         
-        let imageConstraints = [
-            swapCurrencyButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor,
-                                            constant: 4),
-            swapCurrencyButton.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                               constant: -4),
-            swapCurrencyButton.heightAnchor.constraint(equalTo: self.widthAnchor,
-                                                       multiplier: 0.1),
-            swapCurrencyButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            swapCurrencyButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                      multiplier: 0.3)
-        ]
-        
-        NSLayoutConstraint.activate(imageConstraints)
+        swapCurrencyButton.snp.makeConstraints { make in
+            make.top.equalTo(priceLabel.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+            make.height.equalToSuperview().multipliedBy(0.1)
+            make.trailing.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.3)
+        }
     }
     
     private func buttonConfiguration() -> UIButton.Configuration {
@@ -161,8 +149,6 @@ extension PriceView {
     private func configurePriceTextField() {
         self.addSubview(priceTextField)
         
-        priceTextField.translatesAutoresizingMaskIntoConstraints = false
-        
         priceTextField.textAlignment = .left
         priceTextField.font = .preferredFont(forTextStyle: .title3)
         priceTextField.placeholder = "금액을 입력하세요"
@@ -171,17 +157,12 @@ extension PriceView {
                                  action: #selector(didTextFieldChange),
                                  for: .editingChanged)
         
-        let textFieldConstraints = [
-            priceTextField.topAnchor.constraint(equalTo: priceLabel.bottomAnchor,
-                                                constant: 4),
-            priceTextField.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                                   constant: -4),
-            priceTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            priceTextField.trailingAnchor.constraint(equalTo: swapCurrencyButton.leadingAnchor,
-                                                     constant: -8)
-        ]
-        
-        NSLayoutConstraint.activate(textFieldConstraints)
+        priceTextField.snp.makeConstraints { make in
+            make.top.equalTo(priceLabel.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(swapCurrencyButton.snp.leading).offset(-8)
+        }
     }
     
     private func configureUnderLine(size: CGFloat, color: CGColor?) {

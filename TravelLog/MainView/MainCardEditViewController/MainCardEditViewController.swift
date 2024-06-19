@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 import PhotosUI
 
 final class MainCardEditViewController: UIViewController {
@@ -38,7 +39,7 @@ final class MainCardEditViewController: UIViewController {
     
     override func viewDidLoad() {
         view.backgroundColor = .basic
-    
+        
         configureTitleView()
         configureImageView()
         configureNavigationBar()
@@ -69,9 +70,9 @@ extension MainCardEditViewController {
 }
 
 //MARK: - objc Method
- 
-extension MainCardEditViewController{
 
+extension MainCardEditViewController{
+    
     @objc private func addImage() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
@@ -82,7 +83,7 @@ extension MainCardEditViewController{
     }
     
     @objc private func doneAction() {
-      
+        
         self.dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             guard let title = self.titleView.text else { return }
@@ -145,59 +146,6 @@ extension MainCardEditViewController: PHPickerViewControllerDelegate {
 //MARK: - Configuration
 
 extension MainCardEditViewController {
-
-    private func configureTitleView() {
-        view.addSubview(titleView)
-        
-        titleView.translatesAutoresizingMaskIntoConstraints = false
-        
-        titleView.layer.cornerRadius = 20
-        titleView.backgroundColor = UIColor(resource: .baseOfCell)
-        
-        let safeArea = view.safeAreaLayoutGuide
-        let titleViewConstraints = [
-            titleView.topAnchor.constraint(equalTo: safeArea.topAnchor,
-                                           constant: 8),
-            titleView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
-                                               constant: 16),
-            titleView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                                constant: -16),
-            titleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1)
-        ]
-        
-        
-        
-        NSLayoutConstraint.activate(titleViewConstraints)
-        
-    }
-    
-    private func configureImageView() {
-        view.addSubview(imageView)
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        imageView.backgroundColor = UIColor(resource: .baseOfCell)
-        imageView.layer.cornerRadius = 20
-        imageView.clipsToBounds = true
-        
-        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
-                                                              action: #selector(addImage)))
-        imageView.isUserInteractionEnabled = true
-        
-        let safeArea = view.safeAreaLayoutGuide
-        let imageViewConstraints = [
-            imageView.topAnchor.constraint(equalTo: titleView.bottomAnchor,
-                                           constant: 16),
-            imageView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
-                                               constant: 16),
-            imageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                                constant: -16),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: imageView.widthAnchor,
-                                              multiplier: 0.75)
-        ]
-        
-        NSLayoutConstraint.activate(imageViewConstraints)
-    }
     
     private func configureNavigationBar() {
         let doneButton = UIBarButtonItem(title: "완료",
@@ -213,10 +161,45 @@ extension MainCardEditViewController {
         navigationItem.rightBarButtonItem = doneButton
     }
     
+    private func configureTitleView() {
+        view.addSubview(titleView)
+        
+        titleView.layer.cornerRadius = 20
+        titleView.backgroundColor = UIColor(resource: .baseOfCell)
+        
+        let safeArea = view.safeAreaLayoutGuide
+        
+        titleView.snp.makeConstraints { make in
+            make.top.equalTo(safeArea).offset(8)
+            make.directionalHorizontalEdges.equalTo(safeArea).inset(16)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+        }
+        
+    }
+    
+    private func configureImageView() {
+        view.addSubview(imageView)
+        
+        imageView.backgroundColor = UIColor(resource: .baseOfCell)
+        imageView.layer.cornerRadius = 20
+        imageView.clipsToBounds = true
+        
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                              action: #selector(addImage)))
+        imageView.isUserInteractionEnabled = true
+        
+        let safeArea = view.safeAreaLayoutGuide
+        
+        imageView.snp.makeConstraints { make in
+            make.top.equalTo(titleView.snp.bottom).offset(16)
+            make.directionalHorizontalEdges.equalTo(safeArea).inset(16)
+            make.height.lessThanOrEqualTo(imageView.snp.width).multipliedBy(0.75)
+        }
+        
+    }
+    
     private func configureAddButton() {
         imageView.addSubview(addButton)
-        
-        addButton.translatesAutoresizingMaskIntoConstraints = false
         
         addButton.setImage(UIImage(resource: .plusButton), for: .normal)
         addButton.contentVerticalAlignment = .fill
@@ -225,15 +208,11 @@ extension MainCardEditViewController {
                             action: #selector(addImage),
                             for: .touchUpInside)
         
-        let addButtonConstraints = [
-            addButton.widthAnchor.constraint(equalTo: imageView.widthAnchor,
-                                             multiplier: 0.2),
-            addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor),
-            addButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-            addButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(addButtonConstraints)
+        addButton.snp.makeConstraints { make in
+            make.width.equalTo(imageView.snp.width).multipliedBy(0.2)
+            make.height.equalTo(addButton.snp.width)
+            make.center.equalTo(imageView)
+        }
     }
-
+    
 }

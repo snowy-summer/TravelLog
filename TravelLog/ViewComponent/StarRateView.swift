@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol StarRateViewDelegate: AnyObject {
     
@@ -41,22 +42,14 @@ extension StarRateView {
     
     private func configureStarStackView() {
         
-        starStackView.translatesAutoresizingMaskIntoConstraints = false
-        
         starStackView.axis = .horizontal
         starStackView.distribution = .fillEqually
         starStackView.spacing = 4
         
-        let stackConstraints = [
-            starStackView.topAnchor.constraint(equalTo: self.topAnchor,
-                                               constant: 4),
-            starStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                                  constant: -4),
-            starStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(stackConstraints)
-        
+        starStackView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(4)
+            make.centerX.equalToSuperview()
+        }
     }
     
     private func configureStarImage() {
@@ -65,19 +58,18 @@ extension StarRateView {
         
         for i in 0..<5 {
             let button = UIButton()
-            button.translatesAutoresizingMaskIntoConstraints = false
+            
             button.tag = i
             button.contentVerticalAlignment = .fill
             button.contentHorizontalAlignment = .fill
             stars.append(button)
             starStackView.addArrangedSubview(button)
             
-            button.heightAnchor.constraint(equalTo: self.heightAnchor,
-                                           multiplier: 1.0,
-                                           constant: -8).isActive = true
-            button.widthAnchor.constraint(equalTo: button.heightAnchor,
-                                          multiplier: 1.0).isActive = true
-
+            button.snp.makeConstraints { make in
+                make.height.equalTo(self.snp.height).inset(8)
+                make.width.equalTo(button.snp.height)
+            }
+            
             button.addTarget(self,
                              action: #selector(tapStar),
                              for: .touchUpInside)
@@ -103,7 +95,7 @@ extension StarRateView {
         
         if starState[end] == false {
             starState[end] = true
-
+            
         } else if starState[end] && filledCount == end + 1{
             starState[end] = !starState[end]
         }

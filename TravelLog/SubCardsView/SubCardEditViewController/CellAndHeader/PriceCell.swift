@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class PriceCell: UICollectionViewCell {
     
@@ -45,7 +46,7 @@ extension PriceCell {
         
         priceTextField.text = formattedNumber
     }
-
+    
     func updateButtonTitle(text: String?) {
         
         swapCurrencyButton.setTitle(text,
@@ -77,7 +78,7 @@ extension PriceCell {
         let textWithoutComma = formattedNumber?.split(separator: ",").joined()
         delegate?.updateViewModelValue(price: textWithoutComma)
     }
-
+    
     func formatNumberString(_ text: String) -> String? {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
@@ -95,7 +96,7 @@ extension PriceCell {
             return formattedFirstPart
         }
     }
-
+    
     
     @objc func presentCurrencyRateList() {
         delegate?.presentCurrencyList()
@@ -109,7 +110,6 @@ extension PriceCell {
     private func configureCurrencyButton() {
         contentView.addSubview(swapCurrencyButton)
         
-        swapCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
         swapCurrencyButton.configuration = buttonConfiguration()
         var currentCurrency = UserDefaults.standard.object(forKey: "currentCurrency") as? String
         if currentCurrency == nil {
@@ -126,17 +126,11 @@ extension PriceCell {
                                      action: #selector(presentCurrencyRateList),
                                      for: .touchUpInside)
         
-        let imageConstraints = [
-            swapCurrencyButton.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                    constant: 4),
-            swapCurrencyButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                       constant: -4),
-            swapCurrencyButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            swapCurrencyButton.widthAnchor.constraint(equalTo: self.widthAnchor,
-                                                      multiplier: 0.3)
-        ]
-        
-        NSLayoutConstraint.activate(imageConstraints)
+        swapCurrencyButton.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(4)
+            make.trailing.equalToSuperview()
+            make.width.equalTo(self.snp.width).multipliedBy(0.3)
+        }
     }
     
     private func buttonConfiguration() -> UIButton.Configuration {
@@ -154,8 +148,6 @@ extension PriceCell {
     private func configurePriceTextField() {
         contentView.addSubview(priceTextField)
         
-        priceTextField.translatesAutoresizingMaskIntoConstraints = false
-        
         priceTextField.textAlignment = .left
         priceTextField.font = .preferredFont(forTextStyle: .title3)
         priceTextField.placeholder = "금액을 입력하세요"
@@ -164,17 +156,12 @@ extension PriceCell {
                                  action: #selector(didTextFieldChange),
                                  for: .editingChanged)
         
-        let textFieldConstraints = [
-            priceTextField.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                constant: 4),
-            priceTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                   constant: -4),
-            priceTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            priceTextField.trailingAnchor.constraint(equalTo: swapCurrencyButton.leadingAnchor,
-                                                     constant: -8)
-        ]
-        
-        NSLayoutConstraint.activate(textFieldConstraints)
+        priceTextField.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(swapCurrencyButton.snp.leading).offset(-8)
+        }
     }
     
     private func configureUnderLine(size: CGFloat, color: CGColor?) {
