@@ -410,7 +410,7 @@ UICollectionViewLayoutAttributes? {
 <br/>
 해결 방안
 
-- 처음에는 뷰 컨트롤러를 그대로 사용하고 모달처럼 보여주려 했다. 달을 구현하는 방식은 frame의 변경을 생각을 했고 간단하게 구현을 해서 테스트를 했다.
+- 처음에는 뷰 컨트롤러를 그대로 사용하고 모달처럼 보여주려 했다. 모달을 구현하는 방식은 frame의 변경을 생각을 했고 간단하게 구현을 해서 테스트를 했다.
 - 문제는 뒤에 있는 viewController를 터치 할 수 없다는 문제였다. 뒤에 있는 viewController에 mapView가 있기 때문에 무조건 터치가 가능해야 한다.
     - 이것에 대한 해결책으로 hitTest와 dimmingView를 제거하는 방법을 생각했다.
     - hitTest는 view간에는 가능하지만 viewController끼리는 불가능한 것 같다.
