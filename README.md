@@ -11,7 +11,7 @@ https://apps.apple.com/us/app/travellog/id6503001417
 
 
 ### 타겟 버전
-- ios 16 ( 2024 기준 ios 16이상 90% )
+- ios 16 ( 2024 기준 ios 16이상 96% )
 
 <img width="378" alt="Untitled" src="https://github.com/snowy-summer/TripLog/assets/118453865/2bf54d6f-4aaf-4b86-b153-0792b8776dfa">
 
